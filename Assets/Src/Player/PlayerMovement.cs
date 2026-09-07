@@ -3,12 +3,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Input")]
-    [SerializeField] private InputActionAsset inputActions;
-
-    private InputActionMap playerMap;
-    private InputAction moveAction;
-    private InputAction jumpAction;
+    [Header("References")]
+    [SerializeField] private Transform cameraTransform;
+    private PlayerAnimatorController playerAnimatorController;
+    public CharacterController characterController { get; private set; }
 
     [Header("Movement")]
     [SerializeField] private float maxSpeed = 6f;
@@ -21,56 +19,38 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jump")]
     [SerializeField] private float jumpHeight = 2;
     [SerializeField] private float gravity = -25f;
-
-    [Header("References")]
-    [SerializeField] private Transform cameraTransform;
-    [SerializeField] private CharacterController characterController;
-    [SerializeField] private Animator animator;
-
-    private Vector3 horizontalVelocity;
-    private float verticalVelocity;
+    public Vector3 horizontalVelocity { get; private set; }
+    public float verticalVelocity { get; private set; }
 
     private void Awake()
     {
-        playerMap = inputActions.FindActionMap("Player");
-        moveAction = inputActions.FindAction("Move");
-        jumpAction = inputActions.FindAction("Jump");
+        playerAnimatorController = GetComponent<PlayerAnimatorController>();
     }
 
     private void Start()
     {
         cameraTransform = Camera.main.transform;
         characterController = GetComponent<CharacterController>();
-
-    }
-
-    private void OnEnable()
-    {
-        playerMap.Enable();
-    }
-
-    private void OnDisable()
-    {
-        playerMap.Disable();
     }
 
     private void Update()
     {
-        HandleMovement();
-        HandleJump();
-        ApplyGravity();
+        if (characterController.enabled)
+        {
+            HandleMovement();
+            HandleJump();
+            ApplyGravity();
 
-        Vector3 finalVelocity = horizontalVelocity;
-        finalVelocity.y = verticalVelocity;
+            Vector3 finalVelocity = horizontalVelocity;
+            finalVelocity.y = verticalVelocity;
 
-        characterController.Move(finalVelocity * Time.deltaTime);
-
-        UpdateAnimator();
+            characterController.Move(finalVelocity * Time.deltaTime);
+        } 
     }
 
     private void HandleMovement()
     {
-        Vector2 input = moveAction.ReadValue<Vector2>();
+        Vector2 input = PlayerInput.Instance.moveAction.ReadValue<Vector2>();
 
         float inputMagnitude = Mathf.Clamp01(input.magnitude);
 
@@ -114,12 +94,19 @@ public class PlayerMovement : MonoBehaviour
             if (verticalVelocity < 0f)
                 verticalVelocity = -2f;
 
-            if (jumpAction.WasPressedThisFrame())
+            if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
             {
                 verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-                animator.SetTrigger("Jump");
+                playerAnimatorController.PlayJump();
             }
 
+        }
+        else
+        {
+            if (PlayerInput.Instance.jumpAction.WasReleasedThisFrame() && verticalVelocity > 0f)
+            {
+                verticalVelocity *= 0.5f;
+            }
         }
     }
 
@@ -128,12 +115,8 @@ public class PlayerMovement : MonoBehaviour
         verticalVelocity += gravity * Time.deltaTime;
     }
 
-    private void UpdateAnimator()
+    public void Launch()
     {
-        float speed = horizontalVelocity.magnitude;
-        bool isGrounded = characterController.isGrounded;
-
-        animator.SetFloat("Speed", speed, 0.1f, Time.deltaTime);
-        animator.SetBool("isGrounded", isGrounded);
+        verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
 }
