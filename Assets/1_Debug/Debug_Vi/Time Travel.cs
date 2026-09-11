@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -11,13 +12,19 @@ public class TimeTravel : MonoBehaviour
     private InputAction resetAction;
     private InputAction travelAction;
 
-    [Header("Layer")]
+    [Header("Layers")]
     private int playerLayer;
     private int pastLayer;
     private int futureLayer;
 
-    [Header("Player State")]
-    [SerializeField] private bool travelling = false;
+    [Header("Player")]
+    [SerializeField] private bool isTravelling = false;
+    [SerializeField] private/*  const */ float travelDuration = 3;
+    private float travelDurationTimer = 3;
+    private bool onCooldown = false;
+    [SerializeField] private/*  const */ float cooldown = 5;
+    private float cooldownTimer = 3;
+    private MeshRenderer timeDome;
 
     private void Awake()
     {
@@ -35,6 +42,8 @@ public class TimeTravel : MonoBehaviour
         pastLayer = LayerMask.NameToLayer("Past");
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
+        timeDome = GameObject.Find("TimeDome").GetComponent<MeshRenderer>();
+        timeDome.enabled = false;
     }
 
     private void OnEnable()
@@ -58,7 +67,32 @@ public class TimeTravel : MonoBehaviour
 
     private void HandleTravel()
     {
-        if (travelAction.WasPressedThisFrame())
+        // Timer do cooldown
+        if (onCooldown)
+        {
+            cooldownTimer -= Time.deltaTime;
+            
+            if (cooldownTimer <= 0)
+            {
+                onCooldown = false;
+                cooldownTimer = cooldown;
+            }
+        }
+        
+        // Timer da duração da viagem
+        if (isTravelling)
+        {
+            travelDurationTimer -= Time.deltaTime;
+
+            if (travelDurationTimer <= 0)
+            {
+                Travel();
+                travelDurationTimer = travelDuration;
+            }
+        }
+        
+        // Input da Viagem ou retorno
+        if (travelAction.WasPressedThisFrame() && !onCooldown)
         {
             Travel();
         }
@@ -66,18 +100,30 @@ public class TimeTravel : MonoBehaviour
 
     private void Travel()
     {
-        travelling = !travelling;
-        if (travelling)
+        // Viaja se não estiver em cooldown
+        isTravelling = !isTravelling;
+        if (onCooldown)
+        {
+            isTravelling = false;
+        }
+        
+        // Viaja
+        if (isTravelling)
         {
             Debug.Log("viajei pro passado");
             Physics.IgnoreLayerCollision(playerLayer, futureLayer, true);
             Physics.IgnoreLayerCollision(playerLayer, pastLayer, false);
+            timeDome.enabled = true;
         }
+        
+        //Volta da viagem e ativa cooldown
         else
         {
-            Debug.Log("viajei pro futuro");
+            Debug.Log("voltei pro futuro");
             Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
             Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
+            onCooldown = true;
+            timeDome.enabled = false;
         }
     }
 }
