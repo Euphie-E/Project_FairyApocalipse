@@ -10,7 +10,7 @@ public class TemporaryPlatform : MonoBehaviour
     [SerializeField] private float breakTime = 3;
     private float breakTimer = 3;
 
-    [Tooltip("Mínimo de tremor quando quebrar de 0 a 45 (em graus).")]
+    /* [Tooltip("Mínimo de tremor quando quebrar de 0 a 45 (em graus).")] // Pra caso precise programar tremor
     [SerializeField] private float tremorMin = 3;
 
     [Tooltip("Máximo de tremor quando quebrar de 0 a 45 (em graus).")]
@@ -23,7 +23,7 @@ public class TemporaryPlatform : MonoBehaviour
     [SerializeField] private float tremorOscillation = 3;
 
     [Tooltip("Marque caso esteja tremendo pro lado errado.")]
-    [SerializeField] private float flipAxis = 3;
+    [SerializeField] private float flipAxis = 3; */    
 
     [SerializeField] private bool autoRestore = false;
     private bool isRestoring = false;
@@ -35,8 +35,8 @@ public class TemporaryPlatform : MonoBehaviour
     
     void Start()
     {
-        platformMesh = gameObject.GetComponent<MeshRenderer>();
-        platformCollider = gameObject.GetComponent<Collider>();
+        platformMesh = transform.GetChild(0).GetComponent<MeshRenderer>();
+        platformCollider = transform.GetChild(0).GetComponent<Collider>();
         breakTimer = breakTime;
         restoreTimer = restoreTime;
     }
@@ -47,13 +47,9 @@ public class TemporaryPlatform : MonoBehaviour
         Restoring();
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
+    void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("colidi com o " + hit.gameObject.name);
-        /* if (hit.normal.y > 0.5f) // Confere se o player ta em cima
-        {
-            
-        } */
+        Debug.Log("triggou");
         BreakAndRestorePlatform();
     }
 
@@ -62,6 +58,8 @@ public class TemporaryPlatform : MonoBehaviour
         if (isBreaking)                         // FALTA TREMOR
         {
             breakTimer -= Time.deltaTime;
+
+
 
             if (breakTimer <= 0)
             {
