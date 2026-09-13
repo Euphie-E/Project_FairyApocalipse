@@ -1,0 +1,9 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/PauseMenu/PauseStyle.uss?fileID=7433441132597879392&amp;guid=5c9fb1261ad782e459701d64730ea897&amp;type=3#PauseStyle"/>
+    <ui:VisualElement name="PauseContainer" style="flex-grow: 1;">
+        <ui:TabView style="width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: flex-start; align-self: stretch; align-content: flex-start;">
+            <ui:Tab label="Configurações"/>
+            <ui:Tab label="Mecânicas"/>
+        </ui:TabView>
+    </ui:VisualElement>
+</ui:UXML>
