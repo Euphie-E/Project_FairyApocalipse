@@ -17,7 +17,11 @@ public class DebrisSpawner : MonoBehaviour
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
-        catch (Exception ex) {}
+
+        catch
+        {
+            Debug.LogError("não tem renderer, pode tirar esse try catch");
+        }
         
         rockDebris = transform.GetChild(0);
         rockDebrisRB = rockDebris.GetComponent<Rigidbody>();
