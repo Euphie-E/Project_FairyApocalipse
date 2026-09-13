@@ -1,12 +1,12 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/PauseMenu/PauseMenuStyle.uss?fileID=7433441132597879392&amp;guid=3966e2e48a89808419fa0e6b05c59b55&amp;type=3#PauseMenuStyle"/>
     <ui:VisualElement name="PauseContainer" style="flex-grow: 1; align-items: center; flex-direction: column; background-color: rgb(243, 255, 237);">
-        <ui:VisualElement name="Header" style="flex-grow: 1; width: 100%; height: 20%; background-color: rgb(243, 255, 237); flex-direction: row; align-items: center; justify-content: center;">
-            <ui:Button text="Button"/>
-            <ui:Button text="Button"/>
-            <ui:Button text="Button"/>
+        <ui:VisualElement name="Header" style="flex-grow: 1; width: 100%; height: 20%; background-color: rgb(243, 255, 237); flex-direction: row; align-items: center; justify-content: center; min-width: 100%; min-height: auto;">
+            <ui:Button text="Button" name="buttonTabSettings" class="button"/>
+            <ui:Button text="Button" name="buttonTab" class="button"/>
+            <ui:Button text="Button" class="button"/>
         </ui:VisualElement>
         <ui:VisualElement name="ContentContainer" style="flex-grow: 1; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0);"/>
-        <ui:VisualElement name="Footer" style="flex-grow: 1; width: 100%; height: 20%; background-color: rgb(243, 255, 237);"/>
+        <ui:VisualElement name="Footer" style="flex-grow: 1; width: 100%; height: 15%; background-color: rgb(243, 255, 237);"/>
     </ui:VisualElement>
 </ui:UXML>
