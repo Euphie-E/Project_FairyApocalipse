@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,6 +15,12 @@ public class EartquakeController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        try // Quando tirar o renderer do prefab não precisa mais disso
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
+        catch (Exception ex) {}
+
         earthquakeTimer = earthquakeInterval;
 
         spawners = new DebrisSpawner[transform.childCount];
