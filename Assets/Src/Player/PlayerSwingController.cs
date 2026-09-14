@@ -108,15 +108,11 @@ public class PlayerSwingController : MonoBehaviour
     {
         if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
         {
-            Debug.Log("Sem angulo para se soltar");
-            if (angle >= 45f || angle <= -45f)
-            {
-                transform.SetParent(null);
-                isSwinging = false;
-                currentBar.ResetSwingBar();
+            transform.SetParent(null);
+            isSwinging = false;
+            currentBar.ResetSwingBar();
 
-                PlayerStateController.Instance.EndSwing();
-            }
+            PlayerStateController.Instance.EndSwing();
         }
     }
 

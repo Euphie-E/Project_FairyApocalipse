@@ -67,23 +67,38 @@ public class PlayerMovement : MonoBehaviour
         if(moveDirection.sqrMagnitude > 1f)
             moveDirection.Normalize();
 
-        Vector3 targetVelocity = moveDirection * (maxSpeed * inputMagnitude);
-
-        float accelerationRate = inputMagnitude > 0.01f ? acceleration : deceleration;
-
-        horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, targetVelocity, accelerationRate * Time.deltaTime);
-
-        if(moveDirection.sqrMagnitude > 0.001f)
+        if (moveDirection.sqrMagnitude > 0.001f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
 
             float angle = Quaternion.Angle(transform.rotation, targetRotation);
 
             float currentRotationSpeed = rotationSpeed;
+
             if (angle > 120f)
                 currentRotationSpeed *= 1.5f;
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, currentRotationSpeed * Time.deltaTime);
+        }
+
+        Vector3 targetVelocity = moveDirection * (maxSpeed * inputMagnitude);
+
+        float accelerationRate = inputMagnitude > 0.01f ? acceleration : deceleration;
+
+        float directionDot = 0f;
+
+        if (horizontalVelocity.sqrMagnitude > 0.01f && moveDirection.sqrMagnitude > 0.01f)
+        {
+            directionDot = Vector3.Dot(horizontalVelocity.normalized, moveDirection);
+        }
+
+        if (directionDot < 0.5f)
+        {
+            horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, targetVelocity, deceleration * Time.deltaTime);
+        }
+        else
+        {
+            horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, targetVelocity, acceleration * Time.deltaTime);
         }
     }
 
