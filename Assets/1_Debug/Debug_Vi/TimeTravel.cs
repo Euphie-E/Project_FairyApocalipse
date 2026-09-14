@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -19,31 +18,56 @@ public class TimeTravel : MonoBehaviour
 
     [Header("Player")]
     [SerializeField] private bool isTravelling = false;
-    [SerializeField] private/*  const */ float travelDuration = 3;
-    private float travelDurationTimer = 3;
+    [SerializeField] private float travelDuration = 3f;
+    private float travelDurationTimer;
+
+    [SerializeField] private float cooldown = 5f;
+    private float cooldownTimer;
     private bool onCooldown = false;
-    [SerializeField] private/*  const */ float cooldown = 5;
-    private float cooldownTimer = 3;
-    private MeshRenderer timeDome;
+
+    [Header("Cameras")]
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private Camera pastCamera;
+    [SerializeField] private Camera pastDepthCamera;
+
+    [Header("Time Shader")]
+    [SerializeField] private Material timeTravelMaterial;
+    [SerializeField] private Transform timeDomeTransform;
+
+    [Header("Time Dome")]
+    [SerializeField] private MeshRenderer timeDome;
 
     private void Awake()
     {
         playerMap = inputActions.FindActionMap("Player");
         resetAction = inputActions.FindAction("Reset");
         travelAction = inputActions.FindAction("Interact");
-        Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
-        Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
+
+        playerLayer = LayerMask.NameToLayer("Player");
+        futureLayer = LayerMask.NameToLayer("Future");
+        pastLayer = LayerMask.NameToLayer("Past");
+
+        travelDurationTimer = travelDuration;
+        cooldownTimer = cooldown;
     }
 
     private void Start()
     {
-        playerLayer = LayerMask.NameToLayer("Player");
-        futureLayer = LayerMask.NameToLayer("Future");
-        pastLayer = LayerMask.NameToLayer("Past");
+        // Estado físico inicial: FUTURO
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
-        timeDome = GameObject.Find("TimeDome").GetComponent<MeshRenderer>();
+
+        // Main Camera nunca renderiza o passado.
+        SetMainCameraToFuture();
+
+        // Past Camera só será usada durante a habilidade.
+        pastCamera.enabled = false;
+        pastDepthCamera.enabled = false;
+
+        // Dome começa desligado.
         timeDome.enabled = false;
+
+
     }
 
     private void OnEnable()
@@ -51,13 +75,19 @@ public class TimeTravel : MonoBehaviour
         playerMap.Enable();
     }
 
+    private void OnDisable()
+    {
+        playerMap.Disable();
+    }
+
     private void Update()
     {
         HandleReset();
         HandleTravel();
+        UpdateTimeShader();
     }
 
-    private void HandleReset()  // Só pra fim de teste
+    private void HandleReset()
     {
         if (resetAction.WasPressedThisFrame())
         {
@@ -67,63 +97,91 @@ public class TimeTravel : MonoBehaviour
 
     private void HandleTravel()
     {
-        // Timer do cooldown
+        // Cooldown
         if (onCooldown)
         {
             cooldownTimer -= Time.deltaTime;
-            
-            if (cooldownTimer <= 0)
+
+            if (cooldownTimer <= 0f)
             {
                 onCooldown = false;
                 cooldownTimer = cooldown;
             }
         }
-        
-        // Timer da duração da viagem
+
+        // Duração da viagem
         if (isTravelling)
         {
             travelDurationTimer -= Time.deltaTime;
 
-            if (travelDurationTimer <= 0)
+            if (travelDurationTimer <= 0f)
             {
-                Travel();
-                travelDurationTimer = travelDuration;
+                EndTravel();
             }
         }
-        
-        // Input da Viagem ou retorno
-        if (travelAction.WasPressedThisFrame() && !onCooldown)
+
+        // Ativação manual
+        if (travelAction.WasPressedThisFrame() && !isTravelling && !onCooldown)
         {
-            Travel();
+            StartTravel();
         }
     }
 
-    private void Travel()
+    private void StartTravel()
     {
-        // Viaja se não estiver em cooldown
-        isTravelling = !isTravelling;
-        if (onCooldown)
-        {
-            isTravelling = false;
-        }
-        
-        // Viaja
-        if (isTravelling)
-        {
-            Debug.Log("viajei pro passado");
-            Physics.IgnoreLayerCollision(playerLayer, futureLayer, true);
-            Physics.IgnoreLayerCollision(playerLayer, pastLayer, false);
-            timeDome.enabled = true;
-        }
-        
-        //Volta da viagem e ativa cooldown
-        else
-        {
-            Debug.Log("voltei pro futuro");
-            Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
-            Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
-            onCooldown = true;
-            timeDome.enabled = false;
-        }
+        isTravelling = true;
+        travelDurationTimer = travelDuration;
+
+        Debug.Log("Viajei pro passado");
+
+        // Física do passado
+        Physics.IgnoreLayerCollision(playerLayer, futureLayer, true);
+        Physics.IgnoreLayerCollision(playerLayer, pastLayer, false);
+
+        // Visual do passado
+        pastCamera.enabled = true;
+        pastDepthCamera.enabled = true;
+        timeDome.enabled = true;
+    }
+
+    private void EndTravel()
+    {
+        isTravelling = false;
+
+        Debug.Log("Voltei pro futuro");
+
+        // Física do futuro
+        Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
+        Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
+
+        // Visual do passado desligado
+        pastCamera.enabled = false;
+        pastDepthCamera.enabled = false;
+        timeDome.enabled = false;
+       
+
+        // Cooldown
+        onCooldown = true;
+        cooldownTimer = cooldown;
+    }
+
+    private void SetMainCameraToFuture()
+    {
+        int pastMask = 1 << pastLayer;
+
+        playerCamera.cullingMask &= ~pastMask;
+    }
+
+    private void UpdateTimeShader()
+    {
+        if (timeTravelMaterial == null || timeDomeTransform == null)
+            return;
+
+        Vector3 center = timeDomeTransform.position;
+
+        float radius = timeDomeTransform.lossyScale.x * 0.5f;
+
+        timeTravelMaterial.SetVector("_SphereCenter", center);
+        timeTravelMaterial.SetFloat("_SphereRadius", isTravelling ? radius : 0f);
     }
 }
