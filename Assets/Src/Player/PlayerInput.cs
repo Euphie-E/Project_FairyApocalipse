@@ -27,10 +27,14 @@ public class PlayerInput : MonoBehaviour
     private void OnEnable()
     {
         playerMap.Enable();
+        moveAction.Enable();
+        jumpAction.Enable();
     }
 
     private void OnDisable()
     {
         playerMap.Disable();
+        moveAction.Disable();
+        jumpAction.Disable();
     }
 }
