@@ -8,17 +8,24 @@ public class SwingBarController : MonoBehaviour
     [SerializeField] float grabHeight = 2f;
     [SerializeField] Transform swingPivot;
     [SerializeField] float timeToReattach = 1f;
+    [SerializeField] float edgeMargin = 0.2f;
 
     public bool playerAttached;
     public CinemachineCamera cam;
     private bool canAttach = true;
     private CharacterController controller;
+    private BoxCollider boxCollider;
+
+    private void Start()
+    {
+        boxCollider = GetComponent<BoxCollider>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         controller = other.GetComponent<CharacterController>();
 
-        if (controller != null)
+        if (controller != null && other.CompareTag("Player"))
         {
             if (playerAttached)
                 return;
@@ -33,13 +40,28 @@ public class SwingBarController : MonoBehaviour
             yield break;
 
         playerAttached = true;
-
         Transform player = playerController.transform;
 
-        float dot = Vector3.Dot(player.forward, transform.forward);
+        //Coloca o pivot de rotação proximo ao local que o player encostou.
+        Vector3 contactPoint = boxCollider.ClosestPoint(player.position);
 
+        Vector3 localContactPoint = boxCollider.transform.InverseTransformPoint(contactPoint);
+
+        Vector3 pivotPosition = swingPivot.localPosition;
+
+        float halfWidth = boxCollider.size.x * 0.5f;
+        float minX = -halfWidth + edgeMargin;
+        float maxX = halfWidth - edgeMargin;
+
+        pivotPosition.x = Mathf.Clamp(localContactPoint.x, minX, maxX);
+
+        swingPivot.localPosition = pivotPosition;
+
+        //Verifica se Player está na frente ou atrás.
+        float dot = Vector3.Dot(player.forward, transform.forward);
         bool isFront = dot > 0f;
 
+        //Pega a velocidade do player ao escostar na barra
         Vector3 velocity = playerController.velocity;
         float forwardSpeed = Vector3.Dot(velocity, swingPivot.forward);
 
