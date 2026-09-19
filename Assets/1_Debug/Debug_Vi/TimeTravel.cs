@@ -28,8 +28,7 @@ public class TimeTravel : MonoBehaviour
     [Header("Cameras")]
     [SerializeField] private Camera playerCamera;
     [SerializeField] private Camera pastCamera;
-    [SerializeField] private Camera pastDepthCamera;
-
+    
     [Header("Time Shader")]
     [SerializeField] private Material timeTravelMaterial;
     [SerializeField] private Transform timeDomeTransform;
@@ -62,10 +61,9 @@ public class TimeTravel : MonoBehaviour
 
         // Past Camera só será usada durante a habilidade.
         pastCamera.enabled = false;
-        pastDepthCamera.enabled = false;
-
+        
         // Dome começa desligado.
-        timeDome.enabled = false;
+        //timeDome.enabled = false;
 
 
     }
@@ -140,8 +138,7 @@ public class TimeTravel : MonoBehaviour
 
         // Visual do passado
         pastCamera.enabled = true;
-        pastDepthCamera.enabled = true;
-        timeDome.enabled = true;
+        //timeDome.enabled = true;
     }
 
     private void EndTravel()
@@ -156,8 +153,7 @@ public class TimeTravel : MonoBehaviour
 
         // Visual do passado desligado
         pastCamera.enabled = false;
-        pastDepthCamera.enabled = false;
-        timeDome.enabled = false;
+        //timeDome.enabled = false;
        
 
         // Cooldown
