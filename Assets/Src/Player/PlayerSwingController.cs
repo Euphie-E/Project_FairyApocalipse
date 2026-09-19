@@ -32,6 +32,10 @@ public class PlayerSwingController : MonoBehaviour
         cameraTransform = Camera.main.transform;
     }
 
+    void Start()
+    {
+        PlayerInput.Instance.AddAction(Jump,2);
+    }
     private void Update()
     {
         if (swingPivot == null)
@@ -40,7 +44,7 @@ public class PlayerSwingController : MonoBehaviour
         //Le Input
         Vector2 input = PlayerInput.Instance.moveAction.ReadValue<Vector2>();
 
-        //Pega a direção da camera e passa pra direção do input
+        //Pega a direï¿½ï¿½o da camera e passa pra direï¿½ï¿½o do input
         float cameraDirection = GetCameraDirection();
         input.y *= cameraDirection;
 
@@ -61,7 +65,7 @@ public class PlayerSwingController : MonoBehaviour
             angularVelocity = 0f;
 
         UpdateSwingRotation();
-        Jump();
+        //Jump();
     }
 
     private void OnEnable()
@@ -106,14 +110,14 @@ public class PlayerSwingController : MonoBehaviour
 
     private void Jump()
     {
-        if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
-        {
+        //if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
+        //{
             transform.SetParent(null);
             isSwinging = false;
             currentBar.ResetSwingBar();
 
             PlayerStateController.Instance.EndSwing();
-        }
+        //}
     }
 
     private float GetCameraDirection()

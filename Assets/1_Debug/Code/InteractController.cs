@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 
 public class InteractController : MonoBehaviour
 {
-    InputSystem_Actions inputSystemActions;
-    InputAction interactAction;
+    
+    
     public Interactable atteched = null;
     [SerializeField] 
     float radiusCheck = 1;
@@ -15,13 +15,13 @@ public class InteractController : MonoBehaviour
     Collider[] list = new Collider[10];
     void Awake()
     {
-        inputSystemActions ??= new InputSystem_Actions();
-        interactAction = inputSystemActions.Player.Interact;
+        
+        
     }
     void Start()
     {
-        interactAction.performed += ctx => Press();
-        interactAction.canceled += ctx => Cancel();
+        PlayerInput.Instance.AddAction(Press,3);
+        PlayerInput.Instance.AddCancelAction(Cancel,3);
     }
 
     void Press()
@@ -53,16 +53,6 @@ public class InteractController : MonoBehaviour
             atteched.Throw();
         }
     }
-    private void OnEnable()
-    {
-        interactAction.Enable();
-    }
-
-    private void OnDisable()
-    {
-        interactAction.Disable();
-    }
-
     public static void DrawDebugSphere(Vector3 center, float radius, Color color, float duration)
     {
         // Draws a 3D crosshair showing the sphere bounds
