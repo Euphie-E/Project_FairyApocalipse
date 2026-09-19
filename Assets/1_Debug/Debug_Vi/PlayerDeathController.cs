@@ -9,11 +9,16 @@ public class PlayerDeathController : MonoBehaviour
     void Start()
     {
         playerMovement = gameObject.GetComponent<PlayerMovement>();
-
+        
     }
 
     void Update()
     {
-        
+        CheckFall();
+    }
+
+    private void CheckFall()
+    {
+        if (playerMovement.verticalVelocity < 0) falling = true;
     }
 }
