@@ -34,7 +34,6 @@ public class InteractController : MonoBehaviour
             {
                 if (list[i].CompareTag("Interactable"))
                 {
-                    Debug.Log(list[i].name);
                     list[i].GetComponent<Interactable>().Attach(this);
                     break;
                 }

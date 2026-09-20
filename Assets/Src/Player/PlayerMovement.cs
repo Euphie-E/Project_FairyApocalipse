@@ -67,8 +67,6 @@ public class PlayerMovement : MonoBehaviour
             finalVelocity.y = verticalVelocity;
 
             characterController.Move(finalVelocity * Time.deltaTime);
-            Debug.Log(isGrounded);
-            Debug.Log(finalVelocity);
         }
     }
 

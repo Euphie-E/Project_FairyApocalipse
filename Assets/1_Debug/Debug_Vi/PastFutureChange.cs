@@ -23,7 +23,6 @@ public class PastFutureChange : Interactable
 
     protected override void Interact(InteractController player, GameObject attach)
     {
-        Debug.Log("Interagi");
         if (player.GetComponent<TimeTravel>().isTravelling ^ interactInFuture) // se for pra funcionar no passado funciona no passado, se for pra funcionar no futuro funciona no futuro
         {
             Change();
