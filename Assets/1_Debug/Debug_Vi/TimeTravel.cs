@@ -86,7 +86,7 @@ public class TimeTravel : MonoBehaviour
     private void Update()
     {
         //HandleReset();
-        //HandleTravel();
+        HandleTravel();
         UpdateTimeShader();
     }
 
