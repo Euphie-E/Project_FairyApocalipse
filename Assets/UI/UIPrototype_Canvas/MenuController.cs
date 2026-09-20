@@ -8,15 +8,15 @@ public class MenuController : MonoBehaviour
     {
         Time.timeScale = 1f;
         pausePanel.SetActive(false);
+        PlayerInput.Instance.AddAction(Pause,6);
     }
 
     // Update is called once per frame
-    void Update()
+    public void Pause()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)){
-            Time.timeScale = 0f;
-            pausePanel.SetActive(!pausePanel.activeSelf);
-        }
+
+        Time.timeScale = 0f;
+        pausePanel.SetActive(!pausePanel.activeSelf);
     }
 
     public void BackToGame()
