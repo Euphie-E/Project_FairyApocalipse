@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -22,15 +22,27 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 horizontalVelocity { get; private set; }
     public float verticalVelocity { get; private set; }
 
+    [Header("Slide")]
+    public bool isGrounded { get; private set; }
+    private Vector3 groundNormal;
+    private float groundAngle;
+    [SerializeField] private float slideSpeed = 25f;
+
+    [Header("Coyote Jump")]
+    [SerializeField] private float coyoteAirTime = 0.5f;
+    private float currentCoyoteTime;
+    private bool hasJumped;
+
     private void Awake()
     {
         playerAnimatorController = GetComponent<PlayerAnimatorController>();
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Start()
     {
         cameraTransform = Camera.main.transform;
-        characterController = GetComponent<CharacterController>();
+        currentCoyoteTime = coyoteAirTime;
     }
 
     private void Update()
@@ -42,11 +54,26 @@ public class PlayerMovement : MonoBehaviour
             ApplyGravity();
 
             Vector3 finalVelocity = horizontalVelocity;
+
+            //Deslize do player
+            if (groundAngle <= characterController.slopeLimit)
+            {
+                finalVelocity = horizontalVelocity;
+            }
+            else
+            {
+                finalVelocity = Vector3.ProjectOnPlane(horizontalVelocity, groundNormal);
+
+                finalVelocity += GetSlideVelocity();
+            }
+
             finalVelocity.y = verticalVelocity;
 
             characterController.Move(finalVelocity * Time.deltaTime);
-        } 
+        }
     }
+
+    
 
     private void HandleMovement()
     {
@@ -104,17 +131,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJump()
     {
-        if (characterController.isGrounded)
+        if (CanJump())
         {
-            if (verticalVelocity < 0f)
-                verticalVelocity = -2f;
-
             if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
             {
                 verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 playerAnimatorController.PlayJump();
+                hasJumped = true;
             }
-
         }
         else
         {
@@ -127,11 +151,64 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyGravity()
     {
+        if(characterController.isGrounded && verticalVelocity < 0f)
+        {
+            verticalVelocity = -2f;
+            return;
+        }
+
         verticalVelocity += gravity * Time.deltaTime;
     }
 
     public void Launch()
     {
         verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+
+        float angle = Vector3.Angle(hit.normal, Vector3.up);
+
+        if(hit.normal.y > 0f)
+        {
+            groundNormal = hit.normal;
+            groundAngle = angle;
+
+            if (groundAngle <= characterController.slopeLimit)
+                isGrounded = true;
+            else
+                isGrounded = false;
+        }
+    }
+
+    private Vector3 GetSlideVelocity()
+    {
+        Vector3 slideDirection = Vector3.ProjectOnPlane(
+            Vector3.down,
+            groundNormal
+        ).normalized;
+
+        return slideDirection * slideSpeed;
+    }
+
+    private bool CanJump()
+    {
+        if (isGrounded && characterController.isGrounded)
+        {
+            hasJumped = false;
+            currentCoyoteTime = coyoteAirTime;
+            return true;
+        }
+        else if (!characterController.isGrounded && !hasJumped && currentCoyoteTime >= 0f)
+        {
+            Debug.Log($"Can Coyote for {currentCoyoteTime}");
+            currentCoyoteTime -= Time.deltaTime;
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
     }
 }
