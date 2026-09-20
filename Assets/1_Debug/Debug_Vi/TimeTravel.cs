@@ -13,8 +13,8 @@ public class TimeTravel : MonoBehaviour
 
     [Header("Layers")]
     private int playerLayer;
-    private int pastLayer;
-    private int futureLayer;
+    public int pastLayer;
+    public int futureLayer;
 
     [Header("Player")]
     [SerializeField] public bool isTravelling = false;
