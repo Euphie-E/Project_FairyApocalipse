@@ -4,12 +4,12 @@ using UnityEngine.SceneManagement;
 
 public class TimeTravel : MonoBehaviour
 {
-    [Header("Input")]
+    /* [Header("Input")]
     [SerializeField] private InputActionAsset inputActions;
 
     private InputActionMap playerMap;
     private InputAction resetAction;
-    private InputAction travelAction;
+    private InputAction travelAction; */
 
     [Header("Layers")]
     private int playerLayer;
@@ -38,9 +38,9 @@ public class TimeTravel : MonoBehaviour
 
     private void Awake()
     {
-        playerMap = inputActions.FindActionMap("Player");
+        /* playerMap = inputActions.FindActionMap("Player");
         resetAction = inputActions.FindAction("Reset");
-        travelAction = inputActions.FindAction("Travel");
+        travelAction = inputActions.FindAction("Travel"); */
 
         playerLayer = LayerMask.NameToLayer("Player");
         futureLayer = LayerMask.NameToLayer("Future");
@@ -52,6 +52,11 @@ public class TimeTravel : MonoBehaviour
 
     private void Start()
     {
+        // Inputs
+        PlayerInput.Instance.AddAction(HandleReset,4);
+        PlayerInput.Instance.AddAction(StartTravel,5);
+
+
         // Estado físico inicial: FUTURO
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
@@ -68,7 +73,7 @@ public class TimeTravel : MonoBehaviour
 
     }
 
-    private void OnEnable()
+    /* private void OnEnable()
     {
         playerMap.Enable();
     }
@@ -76,21 +81,21 @@ public class TimeTravel : MonoBehaviour
     private void OnDisable()
     {
         playerMap.Disable();
-    }
+    } */
 
     private void Update()
     {
-        HandleReset();
-        HandleTravel();
+        //HandleReset();
+        //HandleTravel();
         UpdateTimeShader();
     }
 
     private void HandleReset()
     {
-        if (resetAction.WasPressedThisFrame())
-        {
+        //if (resetAction.WasPressedThisFrame())
+        //{
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+        //}
     }
 
     private void HandleTravel()
@@ -119,14 +124,15 @@ public class TimeTravel : MonoBehaviour
         }
 
         // Ativação manual
-        if (travelAction.WasPressedThisFrame() && !isTravelling && !onCooldown)
-        {
-            StartTravel();
-        }
+        //if (travelAction.WasPressedThisFrame() && !isTravelling && !onCooldown)
+        //{
+        //    StartTravel();
+        //}
     }
 
     private void StartTravel()
     {
+        if(isTravelling || onCooldown) return;
         isTravelling = true;
         travelDurationTimer = travelDuration;
 
