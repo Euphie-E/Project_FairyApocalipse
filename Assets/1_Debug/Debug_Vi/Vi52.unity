@@ -1700,32 +1700,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1499160731}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1740733407 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2698621453906839477, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
-  m_PrefabInstance: {fileID: 1821765838197051669}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1740733409
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1740733407}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 0.3, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1923781595
 GameObject:
   m_ObjectHideFlags: 0
@@ -2886,14 +2860,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PastFuture
       objectReference: {fileID: 0}
-    - target: {fileID: 3036180741613024402, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
-      propertyPath: attachPoints.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3036180741613024402, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
-      propertyPath: 'attachPoints.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1740733407}
     - target: {fileID: 5764123774760819995, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.99998
@@ -2937,10 +2903,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2698621453906839477, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1740733409}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
 --- !u!33 &1851004165226487343
 MeshFilter:
