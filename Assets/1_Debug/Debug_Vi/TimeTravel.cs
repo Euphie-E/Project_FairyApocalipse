@@ -17,7 +17,7 @@ public class TimeTravel : MonoBehaviour
     private int futureLayer;
 
     [Header("Player")]
-    [SerializeField] private bool isTravelling = false;
+    [SerializeField] public bool isTravelling = false;
     [SerializeField] private float travelDuration = 3f;
     private float travelDurationTimer;
 
