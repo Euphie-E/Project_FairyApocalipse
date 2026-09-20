@@ -37,4 +37,18 @@ public class PlayerInput : MonoBehaviour
         moveAction.Disable();
         jumpAction.Disable();
     }
+
+    public void OnDeath()
+    {
+        playerMap.Disable();
+        moveAction.Disable();
+        jumpAction.Disable();
+    }
+
+    public void OnRevive()
+    {
+        playerMap.Disable();
+        moveAction.Disable();
+        jumpAction.Disable();
+    }
 }
