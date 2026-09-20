@@ -40,7 +40,7 @@ public class TimeTravel : MonoBehaviour
     {
         playerMap = inputActions.FindActionMap("Player");
         resetAction = inputActions.FindAction("Reset");
-        travelAction = inputActions.FindAction("Interact");
+        travelAction = inputActions.FindAction("Travel");
 
         playerLayer = LayerMask.NameToLayer("Player");
         futureLayer = LayerMask.NameToLayer("Future");
