@@ -49,18 +49,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (characterController.enabled)
         {
+            
+
             HandleMovement();
             HandleJump();
             ApplyGravity();
 
             Vector3 finalVelocity = horizontalVelocity;
 
-            //Deslize do player
-            if (groundAngle <= characterController.slopeLimit)
-            {
-                finalVelocity = horizontalVelocity;
-            }
-            else
+            if (!isGrounded && characterController.velocity.y < 0)
             {
                 finalVelocity = Vector3.ProjectOnPlane(horizontalVelocity, groundNormal);
 
@@ -70,10 +67,10 @@ public class PlayerMovement : MonoBehaviour
             finalVelocity.y = verticalVelocity;
 
             characterController.Move(finalVelocity * Time.deltaTime);
+            Debug.Log(isGrounded);
+            Debug.Log(finalVelocity);
         }
     }
-
-    
 
     private void HandleMovement()
     {
@@ -202,7 +199,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (!characterController.isGrounded && !hasJumped && currentCoyoteTime >= 0f)
         {
-            Debug.Log($"Can Coyote for {currentCoyoteTime}");
             currentCoyoteTime -= Time.deltaTime;
             return true;
         }
