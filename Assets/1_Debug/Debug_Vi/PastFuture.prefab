@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3036180741613024402}
   m_Layer: 0
   m_Name: PastFuture
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698621453906839477}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 16.99998, y: 0.145, z: -17.00002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 4118469764541834661}
   - {fileID: 96226342911832435}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!114 &3036180741613024402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48,6 +48,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2572fa222a899ba4c80786501eedb42a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  attachPoints: []
+  rotationThreshold: 0.7
+  holdThreshold: 1
+  forcePS: 0.5
+  start: 0
+  end: 0
   pastObject:
   - {fileID: 7834654377364355180}
   pastChangedObject:
@@ -57,6 +63,8 @@ MonoBehaviour:
   futureChangedObject:
   - {fileID: 6741750579409535266}
   isChanged: 0
+  interactInFuture: 0
+  isReversible: 0
 --- !u!1 &5727801490376489497
 GameObject:
   m_ObjectHideFlags: 0

@@ -119,11 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &107807592 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2664642316351876537, guid: db8e8348e200ad44dac74683a4706dbf, type: 3}
-  m_PrefabInstance: {fileID: 867933440}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &221715668
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,11 +324,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &446859562 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6099451806421071561, guid: db8e8348e200ad44dac74683a4706dbf, type: 3}
-  m_PrefabInstance: {fileID: 867933440}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &527292411
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +355,6 @@ Transform:
   m_Children:
   - {fileID: 221715669}
   - {fileID: 299078392}
-  - {fileID: 1550421375}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &577894152
@@ -1034,14 +1023,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player - Kid
       objectReference: {fileID: 0}
-    - target: {fileID: 8922974664084637939, guid: db8e8348e200ad44dac74683a4706dbf, type: 3}
-      propertyPath: checkpoints.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8922974664084637939, guid: db8e8348e200ad44dac74683a4706dbf, type: 3}
-      propertyPath: 'checkpoints.Array.data[0]'
-      value: 
-      objectReference: {fileID: 446859562}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1159,23 +1140,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1010297806}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1230070421 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7834654377364355180, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
-  m_PrefabInstance: {fileID: 1821765838197051669}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1230070423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1230070421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a8f8e6481e304042a9a2b8bcd8c3220, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PastFutureInteract
 --- !u!1 &1269938446
 GameObject:
   m_ObjectHideFlags: 0
@@ -1736,72 +1700,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1499160731}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1550421375 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5764123774760819995, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
-  m_PrefabInstance: {fileID: 1821765838197051669}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1740733407 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2698621453906839477, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
-  m_PrefabInstance: {fileID: 1821765838197051669}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1740733409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1740733407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 107807592}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1923781595
 GameObject:
   m_ObjectHideFlags: 0
@@ -2956,7 +2854,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 527292412}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2698621453906839477, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
       propertyPath: m_Name
@@ -3005,13 +2903,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2698621453906839477, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1740733409}
-    - targetCorrespondingSourceObject: {fileID: 7834654377364355180, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1230070423}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34a57b8d41538004b83d7a3d226c8cd9, type: 3}
 --- !u!33 &1851004165226487343
 MeshFilter:
@@ -5201,5 +5093,6 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 527292412}
+  - {fileID: 1821765838197051669}
   - {fileID: 867933440}
   - {fileID: 7684034229405759161}
