@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 5708491630554434632}
   - component: {fileID: 5709593721590807119}
   - component: {fileID: 4151704568700818617}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PastCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -325,6 +325,7 @@ GameObject:
   - component: {fileID: 8697555056014407891}
   - component: {fileID: 4516296378048804947}
   - component: {fileID: 8922974664084637939}
+  - component: {fileID: 6038228782548844420}
   m_Layer: 3
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -489,9 +490,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aafafda944d07849925663c270e7dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  checkpoints: []
+  checkpoints:
+  - {fileID: 6099451806421071561}
   maxHeight: 25
   isFalling: 0
+--- !u!114 &6038228782548844420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2664642316351876537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c73b881812643f43a784c051ea7d192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractController
+  atteched: {fileID: 0}
+  radiusCheck: 1.5
+  gizmo: 1
 --- !u!1 &2911940494488221763
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,7 +850,7 @@ GameObject:
   - component: {fileID: 5743627575313571170}
   - component: {fileID: 1774850346259121409}
   - component: {fileID: 7360755556549518981}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
