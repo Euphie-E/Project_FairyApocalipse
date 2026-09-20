@@ -1,12 +1,16 @@
+using NUnit.Framework;
 using UnityEngine;
 
-public class PastFutureChange : MonoBehaviour
+public class PastFutureChange : Interactable
 {
     [SerializeField] GameObject[] pastObject;
     [SerializeField] GameObject[] pastChangedObject;
     [SerializeField] GameObject[] futureObject;
     [SerializeField] GameObject[] futureChangedObject;
-    [SerializeField] bool isChanged = false;
+    [SerializeField] private bool isChanged = false;
+
+    [SerializeField] private bool interactInFuture = false;
+    [SerializeField] private bool isReversible = false;
 
 
     void Start()
@@ -17,9 +21,10 @@ public class PastFutureChange : MonoBehaviour
         ActiveAll(futureObject);
     }
 
-    void Update()
+    protected override void Interact(InteractController player, GameObject attach)
     {
-        if (isChanged)
+        Debug.Log("Interagi");
+        if (player.GetComponent<TimeTravel>().isTravelling ^ interactInFuture) // se for pra funcionar no passado funciona no passado, se for pra funcionar no futuro funciona no futuro
         {
             Change();
         }
@@ -27,7 +32,7 @@ public class PastFutureChange : MonoBehaviour
 
     public void Change()
     {
-        if (/* ! */isChanged)
+        if (isReversible || !isChanged)
         {
             Debug.Log("foi");
             isChanged = true;
