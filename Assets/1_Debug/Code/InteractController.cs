@@ -26,6 +26,7 @@ public class InteractController : MonoBehaviour
             if(gizmo) DrawDebugSphere(transform.position,radiusCheck,Color.blue,2);
             for(int i = 0; i<max;i++)
             {
+                Debug.Log(list[i].name);
                 if (list[i].CompareTag("Interactable"))
                 {
                     list[i].GetComponent<Interactable>().Attach(this);
