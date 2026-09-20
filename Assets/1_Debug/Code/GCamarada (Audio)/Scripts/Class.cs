@@ -7,7 +7,8 @@ namespace GCamarada
     public class AudioManagerList 
     {
         public string clipName;
-        public AudioClip clip;
+        public AudioClip clipe;
+        public AudioClip[] clip;
         public AudioSource source;
     }
 }
