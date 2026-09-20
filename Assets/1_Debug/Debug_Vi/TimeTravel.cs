@@ -56,12 +56,6 @@ public class TimeTravel : MonoBehaviour
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
 
-        Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
-        Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
-
-        Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
-        Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
-
         // Main Camera nunca renderiza o passado.
         SetMainCameraToFuture();
 
