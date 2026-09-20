@@ -1,4 +1,7 @@
+<<<<<<< Updated upstream
 using System;
+=======
+>>>>>>> Stashed changes
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -30,10 +33,17 @@ namespace GCamarada
             {
                 if (Audio.clipName == clipName)
                 {
+<<<<<<< Updated upstream
                     if (!Audio.clip || !Audio.source)
                         Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
 
                     Audio.source.PlayOneShot(Audio.clip);
+=======
+                    if (Audio.clip.Length < 1 || !Audio.source)
+                        Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
+
+                    Audio.source.PlayOneShot(Audio.clip[Random.Range(0, Audio.clip.Length)]);
+>>>>>>> Stashed changes
                     break;
                 }
             }
@@ -44,10 +54,17 @@ namespace GCamarada
             {
                 if (Audio.clipName == clipName)
                 {
+<<<<<<< Updated upstream
                     if (!Audio.clip || !Audio.source)
                         Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
 
                     Audio.source.clip = Audio.clip;
+=======
+                    if (Audio.clip.Length < 1 || !Audio.source)
+                        Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
+
+                    Audio.source.clip = Audio.clip[Random.Range(0, Audio.clip.Length)];
+>>>>>>> Stashed changes
                     Audio.source.loop = loop;
                     Audio.source.Play();
 
@@ -61,7 +78,11 @@ namespace GCamarada
             {
                 if (Audio.clipName == clipName)
                 {
+<<<<<<< Updated upstream
                     if (!Audio.clip || !Audio.source)
+=======
+                    if (Audio.clip.Length < 1 || !Audio.source)
+>>>>>>> Stashed changes
                         Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
                     
                     if (Audio.source.clip)

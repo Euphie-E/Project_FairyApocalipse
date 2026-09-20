@@ -7,7 +7,11 @@ namespace GCamarada
     public class AudioManagerList 
     {
         public string clipName;
+<<<<<<< Updated upstream
         public AudioClip clip;
+=======
+        public AudioClip[] clip;
+>>>>>>> Stashed changes
         public AudioSource source;
     }
 }
