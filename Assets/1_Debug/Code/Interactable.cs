@@ -4,7 +4,7 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
     [SerializeField] 
-    List<GameObject> attachPoints = new List<GameObject>();
+    protected List<GameObject> attachPoints = new List<GameObject>();
     [SerializeField]
     float rotationThreshold = 0.7f;
     [SerializeField]
