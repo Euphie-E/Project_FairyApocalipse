@@ -165,4 +165,18 @@ public class PlayerInput : MonoBehaviour
             resetAction.canceled += ctx => action();
         }
     }
+
+    public void OnDeath()
+    {
+        playerMap.Disable();
+        moveAction.Disable();
+        jumpAction.Disable();
+    }
+
+    public void OnRevive()
+    {
+        playerMap.Disable();
+        moveAction.Disable();
+        jumpAction.Disable();
+    }
 }

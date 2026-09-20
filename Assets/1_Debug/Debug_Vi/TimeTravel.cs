@@ -41,9 +41,9 @@ public class TimeTravel : MonoBehaviour
 
     private void Awake()
     {
-        //playerMap = inputActions.FindActionMap("Player");
-        //resetAction = inputActions.FindAction("Reset");
-        //travelAction = inputActions.FindAction("Interact");
+        playerMap = inputActions.FindActionMap("Player");
+        resetAction = inputActions.FindAction("Reset");
+        travelAction = inputActions.FindAction("Travel");
 
         playerLayer = LayerMask.NameToLayer("Player");
         //notPlayerLayer = LayerMask.NameToLayer("Playernt");
