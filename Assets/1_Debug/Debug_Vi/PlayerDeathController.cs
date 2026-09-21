@@ -38,13 +38,13 @@ public class PlayerDeathController : MonoBehaviour
 
     private void CheckFall()
     {
-        if (!isFalling && playerMovement.verticalVelocity < 0) 
+        if (!isDead && !isFalling && playerMovement.verticalVelocity < 0) 
         {
             isFalling = true;
             yfall = transform.position.y;
         }
 
-        else if (isFalling && playerMovement.verticalVelocity >= 0) 
+        else if (!isDead && isFalling && playerMovement.verticalVelocity >= 0) 
         {
             CheckFallDeath();
             isFalling = false;
@@ -54,7 +54,7 @@ public class PlayerDeathController : MonoBehaviour
 
     private void CheckFallDistance()
     {
-        if (isFalling)
+        if (!isDead && isFalling)
         {
             fallHeight = yfall - transform.position.y;
             
@@ -64,7 +64,7 @@ public class PlayerDeathController : MonoBehaviour
 
     private void CheckFallDeath()
     {
-        if (isFalling && fallHeight > maxHeight)
+        if (!isDead && isFalling && fallHeight > maxHeight)
         {
             isDead = true;
         }
@@ -87,11 +87,13 @@ public class PlayerDeathController : MonoBehaviour
 
     private void Revive()
     {
-        transform.position = checkpoints[caughtCheckpointIndex].transform.position;
+        Debug.Log("aaaa");
+        transform.position = checkpoints[caughtCheckpointIndex].transform.position + Vector3.up * 1.5f;
         playerInput.OnRevive();
+        isDead = false;
     }
 
-    public void NextCheckpoint(int index, GameObject checkpoint)
+    public void NewCheckpoint(int index, GameObject checkpoint)
     {
         caughtCheckpointIndex = index;
         checkpoints[index] = checkpoint;
