@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,6 +19,11 @@ public class PlayerInput : MonoBehaviour
     public InputAction travelAction { get; private set; }
     public InputAction escapeAction { get; private set; }
 
+
+    // gambiarra
+    public InputAction um { get; private set; }
+    public InputAction dois { get; private set; }
+
     private void Awake()
     {
         if (Instance == null)
@@ -33,7 +39,37 @@ public class PlayerInput : MonoBehaviour
         resetAction = inputSystemActions.Player.Reset;
         travelAction = inputSystemActions.Player.Travel;
         escapeAction = inputSystemActions.Player.Escape;
+
+        // gambiarra
+        um = inputSystemActions.Player.Previous;
+        dois = inputSystemActions.Player.Next;
     }
+
+    // gambiarra
+    void Start()
+    {
+        um.performed += ctx =>
+        {
+            transform.GetComponent<PlayerMovement>().enabled = false;
+            transform.GetComponent<PlayerDeathController>().enabled = false;
+            transform.localPosition = new Vector3(14,10.1f,60);
+            StartCoroutine("Gambi");
+        };
+        dois.performed += ctx =>
+        {
+            transform.GetComponent<PlayerMovement>().enabled = false;
+            transform.GetComponent<PlayerDeathController>().enabled = false;
+            transform.localPosition = new Vector3(76.5f,-38.8f,147);
+            StartCoroutine("Gambi");
+        };
+    }
+    IEnumerator Gambi()
+    {
+        yield return new WaitForSeconds(0.5f);
+        transform.GetComponent<PlayerMovement>().enabled = true;
+        transform.GetComponent<PlayerDeathController>().enabled = true;
+    }
+    
 
     private void OnEnable()
     {
@@ -44,6 +80,11 @@ public class PlayerInput : MonoBehaviour
         resetAction.Enable();
         travelAction.Enable();
         escapeAction.Enable();
+
+        //gambiarra
+
+        um.Enable();
+        dois.Enable();
     }
 
     private void OnDisable()
@@ -55,6 +96,11 @@ public class PlayerInput : MonoBehaviour
         resetAction.Disable();
         travelAction.Disable();
         escapeAction.Disable();
+
+        //gambiarra
+
+        um.Disable();
+        dois.Disable();
     }
 
     public void OnDeath()
@@ -70,13 +116,13 @@ public class PlayerInput : MonoBehaviour
 
     public void OnRevive()
     {
-        playerMap.Disable();
-        moveAction.Disable();
-        jumpAction.Disable();
-        interactAction.Disable();
-        resetAction.Disable();
-        travelAction.Disable();
-        escapeAction.Disable();
+        playerMap.Enable();
+        moveAction.Enable();
+        jumpAction.Enable();
+        interactAction.Enable();
+        resetAction.Enable();
+        travelAction.Enable();
+        escapeAction.Enable();
     }
     /// <summary>
     /// Type:<br />
