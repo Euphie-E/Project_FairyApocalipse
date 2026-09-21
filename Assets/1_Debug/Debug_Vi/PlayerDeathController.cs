@@ -88,6 +88,9 @@ public class PlayerDeathController : MonoBehaviour
 
     private void Revive()
     {
+        isFalling = false;
+        fallHeight = 0;
+        toReviveTimer = 0;
         playerCharacterController.enabled = false;
         transform.position = checkpoints[caughtCheckpointIndex].transform.position + Vector3.up * 1.5f;
         playerCharacterController.enabled = true;

@@ -35,8 +35,8 @@ public class TemporaryPlatform : MonoBehaviour
     
     void Start()
     {
-        platformMesh = transform.GetChild(0).GetComponent<MeshRenderer>();
-        platformCollider = transform.GetChild(0).GetComponent<Collider>();
+        platformMesh = GetComponent<MeshRenderer>();
+        platformCollider = GetComponent<Collider>();
         breakTimer = breakTime;
         restoreTimer = restoreTime;
     }
