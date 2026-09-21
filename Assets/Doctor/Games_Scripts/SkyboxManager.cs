@@ -11,70 +11,87 @@ public class SkyboxManager : MonoBehaviour
     public Material daySkybox;
     public Material nightSkybox;
 
-    [Header("Artistic Rotations")]
-    public float morningRotation = 20f;
-    public float afternoonRotation = 70f;
-    public float middayRotation = 120f;
-    public float sunsetRotation = 170f;
-    public float nightRotation = 220f;
+    [Header("Time")]
+    [Range(0f, 24f)]
+    public float timeOfDay = 8f;
 
+    [Tooltip("Quantos minutos reais duram 24 horas no jogo")]
+    public float dayDurationMinutes = 10f;
 
-     public bool isNight = false;
-    private void Start()
-    {
-        SetDayStage(0);
-    }
+    [Header("Day / Night")]
+    [Range(0f, 24f)]
+    public float sunriseHour = 6f;
+
+    [Range(0f, 24f)]
+    public float sunsetHour = 18f;
+
+    public bool isNight;
+
+    private bool previousNightState;
 
     private void Awake()
     {
         Instance = this;
     }
 
-    public void SetDayStage(int stage)
+    private void Start()
     {
-        RenderSettings.skybox = daySkybox;
-        
-
-        float rotation = morningRotation;
-
-        switch (stage)
-        {
-            case 0:
-                rotation = morningRotation;
-                break;
-
-            case 1:
-                rotation = afternoonRotation;
-                break;
-
-            case 2:
-                rotation = middayRotation;
-                break;
-
-            case 3:
-                rotation = sunsetRotation;
-                break;
-        }
-
-        directionalLight.rotation =
-            Quaternion.Euler(rotation, 0, 0);
-
-        DynamicGI.UpdateEnvironment();
-
-        Debug.Log($"Sky Stage Changed: {stage}");
+        UpdateEnvironment(true);
     }
 
-    public void SetNight()
+    private void Update()
     {
-        isNight = true;
-        RenderSettings.skybox = nightSkybox;
-       
+        UpdateTime();
+        UpdateSun();
+        UpdateEnvironment();
+    }
+
+    private void UpdateTime()
+    {
+        // Quantas horas do jogo passam por segundo real
+        float gameHoursPerSecond = 24f / (dayDurationMinutes * 60f);
+
+        timeOfDay += gameHoursPerSecond * Time.deltaTime;
+
+        // Volta para 0 depois das 24h
+        if (timeOfDay >= 24f)
+        {
+            timeOfDay -= 24f;
+        }
+    }
+
+    private void UpdateSun()
+    {
+        // Converte o horário de 0-24 para uma rotação de 0-360
+        float sunRotation = (timeOfDay / 24f) * 360f - 90f;
 
         directionalLight.rotation =
-            Quaternion.Euler(nightRotation, 0, 0);
+            Quaternion.Euler(sunRotation, 0f, 0f);
+    }
 
-        DynamicGI.UpdateEnvironment();
+    private void UpdateEnvironment(bool forceUpdate = false)
+    {
+        isNight =
+            timeOfDay < sunriseHour ||
+            timeOfDay >= sunsetHour;
 
-        Debug.Log("Night Started!");
+        // Só troca o skybox quando realmente muda dia/noite
+        if (forceUpdate || isNight != previousNightState)
+        {
+            if (isNight)
+            {
+                RenderSettings.skybox = nightSkybox;
+                Debug.Log("Night Started!");
+            }
+            else
+            {
+                RenderSettings.skybox = daySkybox;
+                Debug.Log("Day Started!");
+            }
+
+            DynamicGI.UpdateEnvironment();
+
+            previousNightState = isNight;
+        }
     }
 }
