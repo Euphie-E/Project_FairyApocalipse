@@ -74,7 +74,7 @@ public class PlayerSwingController : MonoBehaviour
 
     private void OnDisable()
     {
-        transform.SetParent(GameObject.Find("Player").transform);
+        //transform.SetParent(GameObject.Find("Player").transform);
         if(PlayerInput.Instance != null) 
             PlayerInput.Instance.RemoveAction(Jump,2);
         isSwinging = false;
@@ -112,7 +112,7 @@ public class PlayerSwingController : MonoBehaviour
         //if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
         //{
             if(this.enabled == false) return;
-            transform.SetParent(null);
+            //transform.SetParent(null);
             isSwinging = false;
             currentBar.ResetSwingBar();
 
