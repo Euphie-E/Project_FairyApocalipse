@@ -7,6 +7,7 @@ public class PlayerSwingController : MonoBehaviour
     private Transform swingPivot;
     private SwingBarController currentBar;
     private Transform cameraTransform;
+    private GameObject originalFather;
 
     [Header("Swing")]
     [SerializeField] private float inputForce = 120f;
@@ -73,9 +74,11 @@ public class PlayerSwingController : MonoBehaviour
 
     private void OnDisable()
     {
+        transform.SetParent(GameObject.Find("Player").transform);
         if(PlayerInput.Instance != null) 
             PlayerInput.Instance.RemoveAction(Jump,2);
         isSwinging = false;
+
     }
 
     public void SetCurrentBar(Transform swing, SwingBarController _currentBar)
