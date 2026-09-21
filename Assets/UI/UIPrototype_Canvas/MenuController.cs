@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MenuController : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class MenuController : MonoBehaviour
         PlayerInput.Instance.AddAction(Pause,6);
     }
 
-    public void Pause()
+    public void Pause(InputAction.CallbackContext ctx)
     {
         // Alterna entre pausado e despausado
         isPaused = !isPaused;

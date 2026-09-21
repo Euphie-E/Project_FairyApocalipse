@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerSwingController : MonoBehaviour
 {
@@ -107,11 +108,11 @@ public class PlayerSwingController : MonoBehaviour
         swingPivot.localRotation = Quaternion.Euler(angle, 0f, 0f);
     }
 
-    private void Jump()
+    private void Jump(InputAction.CallbackContext ctx)
     {
         //if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
         //{
-            if(this.enabled == false) return;
+            //if(this.enabled == false) return;
             //transform.SetParent(null);
             isSwinging = false;
             currentBar.ResetSwingBar();

@@ -1,6 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InteractController : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class InteractController : MonoBehaviour
         timeTravel = transform.GetComponent<TimeTravel>();
     }
 
-    void Press()
+    void Press(InputAction.CallbackContext ctx)
     {
         if (atteched == null)
         {
@@ -40,7 +41,7 @@ public class InteractController : MonoBehaviour
             atteched.Detach(this);
         }
     }
-    void Cancel()
+    void Cancel(InputAction.CallbackContext ctx)
     {
         if (atteched != null)
         {

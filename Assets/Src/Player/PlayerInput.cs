@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -165,27 +166,27 @@ public class PlayerInput : MonoBehaviour
     {
         if(type == 1)
         {
-            moveAction.performed += ctx => action(ctx);
+            moveAction.performed += action;
         }
         if(type == 2)
         {
-            jumpAction.performed += ctx => action(ctx);
+            jumpAction.performed += action;
         }
         if(type == 3)
         {
-            interactAction.performed += ctx => action(ctx);
+            interactAction.performed += action;
         }
         if(type == 4)
         {
-            resetAction.performed += ctx => action(ctx);
+            resetAction.performed += action;
         }
         if(type == 5)
         {
-            travelAction.performed += ctx => action(ctx);
+            travelAction.performed += action;
         }
         if(type == 6)
         {
-            escapeAction.performed += ctx => action(ctx);
+            escapeAction.performed += action;
         }
         
     }
@@ -201,7 +202,7 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void AddAction(Action action,int type)
+    public void ZAddAction(Action action,int type)
     {
         if(type == 1)
         {
@@ -245,27 +246,27 @@ public class PlayerInput : MonoBehaviour
     {
         if(type == 1)
         {
-            moveAction.canceled += ctx => action(ctx);
+            moveAction.canceled += action;
         }
         if(type == 2)
         {
-            jumpAction.canceled += ctx => action(ctx);
+            jumpAction.canceled += action;
         }
         if(type == 3)
         {
-            interactAction.canceled += ctx => action(ctx);
+            interactAction.canceled += action;
         }
         if(type == 4)
         {
-            resetAction.canceled += ctx => action(ctx);
+            resetAction.canceled += action;
         }
         if(type == 5)
         {
-            travelAction.canceled += ctx => action(ctx);
+            travelAction.canceled += action;
         }
         if(type == 6)
         {
-            escapeAction.canceled += ctx => action(ctx);
+            escapeAction.canceled += action;
         }
     }
 
@@ -280,7 +281,7 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void AddCancelAction(Action action,int type)
+    public void ZAddCancelAction(Action action,int type)
     {
         if(type == 1)
         {
@@ -323,27 +324,27 @@ public class PlayerInput : MonoBehaviour
     {
         if(type == 1)
         {
-            moveAction.performed += ctx => action(ctx);
+            moveAction.performed -= action;
         }
         if(type == 2)
         {
-            jumpAction.performed += ctx => action(ctx);
+            jumpAction.performed -= action;
         }
         if(type == 3)
         {
-            interactAction.performed += ctx => action(ctx);
+            interactAction.performed -= action;
         }
         if(type == 4)
         {
-            resetAction.performed += ctx => action(ctx);
+            resetAction.performed -= action;
         }
         if(type == 5)
         {
-            travelAction.performed += ctx => action(ctx);
+            travelAction.performed -= action;
         }
         if(type == 6)
         {
-            escapeAction.performed += ctx => action(ctx);
+            escapeAction.performed -= action;
         }
         
     }
@@ -359,7 +360,7 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void RemoveAction(Action action,int type)
+    public void ZRemoveAction(Action action,int type)
     {
         if(type == 1)
         {
@@ -403,27 +404,27 @@ public class PlayerInput : MonoBehaviour
     {
         if(type == 1)
         {
-            moveAction.canceled += ctx => action(ctx);
+            moveAction.canceled -= action;
         }
         if(type == 2)
         {
-            jumpAction.canceled += ctx => action(ctx);
+            jumpAction.canceled -= action;
         }
         if(type == 3)
         {
-            interactAction.canceled += ctx => action(ctx);
+            interactAction.canceled -= action;
         }
         if(type == 4)
         {
-            resetAction.canceled += ctx => action(ctx);
+            resetAction.canceled -= action;
         }
         if(type == 5)
         {
-            travelAction.canceled += ctx => action(ctx);
+            travelAction.canceled -= action;
         }
         if(type == 6)
         {
-            escapeAction.canceled += ctx => action(ctx);
+            escapeAction.canceled -= action;
         }
     }
 
@@ -438,31 +439,31 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void RemoveCancelAction(Action action,int type)
+    public void ZRemoveCancelAction(Action action,int type)
     {
         if(type == 1)
         {
-            moveAction.canceled += ctx => action();
+            moveAction.canceled -= ctx => action();
         }
         if(type == 2)
         {
-            jumpAction.canceled += ctx => action();
+            jumpAction.canceled -= ctx => action();
         }
         if(type == 3)
         {
-            interactAction.canceled += ctx => action();
+            interactAction.canceled -= ctx => action();
         }
         if(type == 4)
         {
-            resetAction.canceled += ctx => action();
+            resetAction.canceled -= ctx => action();
         }
         if(type == 5)
         {
-            travelAction.canceled += ctx => action();
+            travelAction.canceled -= ctx => action();
         }
         if(type == 6)
         {
-            escapeAction.canceled += ctx => action();
+            escapeAction.canceled -= ctx => action();
         }
     }
 }

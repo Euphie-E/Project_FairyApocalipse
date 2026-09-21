@@ -90,7 +90,7 @@ public class TimeTravel : MonoBehaviour
         UpdateTimeShader();
     }
 
-    public void HandleReset()
+    public void HandleReset(InputAction.CallbackContext ctx)
     {
         //if (resetAction.WasPressedThisFrame())
         //{
@@ -130,7 +130,7 @@ public class TimeTravel : MonoBehaviour
         //}
     }
 
-    private void StartTravel()
+    private void StartTravel(InputAction.CallbackContext ctx)
     {
         if(onCooldown) return;
         if(isTravelling) {
