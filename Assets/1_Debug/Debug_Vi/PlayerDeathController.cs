@@ -16,7 +16,7 @@ public class PlayerDeathController : MonoBehaviour
     private float fallHeight = 0;
     private bool isDead = false;   
 
-    [SerializeField] private const float toReviveTime = 2f;
+    [SerializeField] private const float toReviveTime = 0.1f;
     private float toReviveTimer = 0f ;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,6 +27,15 @@ public class PlayerDeathController : MonoBehaviour
         checkpoints = new GameObject[GameObject.FindGameObjectsWithTag("Checkpoint").Length + 1];
 
         checkpoints[0] = transform.parent.gameObject; // colocar o spawn como inicio, meio gambiarra aproveitando que o player pai não se mexe;
+    }
+
+    //gambi
+    void OnEnable()
+    {
+        isFalling = false;
+        yfall = 0;
+        fallHeight = 0;
+        isDead = false;
     }
 
     void Update()
@@ -87,6 +96,9 @@ public class PlayerDeathController : MonoBehaviour
 
     private void Revive()
     {
+        //gambi
+        transform.GetComponent<TimeTravel>().HandleReset();
+        //gambi
         transform.position = checkpoints[caughtCheckpointIndex].transform.position;
         playerInput.OnRevive();
     }

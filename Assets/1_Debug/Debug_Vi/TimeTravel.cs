@@ -90,7 +90,7 @@ public class TimeTravel : MonoBehaviour
         UpdateTimeShader();
     }
 
-    private void HandleReset()
+    public void HandleReset()
     {
         //if (resetAction.WasPressedThisFrame())
         //{
