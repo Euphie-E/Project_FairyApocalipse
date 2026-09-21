@@ -132,7 +132,11 @@ public class TimeTravel : MonoBehaviour
 
     private void StartTravel()
     {
-        if(isTravelling || onCooldown) return;
+        if(onCooldown) return;
+        if(isTravelling) {
+            EndTravel();
+            return;
+        }
         isTravelling = true;
         travelDurationTimer = travelDuration;
 

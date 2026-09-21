@@ -23,6 +23,8 @@ public class PlayerInput : MonoBehaviour
     // gambiarra
     public InputAction um { get; private set; }
     public InputAction dois { get; private set; }
+    public InputAction tres { get; private set; }
+    public InputAction quatro { get; private set; }
 
     private void Awake()
     {
@@ -43,6 +45,8 @@ public class PlayerInput : MonoBehaviour
         // gambiarra
         um = inputSystemActions.Player.Previous;
         dois = inputSystemActions.Player.Next;
+        tres = inputSystemActions.Player.treis;
+        quatro = inputSystemActions.Player.cuatro;
     }
 
     // gambiarra
@@ -62,6 +66,24 @@ public class PlayerInput : MonoBehaviour
             transform.localPosition = new Vector3(76.5f,-38.8f,147);
             StartCoroutine("Gambi");
         };
+        tres.performed += ctx =>
+        {
+            transform.GetComponent<PlayerMovement>().enabled = false;
+            transform.GetComponent<PlayerDeathController>().enabled = false;
+            transform.localPosition = new Vector3(87.5f,-129,131.9f);
+            StartCoroutine("Gambi");
+        };
+        quatro.performed += ctx =>
+        {
+            transform.GetComponent<PlayerMovement>().enabled = false;
+            transform.GetComponent<PlayerDeathController>().enabled = false;
+            transform.localPosition = new Vector3(-32.5f,-165.8f,107);
+            StartCoroutine("Gambi");
+        };
+        
+        /* 
+        
+         */
     }
     IEnumerator Gambi()
     {
@@ -85,6 +107,8 @@ public class PlayerInput : MonoBehaviour
 
         um.Enable();
         dois.Enable();
+        tres.Enable();
+        quatro.Enable();
     }
 
     private void OnDisable()
@@ -101,6 +125,8 @@ public class PlayerInput : MonoBehaviour
 
         um.Disable();
         dois.Disable();
+        tres.Enable();
+        quatro.Disable();
     }
 
     public void OnDeath()
