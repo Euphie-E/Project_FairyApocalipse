@@ -30,11 +30,6 @@ public class PlayerSwingController : MonoBehaviour
         cameraTransform = Camera.main.transform;
     }
 
-    void Start()
-    {
-        PlayerInput.Instance.AddAction(Jump,2);
-    }
-
     private void Update()
     {
         if (swingPivot == null)
@@ -69,8 +64,8 @@ public class PlayerSwingController : MonoBehaviour
 
     private void OnEnable()
     {
+        PlayerInput.Instance.AddAction(Jump,2);
         isSwinging = true;
-
         angularVelocity = -initialForwardSpeed * initialMultiplier;
         if (swingPivot != null)
             angle = 0f;
@@ -78,6 +73,8 @@ public class PlayerSwingController : MonoBehaviour
 
     private void OnDisable()
     {
+        if(PlayerInput.Instance != null) 
+            PlayerInput.Instance.RemoveAction(Jump,2);
         isSwinging = false;
     }
 
@@ -109,14 +106,15 @@ public class PlayerSwingController : MonoBehaviour
 
     private void Jump()
     {
-        if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
-        {
+        //if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
+        //{
+            if(this.enabled == false) return;
             transform.SetParent(null);
             isSwinging = false;
             currentBar.ResetSwingBar();
 
             PlayerStateController.Instance.EndSwing();
-        }
+        //}
     }
 
     private float GetCameraDirection()

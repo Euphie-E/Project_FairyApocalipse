@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5764123774760819995}
   - component: {fileID: 3036180741613024402}
-  - component: {fileID: 2240207648849571842}
+  - component: {fileID: 157138221182448079}
   m_Layer: 0
   m_Name: PastFuture
   m_TagString: Interactable
@@ -67,8 +67,8 @@ MonoBehaviour:
   isChanged: 0
   interactInFuture: 0
   isReversible: 0
---- !u!135 &2240207648849571842
-SphereCollider:
+--- !u!65 &157138221182448079
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -86,7 +86,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.3
+  m_Size: {x: 1, y: 0.3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5727801490376489497
 GameObject:

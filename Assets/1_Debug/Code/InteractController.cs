@@ -1,37 +1,32 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class InteractController : MonoBehaviour
 {
-    InputSystem_Actions inputSystemActions;
-    InputAction interactAction;
     public Interactable atteched = null;
+    TimeTravel timeTravel;
     [SerializeField] 
     float radiusCheck = 1;
     [SerializeField]
     bool gizmo = false;
     Collider[] list = new Collider[10];
-    void Awake()
-    {
-        inputSystemActions ??= new InputSystem_Actions();
-        interactAction = inputSystemActions.Player.Interact;
-    }
     void Start()
     {
-        interactAction.performed += ctx => Press();
-        interactAction.canceled += ctx => Cancel();
+        PlayerInput.Instance.AddAction(Press,3);
+        PlayerInput.Instance.AddCancelAction(Cancel,3);
+        timeTravel = transform.GetComponent<TimeTravel>();
     }
 
     void Press()
     {
         if (atteched == null)
         {
-            int max = Physics.OverlapSphereNonAlloc(this.transform.position,radiusCheck,list);
+            int max = Physics.OverlapSphereNonAlloc(this.transform.position,radiusCheck,list,timeTravel.isTravelling ? timeTravel.pastLayer:timeTravel.futureLayer);
             if(gizmo) DrawDebugSphere(transform.position,radiusCheck,Color.blue,2);
             for(int i = 0; i<max;i++)
             {
+                Debug.Log(list[i].name);
                 if (list[i].CompareTag("Interactable"))
                 {
                     list[i].GetComponent<Interactable>().Attach(this);
@@ -52,15 +47,6 @@ public class InteractController : MonoBehaviour
             atteched.end = Time.time;
             atteched.Throw();
         }
-    }
-    private void OnEnable()
-    {
-        interactAction.Enable();
-    }
-
-    private void OnDisable()
-    {
-        interactAction.Disable();
     }
 
     public static void DrawDebugSphere(Vector3 center, float radius, Color color, float duration)

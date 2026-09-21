@@ -235,4 +235,162 @@ public class PlayerInput : MonoBehaviour
             escapeAction.canceled += ctx => action();
         }
     }
+
+    /// <summary>
+    /// Type:<br />
+    /// 1: Move<br />
+    /// 2: Jump<br />
+    /// 3: Interact<br />
+    /// 4: Reset<br />
+    /// 5: Travel<br />
+    /// 6: Esc<br />
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="type"></param>
+    public void RemoveAction(Action<InputAction.CallbackContext> action,int type)
+    {
+        if(type == 1)
+        {
+            moveAction.performed += ctx => action(ctx);
+        }
+        if(type == 2)
+        {
+            jumpAction.performed += ctx => action(ctx);
+        }
+        if(type == 3)
+        {
+            interactAction.performed += ctx => action(ctx);
+        }
+        if(type == 4)
+        {
+            resetAction.performed += ctx => action(ctx);
+        }
+        if(type == 5)
+        {
+            travelAction.performed += ctx => action(ctx);
+        }
+        if(type == 6)
+        {
+            escapeAction.performed += ctx => action(ctx);
+        }
+        
+    }
+
+    /// <summary>
+    /// Type:<br />
+    /// 1: Move<br />
+    /// 2: Jump<br />
+    /// 3: Interact<br />
+    /// 4: Reset<br />
+    /// 5: Travel<br />
+    /// 6: Esc<br />
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="type"></param>
+    public void RemoveAction(Action action,int type)
+    {
+        if(type == 1)
+        {
+            moveAction.performed -= ctx => action();
+        }
+        if(type == 2)
+        {
+            jumpAction.performed -= ctx => action();
+        }
+        if(type == 3)
+        {
+            interactAction.performed -= ctx => action();
+        }
+        if(type == 4)
+        {
+            resetAction.performed -= ctx => action();
+        }
+        if(type == 5)
+        {
+            travelAction.performed -= ctx => action();
+        }
+        if(type == 6)
+        {
+            escapeAction.performed -= ctx => action();
+        }
+    }
+
+
+    /// <summary>
+    /// Type:<br />
+    /// 1: Move<br />
+    /// 2: Jump<br />
+    /// 3: Interact<br />
+    /// 4: Reset<br />
+    /// 5: Travel<br />
+    /// 6: Esc<br />
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="type"></param>
+    public void RemoveCancelAction(Action<InputAction.CallbackContext> action,int type)
+    {
+        if(type == 1)
+        {
+            moveAction.canceled += ctx => action(ctx);
+        }
+        if(type == 2)
+        {
+            jumpAction.canceled += ctx => action(ctx);
+        }
+        if(type == 3)
+        {
+            interactAction.canceled += ctx => action(ctx);
+        }
+        if(type == 4)
+        {
+            resetAction.canceled += ctx => action(ctx);
+        }
+        if(type == 5)
+        {
+            travelAction.canceled += ctx => action(ctx);
+        }
+        if(type == 6)
+        {
+            escapeAction.canceled += ctx => action(ctx);
+        }
+    }
+
+    /// <summary>
+    /// Type:<br />
+    /// 1: Move<br />
+    /// 2: Jump<br />
+    /// 3: Interact<br />
+    /// 4: Reset<br />
+    /// 5: Travel<br />
+    /// 6: Esc<br />
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="type"></param>
+    public void RemoveCancelAction(Action action,int type)
+    {
+        if(type == 1)
+        {
+            moveAction.canceled += ctx => action();
+        }
+        if(type == 2)
+        {
+            jumpAction.canceled += ctx => action();
+        }
+        if(type == 3)
+        {
+            interactAction.canceled += ctx => action();
+        }
+        if(type == 4)
+        {
+            resetAction.canceled += ctx => action();
+        }
+        if(type == 5)
+        {
+            travelAction.canceled += ctx => action();
+        }
+        if(type == 6)
+        {
+            escapeAction.canceled += ctx => action();
+        }
+    }
 }
