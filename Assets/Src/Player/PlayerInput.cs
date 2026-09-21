@@ -77,7 +77,7 @@ public class PlayerInput : MonoBehaviour
         {
             transform.GetComponent<PlayerMovement>().enabled = false;
             transform.GetComponent<PlayerDeathController>().enabled = false;
-            transform.localPosition = new Vector3(-32.5f,-165.8f,107);
+            transform.localPosition = new Vector3(-23,-156.5f,135);
             StartCoroutine("Gambi");
         };
         
