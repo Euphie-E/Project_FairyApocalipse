@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 300
   spriteBorder: {x: 987, y: 691, z: 986, w: 29}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -93,6 +93,32 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -101,12 +127,12 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 5
-        y: 212
-        width: 1995
+        y: 194
+        width: 995
         height: 494
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 975, y: 437, z: 983, w: 0}
+      border: {x: 610, y: 19, z: 318, w: 24}
       customData: 
       outline: []
       physicsShape: []
@@ -114,6 +140,28 @@ TextureImporter:
       bones: []
       spriteID: b53e92f65821edf489b2710c6736ef50
       internalID: -791871820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MolduraTitulos_1
+      rect:
+        serializedVersion: 2
+        x: 999
+        y: 194
+        width: 982
+        height: 493
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 319, y: 18, z: 551, w: 18}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3b5c6110cee7124bb4cd1f431de29c5
+      internalID: 1518626031
       vertices: []
       indices: 
       edges: []
@@ -133,6 +181,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       MolduraTitulos_0: -791871820
+      MolduraTitulos_1: 1518626031
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
