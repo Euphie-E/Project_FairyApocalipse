@@ -40,6 +40,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slideSpeed = 25f;
     public bool isSliding { get; private set; }
 
+    [Header("Overhead Collision")]
+    private Vector3 collisionNormal;
+    private bool hasCollision;
+
     [Header("Coyote Jump")]
     [SerializeField] private float coyoteAirTime = 0.5f;
     private float currentCoyoteTime;
@@ -62,6 +66,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (characterController.enabled)
         {
+            hasCollision = false;
+            collisionNormal = Vector3.zero;
+
             CheckGrounded();
             HandleMovement();
             HandleJump();
@@ -71,18 +78,23 @@ public class PlayerMovement : MonoBehaviour
 
             if (isGrounded && !hasJumped)
             {
-                Vector3 movementDirection = horizontalVelocity.normalized;
+                finalVelocity = Vector3.ProjectOnPlane(horizontalVelocity, groundNormal);
 
-                movementDirection = Vector3.ProjectOnPlane(movementDirection, groundNormal).normalized;
+                if (horizontalVelocity.sqrMagnitude > 0.001f)
+                    finalVelocity = finalVelocity.normalized * horizontalVelocity.magnitude;
 
-                finalVelocity = movementDirection * horizontalVelocity.magnitude;
+                finalVelocity += groundNormal * -2f;
             }
-            if (isSliding)
+            else if (isSliding && finalVelocity.y <= 0)
             {
-                finalVelocity += slideVelocity; // Colisão versão 1
-            }
+                finalVelocity = Vector3.ProjectOnPlane(horizontalVelocity, groundNormal);
 
-            finalVelocity.y = verticalVelocity;
+                Vector3 gravityVelocity = Vector3.ProjectOnPlane(Vector3.up * verticalVelocity, groundNormal);
+
+                finalVelocity += gravityVelocity;
+            }
+            else
+                finalVelocity.y = verticalVelocity;
 
             characterController.Move(finalVelocity * Time.deltaTime);
 
@@ -166,11 +178,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyGravity()
     {
-        if (isSliding)
-        {
-            verticalVelocity = 0f;
-            return;
-        }
         if(isGrounded && verticalVelocity < 0f)
         {
             verticalVelocity = -2f;
@@ -279,6 +286,18 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             isSliding = true;
+        }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.normal.y < 0f)
+        {
+            hasCollision = true;
+            collisionNormal = hit.normal;
+
+            if (verticalVelocity > 0f)
+                verticalVelocity = 0f;
         }
     }
 
