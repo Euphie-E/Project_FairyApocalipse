@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1484982084649987132}
   - component: {fileID: 7384993372234850412}
-  - component: {fileID: 8485909422921237344}
   m_Layer: 5
   m_Name: DisplaySettings
   m_TagString: Untagged
@@ -66,18 +65,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!225 &8485909422921237344
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1174441544273275545}
-  m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
 --- !u!1 &1228063766229125513
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +153,7 @@ GameObject:
   - component: {fileID: 431389707299335257}
   - component: {fileID: 8627088431818024451}
   - component: {fileID: 1273853533348651394}
-  - component: {fileID: 1260803069741398268}
+  - component: {fileID: 377063713329179240}
   m_Layer: 5
   m_Name: DisplaySettings
   m_TagString: Untagged
@@ -232,7 +219,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1260803069741398268
+--- !u!114 &377063713329179240
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -241,9 +228,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2259679592478277804}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -272,14 +259,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 6446186691121862255}
-  toggleTransition: 1
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
+  m_TargetGraphic: {fileID: 1273853533348651394}
+  m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 0
 --- !u!1 &3151407707003281407
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,7 +411,7 @@ GameObject:
   - component: {fileID: 702903420817659172}
   - component: {fileID: 7617290980441303822}
   - component: {fileID: 6884746335900889584}
-  - component: {fileID: 3156716203581374409}
+  - component: {fileID: 3427435856153152792}
   m_Layer: 5
   m_Name: AccessibilitySettings
   m_TagString: Untagged
@@ -494,7 +477,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3156716203581374409
+--- !u!114 &3427435856153152792
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -503,9 +486,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3207706473849712295}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -534,14 +517,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 6446186691121862255}
-  toggleTransition: 1
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
+  m_TargetGraphic: {fileID: 6884746335900889584}
+  m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 0
 --- !u!1 &4847176032798525924
 GameObject:
   m_ObjectHideFlags: 0
@@ -642,7 +621,7 @@ GameObject:
   - component: {fileID: 7144084856118439709}
   - component: {fileID: 8240097883066706102}
   - component: {fileID: 2799534495549601035}
-  - component: {fileID: 7755562780116437897}
+  - component: {fileID: 4809145535440028770}
   m_Layer: 5
   m_Name: SystemSettings
   m_TagString: Untagged
@@ -708,7 +687,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7755562780116437897
+--- !u!114 &4809145535440028770
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -717,9 +696,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5142372510066518746}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -748,14 +727,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 6446186691121862255}
-  toggleTransition: 1
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
+  m_TargetGraphic: {fileID: 2799534495549601035}
+  m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 0
 --- !u!1 &5155472713697008343
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,7 +742,7 @@ GameObject:
   - component: {fileID: 4173380417801051811}
   - component: {fileID: 8922064985143365850}
   - component: {fileID: 6446186691121862255}
-  - component: {fileID: 4082514521525833855}
+  - component: {fileID: 6722603057396542679}
   m_Layer: 5
   m_Name: SoundSettings
   m_TagString: Untagged
@@ -833,7 +808,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4082514521525833855
+--- !u!114 &6722603057396542679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -842,9 +817,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5155472713697008343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -874,13 +849,9 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 6446186691121862255}
-  toggleTransition: 1
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
+  m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
 --- !u!1 &6057214033943984497
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,7 +862,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6949824010445195937}
   - component: {fileID: 780932452755073975}
-  - component: {fileID: 8917468481055774711}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -928,31 +898,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6057214033943984497}
   m_CullTransparentMesh: 1
---- !u!114 &8917468481055774711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6057214033943984497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 439c3d26231a0824786a3b18b6f74c27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TabMenu
-  pageIndex: 0
-  toggleGroup: {fileID: 8020098292923164858}
-  tabs:
-  - {fileID: 4082514521525833855}
-  - {fileID: 1260803069741398268}
-  - {fileID: 3156716203581374409}
-  - {fileID: 7755562780116437897}
-  pages:
-  - {fileID: 8184289068774170767}
-  - {fileID: 8485909422921237344}
-  OnPageIndexChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &6155780772684101105
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,7 +910,6 @@ GameObject:
   - component: {fileID: 953988340811689852}
   - component: {fileID: 3537956519815875065}
   - component: {fileID: 6792657929023312094}
-  - component: {fileID: 8020098292923164858}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -1060,19 +1004,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &8020098292923164858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6155780772684101105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ToggleGroup
-  m_AllowSwitchOff: 1
 --- !u!1 &6619512747515752978
 GameObject:
   m_ObjectHideFlags: 0
@@ -1083,7 +1014,6 @@ GameObject:
   m_Component:
   - component: {fileID: 496910593814291991}
   - component: {fileID: 37554522934130027}
-  - component: {fileID: 8184289068774170767}
   m_Layer: 5
   m_Name: AudioSettings
   m_TagString: Untagged
@@ -1139,18 +1069,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!225 &8184289068774170767
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6619512747515752978}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1 &7238953583381580092
 GameObject:
   m_ObjectHideFlags: 0
