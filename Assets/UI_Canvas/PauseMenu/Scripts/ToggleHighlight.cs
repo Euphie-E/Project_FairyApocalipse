@@ -4,7 +4,8 @@ using UnityEngine.UI;
 public class ToggleHighlight : MonoBehaviour
 {
     [SerializeField] private Toggle toggle;
-    [SerializeField] private Image  imageToKeepFocusActive;
+    //[SerializeField] private Image  imageToKeepFocusActive;
+    [SerializeField] private GameObject  imageToKeepFocusActive;
         
     private void Reset()
     {
@@ -28,21 +29,22 @@ public class ToggleHighlight : MonoBehaviour
 
         if (toggle.isOn)
         {
-            SetAlpha(1f);
+            //SetAlpha(1f);
+            imageToKeepFocusActive.SetActive(true);
         }
         else
         {
-            SetAlpha(0f);
+            imageToKeepFocusActive.SetActive(false);
         }
     }
     
-    void SetAlpha(float alphaValue)
-    {
-        if (imageToKeepFocusActive != null)
-        {
-            Color corAtual = imageToKeepFocusActive.color;
-            corAtual.a = alphaValue; 
-            imageToKeepFocusActive.color = corAtual;
-        }
-    }
+    // void SetAlpha(float alphaValue)
+    // {
+    //     if (imageToKeepFocusActive != null)
+    //     {
+    //         Color corAtual = imageToKeepFocusActive.color;
+    //         corAtual.a = alphaValue; 
+    //         imageToKeepFocusActive.color = corAtual;
+    //     }
+    // }
 }
