@@ -436,7 +436,15 @@ MonoBehaviour:
   rotationSpeed: 360
   jumpHeight: 2
   gravity: -15
-  slideSpeed: 5
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 193
+  probeForwardOffset: 0.2
+  probeSideOffset: 0.2
+  probeHeight: 0.4
+  groundProbeRadius: 0.1
+  groundProbeDistance: 0.45
+  slideSpeed: 15
   coyoteAirTime: 0.2
 --- !u!114 &8697555056014407891
 MonoBehaviour:
@@ -470,7 +478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba6ee340dac697468e2c6ea27c524a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeTravel
-  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  pastLayer: 0
+  futureLayer: 0
   isTravelling: 0
   travelDuration: 5
   cooldown: 5
