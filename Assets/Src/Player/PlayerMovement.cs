@@ -160,6 +160,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (CanJump() && PlayerInput.Instance.jumpAction.WasPressedThisFrame())
         {
+            DataManager.Instance.AddData(DataManager.Data.Jump, 1);
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
             playerAnimatorController.PlayJump();
