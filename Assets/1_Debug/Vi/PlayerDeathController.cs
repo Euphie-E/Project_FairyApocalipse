@@ -18,8 +18,8 @@ public class PlayerDeathController : MonoBehaviour
     private bool isDead = false;   
 
     [SerializeField] private const float toReviveTime = 2f;
-    private float toReviveTimer = 0f ;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private float toReviveTimer = 0f;
+
     void Start()
     {
         playerMovement = gameObject.GetComponent<PlayerMovement>();
@@ -48,7 +48,7 @@ public class PlayerDeathController : MonoBehaviour
 
         else if (!isDead && isFalling && playerMovement.verticalVelocity >= 0) 
         {
-            CheckFallDeath();
+            CheckFallDistance();
             isFalling = false;
             fallHeight = 0;
         }
@@ -59,7 +59,7 @@ public class PlayerDeathController : MonoBehaviour
         if (!isDead && isFalling)
         {
             fallHeight = yfall - transform.position.y;
-            
+
             CheckFallDeath();
         }
     }
@@ -76,10 +76,10 @@ public class PlayerDeathController : MonoBehaviour
     {
         if (isDead && playerMovement.isGrounded)
         {
+            playerInput.OnDeath();
             toReviveTimer += Time.deltaTime;
             if (toReviveTimer >= toReviveTime)
             {
-                playerInput.OnDeath();
                 toReviveTimer = 0;
                 Revive();
             }
