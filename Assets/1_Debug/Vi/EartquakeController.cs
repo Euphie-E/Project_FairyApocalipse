@@ -1,21 +1,23 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class EartquakeController : MonoBehaviour
 {
     private DebrisSpawner[] spawners;
     [SerializeField] private GameObject rockDebris;
-
+    [SerializeField] private int debrisQuantity = 3;
     [SerializeField] private bool autoEarthquake = false;
 
     [SerializeField] private float earthquakeInterval = 5;
     [SerializeField] private bool randomize = false;
     private float earthquakeTimer;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    
     void Start()
     {
-        try // Quando tirar o renderer do prefab não precisa mais disso
+        /* try // Quando tirar o renderer do prefab não precisa mais disso
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
@@ -23,7 +25,7 @@ public class EartquakeController : MonoBehaviour
         catch
         {
             Debug.LogError("não tem renderer, pode tirar esse try catch");
-        }
+        } */
 
         earthquakeTimer = earthquakeInterval;
 
@@ -33,6 +35,8 @@ public class EartquakeController : MonoBehaviour
         {
             spawners[i] = transform.GetChild(i).GetComponent<DebrisSpawner>();
         }
+
+        PlayerInput.Instance.AddAction(TestEarthquake, 7);
     }
 
     // Update is called once per frame
@@ -72,11 +76,14 @@ public class EartquakeController : MonoBehaviour
             earthquakeTimer = earthquakeInterval;
         }
 
-        for (int i = 0; i < spawners.Length; i++)
+        for (int i = 0; i < (debrisQuantity > spawners.Length ? spawners.Length : debrisQuantity); i++)
         {
             spawners[i].Drop(randomize);
         }
+    }
 
-
+    public void TestEarthquake(InputAction.CallbackContext ctx)
+    {
+        StartEarthquake(false);
     }
 }
