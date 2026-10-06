@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +8,7 @@ public class PlayerSwingController : MonoBehaviour
     private Transform swingPivot;
     private SwingBarController currentBar;
     private Transform cameraTransform;
+    private GameObject originalFather;
 
     [Header("Swing")]
     [SerializeField] private float inputForce = 120f;
@@ -40,7 +40,7 @@ public class PlayerSwingController : MonoBehaviour
         //Le Input
         Vector2 input = PlayerInput.Instance.moveAction.ReadValue<Vector2>();
 
-        //Pega a direção da camera e passa pra direção do input
+        //Pega a direï¿½ï¿½o da camera e passa pra direï¿½ï¿½o do input
         float cameraDirection = GetCameraDirection();
         input.y *= cameraDirection;
 
@@ -61,13 +61,13 @@ public class PlayerSwingController : MonoBehaviour
             angularVelocity = 0f;
 
         UpdateSwingRotation();
-        Jump();
+        //Jump();
     }
 
     private void OnEnable()
     {
+        PlayerInput.Instance.AddAction(Jump,2);
         isSwinging = true;
-
         angularVelocity = -initialForwardSpeed * initialMultiplier;
         if (swingPivot != null)
             angle = 0f;
@@ -75,7 +75,11 @@ public class PlayerSwingController : MonoBehaviour
 
     private void OnDisable()
     {
+        //transform.SetParent(GameObject.Find("Player").transform);
+        if(PlayerInput.Instance != null) 
+            PlayerInput.Instance.RemoveAction(Jump,2);
         isSwinging = false;
+
     }
 
     public void SetCurrentBar(Transform swing, SwingBarController _currentBar)
@@ -104,16 +108,17 @@ public class PlayerSwingController : MonoBehaviour
         swingPivot.localRotation = Quaternion.Euler(angle, 0f, 0f);
     }
 
-    private void Jump()
+    private void Jump(InputAction.CallbackContext ctx)
     {
-        if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
-        {
-            transform.SetParent(null);
+        //if (PlayerInput.Instance.jumpAction.WasPressedThisFrame())
+        //{
+            //if(this.enabled == false) return;
+            //transform.SetParent(null);
             isSwinging = false;
             currentBar.ResetSwingBar();
 
             PlayerStateController.Instance.EndSwing();
-        }
+        //}
     }
 
     private float GetCameraDirection()

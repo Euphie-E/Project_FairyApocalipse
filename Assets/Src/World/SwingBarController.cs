@@ -16,6 +16,9 @@ public class SwingBarController : MonoBehaviour
     private CharacterController controller;
     private BoxCollider boxCollider;
 
+    Transform playerFather;
+    Transform playerTrans;
+
     private void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
@@ -42,7 +45,7 @@ public class SwingBarController : MonoBehaviour
         playerAttached = true;
         Transform player = playerController.transform;
 
-        //Coloca o pivot de rotação proximo ao local que o player encostou.
+        //Coloca o pivot de rotaï¿½ï¿½o proximo ao local que o player encostou.
         Vector3 contactPoint = boxCollider.ClosestPoint(player.position);
 
         Vector3 localContactPoint = boxCollider.transform.InverseTransformPoint(contactPoint);
@@ -57,7 +60,7 @@ public class SwingBarController : MonoBehaviour
 
         swingPivot.localPosition = pivotPosition;
 
-        //Verifica se Player está na frente ou atrás.
+        //Verifica se Player estï¿½ na frente ou atrï¿½s.
         float dot = Vector3.Dot(player.forward, transform.forward);
         bool isFront = dot > 0f;
 
@@ -67,6 +70,9 @@ public class SwingBarController : MonoBehaviour
 
         playerController.enabled = false;
 
+
+        playerTrans = player;
+        playerFather = player.parent;
         player.SetParent(swingPivot, true);
 
         Vector3 startPosition = player.position;
@@ -112,6 +118,7 @@ public class SwingBarController : MonoBehaviour
     public void ResetSwingBar()
     {
         playerAttached = false;
+        playerTrans.SetParent(playerFather,true);
         swingPivot.rotation = new Quaternion(0f , 0f, 0f, 0f);
         StartCoroutine(ResetAttach());
     }
