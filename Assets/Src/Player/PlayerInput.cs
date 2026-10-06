@@ -26,6 +26,7 @@ public class PlayerInput : MonoBehaviour
     public InputAction dois { get; private set; }
     public InputAction tres { get; private set; }
     public InputAction quatro { get; private set; }
+    public InputAction test { get; private set; }
 
     private void Awake()
     {
@@ -48,6 +49,7 @@ public class PlayerInput : MonoBehaviour
         dois = inputSystemActions.Player.Next;
         tres = inputSystemActions.Player.treis;
         quatro = inputSystemActions.Player.cuatro;
+        test = inputSystemActions.Player.Test;
     }
 
     // gambiarra
@@ -81,10 +83,7 @@ public class PlayerInput : MonoBehaviour
             transform.localPosition = new Vector3(-23,-156.5f,135);
             StartCoroutine("Gambi");
         };
-        
-        /* 
-        
-         */
+
     }
     IEnumerator Gambi()
     {
@@ -110,6 +109,7 @@ public class PlayerInput : MonoBehaviour
         dois.Enable();
         tres.Enable();
         quatro.Enable();
+        test.Enable();
     }
 
     private void OnDisable()
@@ -187,6 +187,10 @@ public class PlayerInput : MonoBehaviour
         if(type == 6)
         {
             escapeAction.performed += action;
+        }
+        if(type == 7)
+        {
+            test.performed += action;
         }
         
     }
