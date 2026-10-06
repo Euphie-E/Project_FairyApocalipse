@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class EartquakeController : MonoBehaviour
 {
     private DebrisSpawner[] spawners;
+    private Transform player;
     [SerializeField] private GameObject rockDebris;
     [SerializeField] private int debrisQuantity = 3;
     [SerializeField] private bool autoEarthquake = false;
@@ -14,7 +15,9 @@ public class EartquakeController : MonoBehaviour
     [SerializeField] private bool randomize = false;
     private float earthquakeTimer;
 
-    
+    [Header("Spawn Position")]
+    [SerializeField] private float height = 25;
+    [SerializeField] private float range = 5;
     void Start()
     {
         /* try // Quando tirar o renderer do prefab não precisa mais disso
@@ -26,6 +29,7 @@ public class EartquakeController : MonoBehaviour
         {
             Debug.LogError("não tem renderer, pode tirar esse try catch");
         } */
+        player = PlayerInput.Instance.transform;
 
         earthquakeTimer = earthquakeInterval;
 
@@ -71,6 +75,8 @@ public class EartquakeController : MonoBehaviour
 
     public void StartEarthquake(bool resetTimer)
     {
+        
+
         if (resetTimer)
         {
             earthquakeTimer = earthquakeInterval;
@@ -78,6 +84,13 @@ public class EartquakeController : MonoBehaviour
 
         for (int i = 0; i < (debrisQuantity > spawners.Length ? spawners.Length : debrisQuantity); i++)
         {
+            float x = player.position.x + UnityEngine.Random.Range(-range, range);
+            float y = player.position.y + height;
+            float z = player.position.z + UnityEngine.Random.Range(-range, range);
+
+            Vector3 newPosition = new Vector3(x, y, z);
+
+            spawners[i].transform.position = newPosition;
             spawners[i].Drop(randomize);
         }
     }
