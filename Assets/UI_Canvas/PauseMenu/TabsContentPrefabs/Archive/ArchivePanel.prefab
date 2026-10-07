@@ -414,6 +414,7 @@ GameObject:
   - component: {fileID: 2919644198217258981}
   - component: {fileID: 6557484083157755330}
   - component: {fileID: 462719894577858842}
+  - component: {fileID: 2652092852701580947}
   m_Layer: 5
   m_Name: ArchivePanel
   m_TagString: Untagged
@@ -481,6 +482,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2652092852701580947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909212716917934202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fa3502f9fd5f32448803a952d6a5fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArchivePanel
+  tName: {fileID: 5843880833999387035}
+  description: {fileID: 2057075122295458581}
+  icon: {fileID: 1291254177371602074}
+  data: {fileID: 11400000, guid: bca4e62ef7753584b9b39e9181a9606f, type: 2}
 --- !u!1 &3089248165292656934
 GameObject:
   m_ObjectHideFlags: 0
