@@ -7,15 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
-    public bool b;
-    void Update()
-    {
-        if (b)
-        {
-            Debug.Log(SceneManager.GetActiveScene().name == scenes[0].name);
-            b=!b;
-        }
-    }
     public static DataManager Instance {get; private set;}
     public readonly DataEvents dataEvents = new();
     string savePath;

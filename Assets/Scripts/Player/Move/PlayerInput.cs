@@ -139,6 +139,8 @@ public class PlayerInput : MonoBehaviour
         resetAction.Disable();
         travelAction.Disable();
         escapeAction.Disable();
+        if (DataManager.Instance != null)
+            DataManager.Instance.AddData(DataManager.Data.Death,1);
     }
 
     public void OnRevive()
