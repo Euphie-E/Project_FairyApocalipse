@@ -82,8 +82,6 @@ public class PlayerMovement : MonoBehaviour
 
                 if (horizontalVelocity.sqrMagnitude > 0.001f)
                     finalVelocity = finalVelocity.normalized * horizontalVelocity.magnitude;
-
-                finalVelocity += groundNormal * -2f;
             }
             else if (isSliding && finalVelocity.y <= 0)
             {
