@@ -51,14 +51,17 @@ public class DataManager : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        SendData();
+        SaveData();
     }
 
-    public void SendData()
+    void SaveData()
     {
         string json = JsonUtility.ToJson(playerData, true);
         File.WriteAllText(savePath, json);
-        if (dataEvents.isInitialized)
+    }
+    public void SendData()
+    {
+        if (TestInit())
         {
             dataEvents.Add(DataEvents.Statistics.JumpTotal,PlayerData.JumpTotal);
             dataEvents.Add(DataEvents.Statistics.Jump,playerData.Jump);
@@ -79,6 +82,7 @@ public class DataManager : MonoBehaviour
     }
     void Run(Scene scene, LoadSceneMode loaded)
     {
+        if(playerDataGroup == null) LoadGame();
         int index = CheckSceneIDX(scene);
         dataEvents.index = index;
         playerData = playerDataGroup.group[index];
@@ -88,8 +92,7 @@ public class DataManager : MonoBehaviour
     void SaveGame(Scene current, Scene Next)
     {
         playerData.Duration = Time.time - strTime;
-        string json = JsonUtility.ToJson(playerDataGroup, true);
-        File.WriteAllText(savePath, json);
+        SaveData();
         SendData();
     }
 
@@ -132,12 +135,14 @@ public class DataManager : MonoBehaviour
 
         // 3. Convert the JSON string back into your C# object type
         PlayerDataGroup data = JsonUtility.FromJson<PlayerDataGroup>(json);
-
         playerDataGroup = data;
+        playerDataGroup ??= new PlayerDataGroup(5);
+        if(playerDataGroup.group == null || playerDataGroup.group.Length == 0) playerDataGroup = new PlayerDataGroup(5);
     }
     
     public void AddData(Data data, int value)
     {
+        if(!TestInit()) return;
         switch (data)
         {
             case Data.Death:
@@ -159,6 +164,7 @@ public class DataManager : MonoBehaviour
     }
     public void AddData(Data data, float value)
     {
+        if(!TestInit()) return;
         switch (data)
         {
             case Data.TimeStamp:
@@ -167,5 +173,9 @@ public class DataManager : MonoBehaviour
             default:
                 break;
         }
+    }
+    bool TestInit()
+    {
+        return dataEvents.isInitialized;
     }
 }
