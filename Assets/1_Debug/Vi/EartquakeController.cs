@@ -91,7 +91,7 @@ public class EartquakeController : MonoBehaviour
             Vector3 newPosition = new Vector3(x, y, z);
 
             spawners[i].transform.position = newPosition;
-            spawners[i].Drop(randomize);
+            spawners[i].Drop(height, randomize);
         }
     }
 
