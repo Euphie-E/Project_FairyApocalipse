@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jump")]
     [SerializeField] private float jumpHeight = 2;
     [SerializeField] private float gravity = -25f;
+    [SerializeField] private float maxGravityVelocity = -10f;
     public Vector3 horizontalVelocity { get; private set; }
     public float verticalVelocity { get; private set; }
 
@@ -27,8 +28,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundLayerMask;
     public bool isGrounded { get; private set; }
     private Vector3 groundNormal;
-    [SerializeField] float probeForwardOffset;
-    [SerializeField] float probeSideOffset;
+    [SerializeField] float probeOffset;
     [SerializeField] float probeHeight;
     [SerializeField]private float groundProbeRadius;
     private RaycastHit[] groundHits;
@@ -82,6 +82,8 @@ public class PlayerMovement : MonoBehaviour
 
                 if (horizontalVelocity.sqrMagnitude > 0.001f)
                     finalVelocity = finalVelocity.normalized * horizontalVelocity.magnitude;
+
+                finalVelocity += Vector3.down * 2f;
             }
             else if (isSliding && finalVelocity.y <= 0)
             {
@@ -96,7 +98,10 @@ public class PlayerMovement : MonoBehaviour
 
             characterController.Move(finalVelocity * Time.deltaTime);
 
-            //Debug.Log($"isGrounded: {isGrounded} | isSliding: {isSliding}");
+
+            //Debug
+            debugFinalVelocity = finalVelocity;
+            Debug.Log($"isGrounded: {isGrounded} | isSliding: {isSliding}");
         }
     }
 
@@ -177,13 +182,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyGravity()
     {
-        if(isGrounded && verticalVelocity < 0f)
+        if(isGrounded && verticalVelocity <= 0f)
         {
             verticalVelocity = -2f;
             return;
         }
 
         verticalVelocity += gravity * Time.deltaTime;
+
+        if(verticalVelocity <= maxGravityVelocity)
+        {
+            verticalVelocity = maxGravityVelocity;
+        }
     }
 
     public void Launch()
@@ -222,19 +232,28 @@ public class PlayerMovement : MonoBehaviour
         Vector3[] probePositions =
             {
                 feetPosition,
-                feetPosition + transform.forward * probeForwardOffset,
-                feetPosition - transform.forward * probeForwardOffset,
-                feetPosition + transform.right * probeSideOffset,
-                feetPosition - transform.right * probeSideOffset
+                feetPosition + transform.forward * probeOffset,
+                feetPosition - transform.forward * probeOffset,
+                feetPosition + transform.right * probeOffset,
+                feetPosition - transform.right * probeOffset,
+                feetPosition + (transform.forward + transform.right).normalized * probeOffset,
+                feetPosition + (transform.forward - transform.right).normalized * probeOffset,
+                feetPosition + (-transform.forward + transform.right).normalized * probeOffset,
+                feetPosition + (-transform.forward - transform.right).normalized * probeOffset
             };
 
-        float bestGroundAngle = float.MaxValue;
-        Vector3 bestNormal = Vector3.up;
+        debugProbePositions = probePositions;
 
-        foreach(Vector3 probePosition in probePositions)
+        float primaryAngle = float.MaxValue;
+        Vector3 primaryNormal = Vector3.up;
+
+        //float secondaryAngle = float.MaxValue;
+        //Vector3 secondaryNormal = Vector3.up;
+
+        for(int p = 0; p < probePositions.Length; p++)
         {
             int hitCount = Physics.SphereCastNonAlloc(
-                probePosition,
+                probePositions[p],
                 groundProbeRadius,
                 Vector3.down,
                 groundHits,
@@ -254,23 +273,24 @@ public class PlayerMovement : MonoBehaviour
 
                 float angle = Vector3.Angle(hit.normal, Vector3.up);
 
-                if (angle < bestGroundAngle)
+                if (angle < primaryAngle)
                 {
-                    bestGroundAngle = angle;
-                    bestNormal = hit.normal;
+                    primaryAngle = angle;
+                    primaryNormal = hit.normal;
                 }
+
             }
         }
 
-        if (bestGroundAngle == float.MaxValue)
+        if (primaryAngle == float.MaxValue)
         {
             isGrounded = false;
             isSliding = false;
             return;
         }
 
-        groundNormal = bestNormal;
-        groundAngle = bestGroundAngle;
+        groundAngle = primaryAngle;
+        groundNormal = primaryNormal;
 
         if (groundAngle <= characterController.slopeLimit)
         {
@@ -288,62 +308,25 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.normal.y < 0f)
-        {
-            hasCollision = true;
-            collisionNormal = hit.normal;
+    //private void OnControllerColliderHit(ControllerColliderHit hit)
+    //{
+    //    if (hit.normal.y < 0f)
+    //    {
+    //        hasCollision = true;
+    //        collisionNormal = hit.normal;
 
-            if (verticalVelocity > 0f)
-                verticalVelocity = 0f;
-        }
-    }
+    //        if (verticalVelocity > 0f)
+    //            verticalVelocity = 0f;
+    //    }
+    //}
 
-    private void OnDrawGizmosSelected()
-    {
-        if (characterController == null)
-            return;
+    
 
-        Vector3 feetPosition =
-            transform.position +
-            Vector3.up * probeHeight;
-
-        Vector3[] probePositions =
-        {
-            feetPosition,
-
-            feetPosition +
-            transform.forward * probeForwardOffset,
-
-            feetPosition -
-            transform.forward * probeForwardOffset,
-
-            feetPosition +
-            transform.right * probeSideOffset,
-
-            feetPosition -
-            transform.right * probeSideOffset
-        };
-
-        foreach (Vector3 position in probePositions)
-        {
-            Gizmos.color = Color.cyan;
-
-            Gizmos.DrawWireSphere(
-                position,
-                groundProbeRadius
-            );
-
-            Gizmos.DrawLine(
-                position,
-                position + Vector3.down * groundProbeDistance
-            );
-        }
-    }
-
+    [Header("Debug Data")]
     private Vector3[] debugProbePositions;
     private List<RaycastHit> debugHits = new List<RaycastHit>();
+    private Vector3 debugFinalVelocity;
+    private float vectorGizmoScale = 0.2f;
 
     private void OnDrawGizmos()
     {
@@ -387,21 +370,20 @@ public class PlayerMovement : MonoBehaviour
                 );
             }
         }
-    }
-    public void TeleportTo(Transform teleportPoint)
-    {
-        
-        characterController.enabled = false;
 
-        
-        horizontalVelocity = Vector3.zero;
-        verticalVelocity = 0f;
+        // Vetor finalVelocity
+        Gizmos.color = Color.green;
 
-        
-        transform.position = teleportPoint.position;
-        //transform.rotation = teleportPoint.rotation;
+        Vector3 origin = characterController.transform.position;
 
-        
-        characterController.enabled = true;
+        Gizmos.DrawLine(
+            origin,
+            origin + debugFinalVelocity * vectorGizmoScale
+        );
+
+        Gizmos.DrawSphere(
+            origin + debugFinalVelocity * vectorGizmoScale,
+            0.05f
+        );
     }
 }
