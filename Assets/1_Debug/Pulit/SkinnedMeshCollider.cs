@@ -11,6 +11,9 @@ public class SkinnedMeshCollider : MonoBehaviour
 
     void Start()
     {
+        if (skinnedMesh == null)
+            skinnedMesh = GetComponent<SkinnedMeshRenderer>();
+
         meshCollider = GetComponent<MeshCollider>();
 
         bakedMesh = new Mesh();
@@ -21,7 +24,8 @@ public class SkinnedMeshCollider : MonoBehaviour
     {
         if (skinnedMesh == null) return;
 
-        skinnedMesh.BakeMesh(bakedMesh);
+        // Evita incluir a escala do Transform no BakeMesh
+        skinnedMesh.BakeMesh(bakedMesh, false);
 
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = bakedMesh;
