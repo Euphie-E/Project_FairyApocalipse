@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DebrisSpawner : MonoBehaviour
 {
@@ -11,27 +12,25 @@ public class DebrisSpawner : MonoBehaviour
     public float speed = 2;
     public float size = 2;
     
+    private ShadowEffect shadowEffect;
+
     void Start()
     {
-        try // Quando tirar o renderer do prefab não precisa mais disso
-        {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
-        }
-
-        catch
-        {
-            Debug.LogError("não tem renderer, pode tirar esse try catch");
-        }
         
         rockDebris = transform.GetChild(0);
         rockDebrisRB = rockDebris.GetComponent<Rigidbody>();
         rockDebris.gameObject.SetActive(false);
+
+        shadowEffect = rockDebris.transform.GetChild(0).GetComponent<ShadowEffect>();
     }
 
-    public void Drop(bool randomize)
+    public void Drop(float startHeight, bool randomize)
     {
         rockDebrisRB.linearVelocity = Vector3.zero;
+        rockDebris.gameObject.SetActive(false);
         rockDebris.localPosition = new Vector3(0, 0, 0);
+        rockDebris.gameObject.SetActive(true);
+        shadowEffect.StartDrop(startHeight);
 
         if (randomize)
         {

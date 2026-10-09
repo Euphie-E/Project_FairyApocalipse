@@ -1,21 +1,32 @@
 using System;
 using System.IO;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance {get; private set;}
-    DataEvents dataEvents = new DataEvents();
+    public readonly DataEvents dataEvents = new();
     string savePath;
+    PlayerDataGroup playerDataGroup = new(5);
     PlayerData playerData;
-    [SerializeField] string ENVIRONMENT = "production";
-    [SerializeField] Scene[] scenes = new Scene[4]; 
+    [SerializeField] Environment ENVIRONMENT = Environment.production;
+    [SerializeField] SceneAsset[] scenes = new SceneAsset[4]; 
+    float strTime;
+    int ckpSize = 4;
+    public enum Environment
+    {
+        production,
+        playtest
+    }
     public enum Data
     {
         Jump,
         Death,
-        TimeTravel
+        TimeTravel,
+        TimeStamp
     }
     void Awake()
     {
@@ -27,146 +38,157 @@ public class DataManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(this);
-            dataEvents.Run(ENVIRONMENT);
+            dataEvents.Run(ENVIRONMENT.ToString());
         }
     }
     void Start()
     {
         savePath = Path.Combine(Application.persistentDataPath, "playerData.json");
         LoadGame();
+        Run(SceneManager.GetActiveScene(),LoadSceneMode.Single);
         SceneManager.activeSceneChanged += SaveGame;
+        SceneManager.sceneLoaded += Run;
     }
 
     void OnApplicationQuit()
     {
-        SaveGame();
-        
+        SaveData();
     }
 
-    public void SaveGame()
+    void SaveData()
     {
-        string json = JsonUtility.ToJson(playerData, true);
+        playerData.Duration = (int)((Time.time - strTime)*100)/100f;
+        string json = JsonUtility.ToJson(playerDataGroup, true);
         File.WriteAllText(savePath, json);
-        if (dataEvents.isInitialized)
-        {
-            dataEvents.Add(DataEvents.Statistics.JumpTotal,playerData.JumpTotal);
-            dataEvents.Add(DataEvents.Statistics.Jump_1,playerData.Jump_1);
-            dataEvents.Add(DataEvents.Statistics.Jump_2,playerData.Jump_2);
-            dataEvents.Add(DataEvents.Statistics.Jump_3,playerData.Jump_3);
-            dataEvents.Add(DataEvents.Statistics.Jump_4,playerData.Jump_4);
-            dataEvents.Add(DataEvents.Statistics.DeathTotal,playerData.DeathTotal);
-            dataEvents.Add(DataEvents.Statistics.Death_1,playerData.Death_1);
-            dataEvents.Add(DataEvents.Statistics.Death_2,playerData.Death_2);
-            dataEvents.Add(DataEvents.Statistics.Death_3,playerData.Death_3);
-            dataEvents.Add(DataEvents.Statistics.Death_4,playerData.Death_4);
-            dataEvents.Add(DataEvents.Statistics.TimeTravelTotal,playerData.TimeTravelTotal);
-            dataEvents.Add(DataEvents.Statistics.TimeTravel_1,playerData.TimeTravel_1);
-            dataEvents.Add(DataEvents.Statistics.TimeTravel_2,playerData.TimeTravel_2);
-            dataEvents.Add(DataEvents.Statistics.TimeTravel_3,playerData.TimeTravel_3);
-            dataEvents.Add(DataEvents.Statistics.TimeTravel_4,playerData.TimeTravel_4);
-        }
     }
-
+    public void SendData()
+    {
+        if (TestInit())
+        {
+            dataEvents.Add(DataEvents.Statistics.JumpTotal,playerDataGroup.JumpTotal);
+            dataEvents.Add(DataEvents.Statistics.Jump,playerData.Jump);
+            dataEvents.Add(DataEvents.Statistics.DeathTotal,playerDataGroup.DeathTotal);
+            dataEvents.Add(DataEvents.Statistics.Death,playerData.Death);
+            dataEvents.Add(DataEvents.Statistics.TimeTravelTotal,playerDataGroup.TimeTravelTotal);
+            dataEvents.Add(DataEvents.Statistics.TimeTravel,playerData.TimeTravel);
+            dataEvents.Add(DataEvents.Statistics.GDuration,(int)playerData.Duration);
+            if(playerData.CheckPoints.Length > 0)
+            {
+                dataEvents.Add(DataEvents.Statistics.CheckPoints,(float)playerData.CheckPoints[0]-strTime,0);
+                for (int i = 1; i < playerData.CheckPoints.Length; i++)
+                {
+                    dataEvents.Add(DataEvents.Statistics.CheckPoints,(float)(playerData.CheckPoints[i]-playerData.CheckPoints[i-1]),i);
+                }
+            }
+        } 
+    }
+    void Run(Scene scene, LoadSceneMode loaded)
+    {
+        if(playerDataGroup == null) LoadGame();
+        int index = CheckSceneIDX(scene);
+        dataEvents.index = index;
+        playerData = new();
+        playerDataGroup.group[index] = playerData;
+        playerData.index = index;
+        if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize) playerData.CheckPoints = new double[ckpSize];
+        strTime = Time.time;
+    }
     void SaveGame(Scene current, Scene Next)
     {
-        string json = JsonUtility.ToJson(playerData, true);
-        File.WriteAllText(savePath, json);
+        SaveData();
+        SendData();
+    }
+
+    int CheckSceneIDX(Scene scene)
+    {
+        int index = 4;
+        if(scene.name == scenes[0].name)
+        {
+            index = 0;
+        }
+        else if(scene.name == scenes[1].name)
+        {
+            index = 1;
+        }
+        else if(scene.name == scenes[2].name)
+        {
+            index = 2;
+        }
+        else if(scene.name == scenes[3].name)
+        {
+            index = 3;
+        }
+        else
+        {
+            Debug.Log("this scene is not loaded in the data manager at: "+this.gameObject.name);
+        }
+        return index;
     }
 
     public void LoadGame()
     {
         if (!File.Exists(savePath))
         {
-            playerData =  new PlayerData(); 
+            playerDataGroup =  new PlayerDataGroup(5); 
+            return;
         }
 
         // 2. Read the raw text from the file
         string json = File.ReadAllText(savePath);
 
         // 3. Convert the JSON string back into your C# object type
-        PlayerData data = JsonUtility.FromJson<PlayerData>(json);
-
-        playerData = data;
+        PlayerDataGroup data = JsonUtility.FromJson<PlayerDataGroup>(json);
+        playerDataGroup = data;
+        playerDataGroup ??= new PlayerDataGroup(5);
+        if(playerDataGroup.group == null || playerDataGroup.group.Length == 0) playerDataGroup = new PlayerDataGroup(5);
     }
     
     public void AddData(Data data, int value)
     {
-        Scene scene = SceneManager.GetActiveScene();
+        if(!TestInit()) return;
         switch (data)
         {
-            case Data.Jump:
-                playerData.JumpTotal += value;
-                if(scene == scenes[0])
-                {
-                    playerData.Jump_1 += value;
-                }
-                else if(scene == scenes[1])
-                {
-                    playerData.Jump_2 += value;
-                }
-                else if(scene == scenes[2])
-                {
-                    playerData.Jump_3 += value;
-                }
-                else if(scene == scenes[3])
-                {
-                    playerData.Jump_4 += value;
-                }
-                else
-                {
-                    Debug.Log("this scene is not loaded in the data manager at: "+this.gameObject.name);
-                }
-                break;
             case Data.Death:
-                playerData.DeathTotal += value;
-                if(scene == scenes[0])
-                {
-                    playerData.Death_1 += value;
-                }
-                else if(scene == scenes[1])
-                {
-                    playerData.Death_2 += value;
-                }
-                else if(scene == scenes[2])
-                {
-                    playerData.Death_3 += value;
-                }
-                else if(scene == scenes[3])
-                {
-                    playerData.Death_4 += value;
-                }
-                else
-                {
-                    Debug.Log("this scene is not loaded in the data manager at: "+this.gameObject.name);
-                }
+                playerData.Death += value;
+                playerDataGroup.DeathTotal += value;
+                break;
+            case Data.Jump:
+                playerData.Jump += value;
+                playerDataGroup.JumpTotal += value;
                 break;
             case Data.TimeTravel:
-                playerData.TimeTravelTotal += value;
-                if(scene == scenes[0])
-                {
-                    playerData.TimeTravel_1 += value;
-                }
-                else if(scene == scenes[1])
-                {
-                    playerData.TimeTravel_2 += value;
-                }
-                else if(scene == scenes[2])
-                {
-                    playerData.TimeTravel_3 += value;
-                }
-                else if(scene == scenes[3])
-                {
-                    playerData.TimeTravel_4 += value;
-                }
-                else
-                {
-                    Debug.Log("this scene is not loaded in the data manager at: "+this.gameObject.name);
-                }
-
+                playerData.TimeTravel += value;
+                playerDataGroup.TimeTravelTotal += value;
                 break;
             default:
-                Debug.Log("wrong enum for data at: "+this.gameObject.name);
                 break;
+        }
+        
+    }
+    int ckpPt = 0;
+    public void AddData(Data data, float value)
+    {
+        if(!TestInit()) return;
+        switch (data)
+        {
+            case Data.TimeStamp:
+                playerData.CheckPoints[ckpPt] = (int)(value*100)/100f;
+                break;
+            default:
+                break;
+        }
+    }
+    bool TestInit()
+    {
+        return dataEvents.isInitialized;
+    }
+    public void SetTotalCheckpoints(int size)
+    {
+        ckpSize = size;
+        if(playerData != null)
+        {
+            if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize)
+                playerData.CheckPoints = new double[ckpSize];
         }
     }
 }
