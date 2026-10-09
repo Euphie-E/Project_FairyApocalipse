@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
@@ -16,6 +17,9 @@ public class DataManager : MonoBehaviour
     [SerializeField] SceneAsset[] scenes = new SceneAsset[4]; 
     float strTime;
     int ckpSize = 4;
+    private bool testing = false;
+    InputAction add;
+    InputSystem_Actions act;
     public enum Environment
     {
         production,
@@ -30,6 +34,8 @@ public class DataManager : MonoBehaviour
     }
     void Awake()
     {
+        act = new InputSystem_Actions();
+        add = act.Player.AddTester;
         if(Instance != null && Instance != this)
         {
             Destroy(this);
@@ -44,10 +50,20 @@ public class DataManager : MonoBehaviour
     void Start()
     {
         savePath = Path.Combine(Application.persistentDataPath, "playerData.json");
+        if(ENVIRONMENT == Environment.playtest) AddNewTester();
         LoadGame();
         Run(SceneManager.GetActiveScene(),LoadSceneMode.Single);
         SceneManager.activeSceneChanged += SaveGame;
         SceneManager.sceneLoaded += Run;
+        add.performed += AddNewTester;
+    }
+    void OnEnable()
+    {
+        add.Enable();
+    }
+    void OnDisable()
+    {
+        add.Disable();
     }
 
     void OnApplicationQuit()
@@ -87,11 +103,14 @@ public class DataManager : MonoBehaviour
         if(playerDataGroup == null) LoadGame();
         int index = CheckSceneIDX(scene);
         dataEvents.index = index;
-        playerData = new();
+        if(testing || playerData == null || index != playerData.index)
+        {
+            playerData = new();
+            strTime = Time.time;
+        }
         playerDataGroup.group[index] = playerData;
         playerData.index = index;
         if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize) playerData.CheckPoints = new double[ckpSize];
-        strTime = Time.time;
     }
     void SaveGame(Scene current, Scene Next)
     {
@@ -190,5 +209,25 @@ public class DataManager : MonoBehaviour
             if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize)
                 playerData.CheckPoints = new double[ckpSize];
         }
+    }
+    void AddNewTester(InputAction.CallbackContext ctx = new())
+    {
+        testing = true;
+        int user = dataEvents.AddPlayerCT(PlayerPrefs.GetInt("TotalTester",0));
+        if(playerData != null && playerData.index != -1)
+        {
+            SendData(); 
+            string folderPath = Path.Combine(Application.persistentDataPath, "TestData");
+            string fName = "playerData_"+user.ToString()+".json";
+            savePath = Path.Combine(folderPath, fName);
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            } 
+        }
+        PlayerPrefs.SetInt("TotalTester", user);
+        PlayerPrefs.Save();
+        Debug.Log("gay");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
