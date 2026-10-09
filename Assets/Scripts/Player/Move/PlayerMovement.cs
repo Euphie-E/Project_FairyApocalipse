@@ -388,4 +388,20 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    public void TeleportTo(Transform teleportPoint)
+    {
+        
+        characterController.enabled = false;
+
+        
+        horizontalVelocity = Vector3.zero;
+        verticalVelocity = 0f;
+
+        
+        transform.position = teleportPoint.position;
+        //transform.rotation = teleportPoint.rotation;
+
+        
+        characterController.enabled = true;
+    }
 }
