@@ -29,7 +29,8 @@ public class DataEvents
         try
         {
             // Initialize fundamental Unity Gaming Services
-            await UnityServices.InitializeAsync(new InitializationOptions().SetEnvironmentName(environment));
+            await UnityServices.InitializeAsync();
+            new InitializationOptions().SetEnvironmentName(environment);
             // Explicitly opt-in / start data collection for this player
             //AnalyticsService.Instance.StartDataCollection();
             EndUserConsent.SetConsentState(new ConsentState 
@@ -47,16 +48,10 @@ public class DataEvents
         }
         user = SystemInfo.deviceUniqueIdentifier;
     }
-    public int AddPlayerCT(int start)
-    {
-        playerCT = start+1;
-        return AddPlayerCT();
-    }
-    public int AddPlayerCT()
+    public void AddPlayerCT()
     {
         user = playerCT.ToString();
         playerCT++;
-        return playerCT-1;
     }
     public void Add(Statistics statistics,int value)
     {
@@ -103,10 +98,10 @@ public class PlayerDataGroup
 [Serializable]
 public class PlayerData
 {
-    public int index = -1;
+    public int index;
     public int Jump;
     public int TimeTravel;
     public int Death;
     public double Duration;
-    public double[] CheckPoints = new double[4];
+    public double[] CheckPoints;
 }
