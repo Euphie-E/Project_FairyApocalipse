@@ -386,4 +386,21 @@ public class PlayerMovement : MonoBehaviour
             0.05f
         );
     }
+
+    public void TeleportTo(Transform teleportPoint)
+    {
+        // Desliga o CharacterController
+        characterController.enabled = false;
+
+        // Zera todo movimento anterior
+        horizontalVelocity = Vector3.zero;
+        verticalVelocity = 0f;
+
+        // Teleporta exatamente o PlayerCharacter
+        transform.position = teleportPoint.position;
+        transform.rotation = teleportPoint.rotation;
+
+        // Liga novamente
+        characterController.enabled = true;
+    }
 }
