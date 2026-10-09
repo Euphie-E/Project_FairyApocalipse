@@ -84,6 +84,10 @@ public class PlayerDataGroup
     public PlayerDataGroup(int size)
     {
         group = new PlayerData[size];
+        for(int i = 0; i < size; i++)
+        {
+            group[i] = new PlayerData();
+        }
     }
 }
 
