@@ -148,8 +148,6 @@ public class PlayerInput : MonoBehaviour
         resetAction.Disable();
         travelAction.Disable();
         escapeAction.Disable();
-        if (DataManager.Instance != null)
-            DataManager.Instance.AddData(DataManager.Data.Death,1);
     }
 
     public void OnRevive()
@@ -161,6 +159,8 @@ public class PlayerInput : MonoBehaviour
         resetAction.Enable();
         travelAction.Enable();
         escapeAction.Enable();
+        if (DataManager.Instance != null)
+            DataManager.Instance.AddData(DataManager.Data.Death,1);
     }
     /// <summary>
     /// Type:<br />
