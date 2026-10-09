@@ -149,6 +149,8 @@ public class TimeTravel : MonoBehaviour
         // Visual do passado
         pastCamera.enabled = true;
         //timeDome.enabled = true;
+        if (DataManager.Instance != null)
+            DataManager.Instance.AddData(DataManager.Data.TimeTravel,1);
     }
 
     private void EndTravel()
