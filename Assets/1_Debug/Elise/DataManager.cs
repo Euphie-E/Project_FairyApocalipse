@@ -50,9 +50,9 @@ public class DataManager : MonoBehaviour
     void Start()
     {
         savePath = Path.Combine(Application.persistentDataPath, "playerData.json");
-        if(ENVIRONMENT == Environment.playtest) AddNewTester();
         LoadGame();
         Run(SceneManager.GetActiveScene(),LoadSceneMode.Single);
+        if(ENVIRONMENT == Environment.playtest) testing = true;
         SceneManager.activeSceneChanged += SaveGame;
         SceneManager.sceneLoaded += Run;
         add.performed += AddNewTester;
@@ -93,6 +93,7 @@ public class DataManager : MonoBehaviour
                 dataEvents.Add(DataEvents.Statistics.CheckPoints,(float)playerData.CheckPoints[0]-strTime,0);
                 for (int i = 1; i < playerData.CheckPoints.Length; i++)
                 {
+                    if(playerData.CheckPoints[i] == 0) return;
                     dataEvents.Add(DataEvents.Statistics.CheckPoints,(float)(playerData.CheckPoints[i]-playerData.CheckPoints[i-1]),i);
                 }
             }
@@ -114,6 +115,7 @@ public class DataManager : MonoBehaviour
     }
     void SaveGame(Scene current, Scene Next)
     {
+        if (testing) return;
         SaveData();
         SendData();
     }
@@ -216,18 +218,20 @@ public class DataManager : MonoBehaviour
         int user = dataEvents.AddPlayerCT(PlayerPrefs.GetInt("TotalTester",0));
         if(playerData != null && playerData.index != -1)
         {
-            SendData(); 
+            playerData.Duration = (int)((Time.time - strTime)*100)/100f;
+            string json = JsonUtility.ToJson(playerDataGroup, true);
             string folderPath = Path.Combine(Application.persistentDataPath, "TestData");
             string fName = "playerData_"+user.ToString()+".json";
-            savePath = Path.Combine(folderPath, fName);
+            string filePath = Path.Combine(folderPath, fName);
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             } 
+            File.WriteAllText(filePath, json);
+            SendData(); 
         }
         PlayerPrefs.SetInt("TotalTester", user);
         PlayerPrefs.Save();
-        Debug.Log("gay");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

@@ -29,8 +29,7 @@ public class DataEvents
         try
         {
             // Initialize fundamental Unity Gaming Services
-            await UnityServices.InitializeAsync();
-            new InitializationOptions().SetEnvironmentName(environment);
+            await UnityServices.InitializeAsync(new InitializationOptions().SetEnvironmentName(environment));
             // Explicitly opt-in / start data collection for this player
             //AnalyticsService.Instance.StartDataCollection();
             EndUserConsent.SetConsentState(new ConsentState 
