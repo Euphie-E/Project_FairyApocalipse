@@ -96,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
 
             characterController.Move(finalVelocity * Time.deltaTime);
 
-            Debug.Log($"isGrounded: {isGrounded} | isSliding: {isSliding}");
+            //Debug.Log($"isGrounded: {isGrounded} | isSliding: {isSliding}");
         }
     }
 
