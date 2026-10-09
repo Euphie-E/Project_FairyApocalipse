@@ -29,6 +29,7 @@ public class PlayerDeathController : MonoBehaviour
         checkpoints = new GameObject[GameObject.FindGameObjectsWithTag("Checkpoint").Length + 1];
 
         checkpoints[0] = transform.parent.gameObject; // colocar o spawn como inicio, meio gambiarra aproveitando que o player pai não se mexe;
+        DataManager.Instance?.SetTotalCheckpoints(checkpoints.Length);
     }
 
     void Update()

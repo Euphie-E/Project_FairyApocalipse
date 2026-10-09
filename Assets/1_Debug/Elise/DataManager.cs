@@ -15,6 +15,7 @@ public class DataManager : MonoBehaviour
     [SerializeField] Environment ENVIRONMENT = Environment.production;
     [SerializeField] SceneAsset[] scenes = new SceneAsset[4]; 
     float strTime;
+    int ckpSize = 4;
     public enum Environment
     {
         production,
@@ -56,26 +57,27 @@ public class DataManager : MonoBehaviour
 
     void SaveData()
     {
-        string json = JsonUtility.ToJson(playerData, true);
+        playerData.Duration = (int)((Time.time - strTime)*100)/100f;
+        string json = JsonUtility.ToJson(playerDataGroup, true);
         File.WriteAllText(savePath, json);
     }
     public void SendData()
     {
         if (TestInit())
         {
-            dataEvents.Add(DataEvents.Statistics.JumpTotal,PlayerData.JumpTotal);
+            dataEvents.Add(DataEvents.Statistics.JumpTotal,playerDataGroup.JumpTotal);
             dataEvents.Add(DataEvents.Statistics.Jump,playerData.Jump);
-            dataEvents.Add(DataEvents.Statistics.DeathTotal,PlayerData.DeathTotal);
+            dataEvents.Add(DataEvents.Statistics.DeathTotal,playerDataGroup.DeathTotal);
             dataEvents.Add(DataEvents.Statistics.Death,playerData.Death);
-            dataEvents.Add(DataEvents.Statistics.TimeTravelTotal,PlayerData.TimeTravelTotal);
+            dataEvents.Add(DataEvents.Statistics.TimeTravelTotal,playerDataGroup.TimeTravelTotal);
             dataEvents.Add(DataEvents.Statistics.TimeTravel,playerData.TimeTravel);
-            dataEvents.Add(DataEvents.Statistics.GDuration,playerData.Duration);
-            if(playerData.CheckPoints.Count > 0)
+            dataEvents.Add(DataEvents.Statistics.GDuration,(int)playerData.Duration);
+            if(playerData.CheckPoints.Length > 0)
             {
-                dataEvents.Add(DataEvents.Statistics.CheckPoints,playerData.CheckPoints[0]-strTime,0);
-                for (int i = 1; i < playerData.CheckPoints.Count; i++)
+                dataEvents.Add(DataEvents.Statistics.CheckPoints,(float)playerData.CheckPoints[0]-strTime,0);
+                for (int i = 1; i < playerData.CheckPoints.Length; i++)
                 {
-                    dataEvents.Add(DataEvents.Statistics.CheckPoints,playerData.CheckPoints[i]-playerData.CheckPoints[i-1],i);
+                    dataEvents.Add(DataEvents.Statistics.CheckPoints,(float)(playerData.CheckPoints[i]-playerData.CheckPoints[i-1]),i);
                 }
             }
         } 
@@ -85,13 +87,14 @@ public class DataManager : MonoBehaviour
         if(playerDataGroup == null) LoadGame();
         int index = CheckSceneIDX(scene);
         dataEvents.index = index;
-        playerData = playerDataGroup.group[index];
+        playerData = new();
+        playerDataGroup.group[index] = playerData;
         playerData.index = index;
+        if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize) playerData.CheckPoints = new double[ckpSize];
         strTime = Time.time;
     }
     void SaveGame(Scene current, Scene Next)
     {
-        playerData.Duration = Time.time - strTime;
         SaveData();
         SendData();
     }
@@ -147,28 +150,29 @@ public class DataManager : MonoBehaviour
         {
             case Data.Death:
                 playerData.Death += value;
-                PlayerData.DeathTotal += value;
+                playerDataGroup.DeathTotal += value;
                 break;
             case Data.Jump:
                 playerData.Jump += value;
-                PlayerData.JumpTotal += value;
+                playerDataGroup.JumpTotal += value;
                 break;
             case Data.TimeTravel:
                 playerData.TimeTravel += value;
-                PlayerData.TimeTravelTotal += value;
+                playerDataGroup.TimeTravelTotal += value;
                 break;
             default:
                 break;
         }
         
     }
+    int ckpPt = 0;
     public void AddData(Data data, float value)
     {
         if(!TestInit()) return;
         switch (data)
         {
             case Data.TimeStamp:
-                playerData.CheckPoints.Append(value);
+                playerData.CheckPoints[ckpPt] = (int)(value*100)/100f;
                 break;
             default:
                 break;
@@ -177,5 +181,14 @@ public class DataManager : MonoBehaviour
     bool TestInit()
     {
         return dataEvents.isInitialized;
+    }
+    public void SetTotalCheckpoints(int size)
+    {
+        ckpSize = size;
+        if(playerData != null)
+        {
+            if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize)
+                playerData.CheckPoints = new double[ckpSize];
+        }
     }
 }

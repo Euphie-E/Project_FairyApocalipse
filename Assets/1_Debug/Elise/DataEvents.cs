@@ -78,9 +78,13 @@ public class DataEvents
     }
 }
 
+[Serializable]
 public class PlayerDataGroup
 {
     public PlayerData[] group;
+    public int JumpTotal;
+    public int DeathTotal;
+    public int TimeTravelTotal;
     public PlayerDataGroup(int size)
     {
         group = new PlayerData[size];
@@ -91,15 +95,13 @@ public class PlayerDataGroup
     }
 }
 
+[Serializable]
 public class PlayerData
 {
     public int index;
-    public static int JumpTotal;
     public int Jump;
-    public static int TimeTravelTotal;
     public int TimeTravel;
-    public static int DeathTotal;
     public int Death;
-    public float Duration;
-    public List<float> CheckPoints = new List<float>();
+    public double Duration;
+    public double[] CheckPoints;
 }
