@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Footsteps Audio")]
+    [SerializeField] private float stepInterval = 0.4f;
+    private float stepTimer;
     [Header("References")]
     [SerializeField] private Transform cameraTransform;
     private PlayerAnimatorController playerAnimatorController;
@@ -73,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
             HandleMovement();
             HandleJump();
             ApplyGravity();
+            HandleFootsteps();
 
             Vector3 finalVelocity = horizontalVelocity;
 
@@ -167,6 +171,7 @@ public class PlayerMovement : MonoBehaviour
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
             playerAnimatorController.PlayJump();
+            GCamarada.AudioManager.I?.OnShotClip("Jump");
 
             hasJumped = true;
             currentCoyoteTime = 0f;
@@ -402,5 +407,21 @@ public class PlayerMovement : MonoBehaviour
 
         // Liga novamente
         characterController.enabled = true;
+    }
+    private void HandleFootsteps()
+    {
+        if (isGrounded && horizontalVelocity.sqrMagnitude > 0.1f)
+        {
+            stepTimer -= Time.deltaTime;
+            if (stepTimer <= 0f)
+            {
+                GCamarada.AudioManager.I?.PlaySequentialClip("GrassFootstep");
+                stepTimer = stepInterval;
+            }
+        }
+        else
+        {
+            stepTimer = 0f; 
+        }
     }
 }
