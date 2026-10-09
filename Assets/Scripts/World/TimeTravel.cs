@@ -132,14 +132,17 @@ public class TimeTravel : MonoBehaviour
 
     private void StartTravel(InputAction.CallbackContext ctx)
     {
-        if(onCooldown) return;
-        if(isTravelling) {
+        if (!ctx.performed) return;
+        if (onCooldown) return;
+        if(isTravelling) 
+        {
             EndTravel();
             return;
         }
         isTravelling = true;
         travelDurationTimer = travelDuration;
 
+        GCamarada.AudioManager.I?.PlayClip("StartTravel", true);
         Debug.Log("Viajei pro passado");
 
         // Física do passado
@@ -157,6 +160,7 @@ public class TimeTravel : MonoBehaviour
     {
         isTravelling = false;
 
+        GCamarada.AudioManager.I?.StopClip("StartTravel");
         Debug.Log("Voltei pro futuro");
 
         // Física do futuro
