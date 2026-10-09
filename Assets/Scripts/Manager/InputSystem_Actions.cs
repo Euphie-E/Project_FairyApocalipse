@@ -226,6 +226,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AddTester"",
+                    ""type"": ""Button"",
+                    ""id"": ""fafc60a9-08b8-43fb-82b2-fd66ebc78440"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -699,6 +708,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Test"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93cd3562-ae81-4624-affc-8d1dc2814779"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddTester"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1301,6 +1321,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_treis = m_Player.FindAction("treis", throwIfNotFound: true);
         m_Player_cuatro = m_Player.FindAction("cuatro", throwIfNotFound: true);
         m_Player_Test = m_Player.FindAction("Test", throwIfNotFound: true);
+        m_Player_AddTester = m_Player.FindAction("AddTester", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1409,6 +1430,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_treis;
     private readonly InputAction m_Player_cuatro;
     private readonly InputAction m_Player_Test;
+    private readonly InputAction m_Player_AddTester;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1481,6 +1503,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Test => m_Wrapper.m_Player_Test;
         /// <summary>
+        /// Provides access to the underlying input action "Player/AddTester".
+        /// </summary>
+        public InputAction @AddTester => m_Wrapper.m_Player_AddTester;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1551,6 +1577,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Test.started += instance.OnTest;
             @Test.performed += instance.OnTest;
             @Test.canceled += instance.OnTest;
+            @AddTester.started += instance.OnAddTester;
+            @AddTester.performed += instance.OnAddTester;
+            @AddTester.canceled += instance.OnAddTester;
         }
 
         /// <summary>
@@ -1607,6 +1636,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Test.started -= instance.OnTest;
             @Test.performed -= instance.OnTest;
             @Test.canceled -= instance.OnTest;
+            @AddTester.started -= instance.OnAddTester;
+            @AddTester.performed -= instance.OnAddTester;
+            @AddTester.canceled -= instance.OnAddTester;
         }
 
         /// <summary>
@@ -2012,6 +2044,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTest(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "AddTester" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAddTester(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

@@ -24,6 +24,7 @@ public class PlayerSwingController : MonoBehaviour
     [SerializeField] private float maxAngle = 90f;
     private float angle;
     private float angularVelocity;
+    public float swingDir;
 
     private void Awake()
     {
@@ -45,6 +46,7 @@ public class PlayerSwingController : MonoBehaviour
         input.y *= cameraDirection;
 
         ApplyInputForce(input);
+        swingDir=input.y;
 
         ApplyGravity();
 
