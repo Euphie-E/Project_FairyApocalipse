@@ -20,7 +20,6 @@ public class PlayerAnimatorController : MonoBehaviour
         //else if (swing.enabled) UpdateSwingAnimation();
 
         float speed = movement.horizontalVelocity.magnitude;
-        float swingDir = swing.swingDir;
         bool isGrounded = movement.isGrounded;
         bool isSwinging = swing.isSwinging;
 
@@ -28,12 +27,6 @@ public class PlayerAnimatorController : MonoBehaviour
         animator.SetFloat("VerticalSpeed", movement.verticalVelocity, 0.1f, Time.deltaTime);
         animator.SetBool("isGrounded", isGrounded);
         animator.SetBool("isSwinging", isSwinging);
-        
-
-        if(swingDir == 0 && animator.GetFloat("SwingDir")<0.1f && animator.GetFloat("SwingDir") > -0.1f)
-            animator.SetFloat("SwingDir",swingDir);
-        else animator.SetFloat("SwingDir",swingDir,0.1f,Time.deltaTime);
-            
     }
 
     private void UpdateMovementAnimation()
