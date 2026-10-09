@@ -29,6 +29,7 @@ public class PlayerDeathController : MonoBehaviour
         checkpoints = new GameObject[GameObject.FindGameObjectsWithTag("Checkpoint").Length + 1];
 
         checkpoints[0] = transform.parent.gameObject; // colocar o spawn como inicio, meio gambiarra aproveitando que o player pai não se mexe;
+        DataManager.Instance?.SetTotalCheckpoints(checkpoints.Length);
     }
 
     void Update()
@@ -56,7 +57,7 @@ public class PlayerDeathController : MonoBehaviour
 
     private void CheckFallDistance()
     {
-        if (!isDead && isFalling)
+        if (isFalling)
         {
             fallHeight = yfall - transform.position.y;
 
@@ -74,7 +75,7 @@ public class PlayerDeathController : MonoBehaviour
 
     private void CheckDeath()
     {
-        if (isDead && playerMovement.isGrounded)
+        if (isDead && (playerMovement.isGrounded || fallHeight > maxHeight*2.5f))
         {
             playerInput.OnDeath();
             toReviveTimer += Time.deltaTime;
@@ -102,5 +103,7 @@ public class PlayerDeathController : MonoBehaviour
     {
         caughtCheckpointIndex = index;
         checkpoints[index] = checkpoint;
+        if (DataManager.Instance != null)
+            DataManager.Instance.AddData(DataManager.Data.TimeStamp,Time.time);
     }
 }
