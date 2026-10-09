@@ -90,11 +90,11 @@ public class DataManager : MonoBehaviour
             dataEvents.Add(DataEvents.Statistics.GDuration,(int)playerData.Duration);
             if(playerData.CheckPoints.Length > 0)
             {
-                dataEvents.Add(DataEvents.Statistics.CheckPoints,(float)playerData.CheckPoints[0]-strTime,0);
+                dataEvents.Add(DataEvents.Statistics.CheckPoint,(float)playerData.CheckPoints[0]-strTime,0);
                 for (int i = 1; i < playerData.CheckPoints.Length; i++)
                 {
                     if(playerData.CheckPoints[i] == 0) return;
-                    dataEvents.Add(DataEvents.Statistics.CheckPoints,(float)(playerData.CheckPoints[i]-playerData.CheckPoints[i-1]),i);
+                    dataEvents.Add(DataEvents.Statistics.CheckPoint,(float)(playerData.CheckPoints[i]-playerData.CheckPoints[i-1]),i);
                 }
             }
         } 

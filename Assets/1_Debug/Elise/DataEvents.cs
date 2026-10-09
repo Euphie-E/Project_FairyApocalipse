@@ -18,7 +18,7 @@ public class DataEvents
         DeathTotal,
         Death,
         GDuration,
-        CheckPoints
+        CheckPoint
     };
 
     string user;
