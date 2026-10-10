@@ -11,19 +11,55 @@ namespace GCamarada
     public class AudioManager : MonoBehaviour
     {
         public static AudioManager I;
-        
+
         [SerializeField] private List<AudioManagerList> audioInfo;
-        
+
         [Header("References")]
-        
         [SerializeField] private AudioMixer audioMixer;
 
         private void Awake()
         {
             if (I == null)
                 I = this;
-            else 
+            else
                 Destroy(gameObject);
+        }
+        private Dictionary<string, int> sequentialIndices = new Dictionary<string, int>();
+
+        public void PlaySequentialClip(string clipName)
+        {
+            foreach (var Audio in audioInfo)
+            {
+                if (Audio.clipName == clipName)
+                {
+                    if (!Audio.source)
+                    {
+                        Debug.LogWarning($"AudioSource não atribuído em: {clipName}");
+                        return;
+                    }
+
+                    if (Audio.clip != null && Audio.clip.Length > 0)
+                    {
+                        if (!sequentialIndices.ContainsKey(clipName))
+                            sequentialIndices[clipName] = 0;
+
+                        int currentIndex = sequentialIndices[clipName];
+
+                        if (Audio.clip[currentIndex] != null)
+                        {
+                            Audio.source.PlayOneShot(Audio.clip[currentIndex]);
+                        }
+
+                        sequentialIndices[clipName] = (currentIndex + 1) % Audio.clip.Length;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"A lista de 'clip' está vazia para: {clipName}");
+                    }
+
+                    break;
+                }
+            }
         }
         public void OnShotClip(string clipName)
         {
@@ -31,52 +67,78 @@ namespace GCamarada
             {
                 if (Audio.clipName == clipName)
                 {
-                    if (!Audio.clipe || !Audio.source)
-                        Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
+                    if (!Audio.source)
+                    {
+                        Debug.LogWarning($"AudioSource não atribuído em: {clipName}");
+                        return;
+                    }
 
-                    Audio.source.PlayOneShot(Audio.clipe);
-                    if (Audio.clip.Length < 1 || !Audio.source)
-                        Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
 
-                    Audio.source.PlayOneShot(Audio.clip[Random.Range(0, Audio.clip.Length)]);
+                    if (Audio.clipe != null)
+                    {
+                        Audio.source.PlayOneShot(Audio.clipe);
+                    }
+
+                    else if (Audio.clip != null && Audio.clip.Length > 0)
+                    {
+                        AudioClip randomClip = Audio.clip[Random.Range(0, Audio.clip.Length)];
+                        if (randomClip != null)
+                            Audio.source.PlayOneShot(randomClip);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Nenhum AudioClip configurado para: {clipName}");
+                    }
+
                     break;
                 }
             }
         }
+
         public void PlayClip(string clipName, bool loop = false)
         {
             foreach (var Audio in audioInfo)
             {
                 if (Audio.clipName == clipName)
                 {
-                    if (!Audio.clipe || !Audio.source)
-                        Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
+                    if (!Audio.source)
+                    {
+                        Debug.LogWarning($"AudioSource faltando em: {clipName}");
+                        return;
+                    }
 
-                    Audio.source.clip = Audio.clipe;
-                    if (Audio.clip.Length < 1 || !Audio.source)
-                        Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
+                    AudioClip clipToPlay = null;
 
-                    Audio.source.clip = Audio.clip[Random.Range(0, Audio.clip.Length)];
+                    if (Audio.clipe != null)
+                        clipToPlay = Audio.clipe;
+                    else if (Audio.clip != null && Audio.clip.Length > 0)
+                        clipToPlay = Audio.clip[Random.Range(0, Audio.clip.Length)];
+
+                    if (clipToPlay == null)
+                    {
+                        Debug.LogWarning($"Nenhum AudioClip configurado para: {clipName}");
+                        return;
+                    }
+
+                    Audio.source.clip = clipToPlay;
                     Audio.source.loop = loop;
                     Audio.source.Play();
-
                     break;
                 }
             }
         }
+
         public void StopClip(string clipName)
         {
             foreach (var Audio in audioInfo)
             {
                 if (Audio.clipName == clipName)
                 {
-                    if (!Audio.clipe || !Audio.source)
-                    if (Audio.clip.Length < 1 || !Audio.source)
-                        Debug.LogWarning($"Verifique a lista de audios pois algo esta faltando!! Audio Name: {Audio.clipName}");
-                    
-                    if (Audio.source.clip)
+                    if (Audio.source != null)
+                    {
                         Audio.source.Stop();
-
+                        Audio.source.clip = null;
+                    }
                     break;
                 }
             }
@@ -86,10 +148,10 @@ namespace GCamarada
         {
             if (volumeValueText)
                 volumeValueText.text = value.ToString();
- 
+
             if (!audioMixer)
             {
-                Debug.LogWarning($"A variavel audioMixer esta sem valor!!");
+                Debug.LogWarning($"A variável audioMixer está sem valor!!");
                 return;
             }
 
@@ -102,10 +164,12 @@ namespace GCamarada
         {
             SetVolumeValue(slider.value, "AudioMaster", slider.GetComponentInChildren<TextMeshProUGUI>());
         }
+
         public void SetVFXVolume(Slider slider)
         {
             SetVolumeValue(slider.value, "AudioVFX", slider.GetComponentInChildren<TextMeshProUGUI>());
         }
+
         public void SetMusicVolume(Slider slider)
         {
             SetVolumeValue(slider.value, "AudioMusic", slider.GetComponentInChildren<TextMeshProUGUI>());
