@@ -23,14 +23,21 @@ public class MenuController : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Escape))
         {
-            pausePanel.SetActive(true);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.Confined;
+            if (pausePanel.activeSelf)
+            {
+                pausePanel.SetActive(true);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            
+            else
+            {
+                pausePanel.SetActive(false);
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            
         }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        
     }
 }
