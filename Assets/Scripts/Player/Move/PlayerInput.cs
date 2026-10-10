@@ -50,6 +50,9 @@ public class PlayerInput : MonoBehaviour
         tres = inputSystemActions.Player.treis;
         quatro = inputSystemActions.Player.cuatro;
         test = inputSystemActions.Player.Test;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // gambiarra
