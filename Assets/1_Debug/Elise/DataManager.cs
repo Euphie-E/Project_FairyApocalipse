@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -14,7 +13,7 @@ public class DataManager : MonoBehaviour
     PlayerDataGroup playerDataGroup = new(5);
     PlayerData playerData;
     [SerializeField] Environment ENVIRONMENT = Environment.production;
-    [SerializeField] SceneAsset[] scenes = new SceneAsset[4]; 
+    [SerializeField] String[] scenes = new String[4]; 
     float strTime;
     int ckpSize = 4;
     private bool testing = false;
@@ -123,19 +122,19 @@ public class DataManager : MonoBehaviour
     int CheckSceneIDX(Scene scene)
     {
         int index = 4;
-        if(scene.name == scenes[0].name)
+        if(scene.name == scenes[0])
         {
             index = 0;
         }
-        else if(scene.name == scenes[1].name)
+        else if(scene.name == scenes[1])
         {
             index = 1;
         }
-        else if(scene.name == scenes[2].name)
+        else if(scene.name == scenes[2])
         {
             index = 2;
         }
-        else if(scene.name == scenes[3].name)
+        else if(scene.name == scenes[3])
         {
             index = 3;
         }
