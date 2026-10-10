@@ -29,27 +29,19 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Ground Check")]
     [SerializeField] LayerMask groundLayerMask;
-    public bool isGrounded { get; private set; }
-    private Vector3 groundNormal;
-    [SerializeField] float probeOffset;
-    [SerializeField] float probeHeight;
-    [SerializeField]private float groundProbeRadius;
-    private RaycastHit[] groundHits;
-    [SerializeField]private float groundProbeDistance;
-
-    [Header("Slide")]
-    private Vector3 slideVelocity;
+    [SerializeField] private float groundCheckDistance = 0.15f;
+    [SerializeField] private float snapDistance = 0.4f;
+    [SerializeField] private float groundRadiusShrink = 0.05f;
+    private Vector3 groundNormal = Vector3.up;
     private float groundAngle;
-    [SerializeField] private float slideSpeed = 25f;
+    public bool isGrounded { get; private set; }
     public bool isSliding { get; private set; }
 
-    [Header("Overhead Collision")]
-    private Vector3 collisionNormal;
-    private bool hasCollision;
-
     [Header("Coyote Jump")]
-    [SerializeField] private float coyoteAirTime = 0.5f;
-    private float currentCoyoteTime;
+    [SerializeField] private float coyoteTime = 0.12f;
+    private float lastGroundedTime = -10f;
+    private float lastJumpTime = -10f;
+    private const float ignoreGroundAfterJump = 0.1f;
     private bool hasJumped;
 
     private void Awake()
@@ -60,52 +52,69 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        groundHits = new RaycastHit[5];
         cameraTransform = Camera.main.transform;
-        currentCoyoteTime = coyoteAirTime;
     }
 
     private void Update()
     {
-        if (characterController.enabled)
+        if (!characterController.enabled) return;
+
+        CheckGrounded();
+        HandleMovement();
+        HandleJump();
+        ApplyGravity();
+        HandleFootsteps();
+
+        Vector3 velocity = CalculateFinalVelocity();
+        bool groundedBeforeMove = isGrounded;
+
+        CollisionFlags flags = characterController.Move(velocity * Time.deltaTime);
+
+        if ((flags & CollisionFlags.Above) != 0 && verticalVelocity > 0f) //Bateu no teto
+            verticalVelocity = 0f;
+
+        if (groundedBeforeMove && !characterController.isGrounded)
+            SnapToGround();
+
+#if UNITY_EDITOR
+        debugFinalVelocity = velocity;
+#endif
+    }
+
+    private Vector3 CalculateFinalVelocity()
+    {
+        if (isGrounded && verticalVelocity <= 0f)
         {
-            hasCollision = false;
-            collisionNormal = Vector3.zero;
+            Vector3 v = Vector3.ProjectOnPlane(horizontalVelocity, groundNormal);
+            if (v.sqrMagnitude > 0.0001f)
+                v = v.normalized * horizontalVelocity.magnitude;
 
-            CheckGrounded();
-            HandleMovement();
-            HandleJump();
-            ApplyGravity();
-            HandleFootsteps();
+            v.y += verticalVelocity;
+            return v;
+        }
 
-            Vector3 finalVelocity = horizontalVelocity;
+        if (isSliding)
+        {
+            Vector3 v = Vector3.ProjectOnPlane(horizontalVelocity, groundNormal);
+            v += Vector3.ProjectOnPlane(Vector3.up * verticalVelocity, groundNormal);
+            return v;
+        }
 
-            if (isGrounded && !hasJumped)
-            {
-                finalVelocity = Vector3.ProjectOnPlane(horizontalVelocity, groundNormal);
+        Vector3 air = horizontalVelocity;
+        air.y = verticalVelocity;
+        return air;
+    }
 
-                if (horizontalVelocity.sqrMagnitude > 0.001f)
-                    finalVelocity = finalVelocity.normalized * horizontalVelocity.magnitude;
+    private void SnapToGround()
+    {
+        if (hasJumped || verticalVelocity > 0f) return;
 
-                finalVelocity += Vector3.down * 2f;
-            }
-            else if (isSliding && finalVelocity.y <= 0)
-            {
-                finalVelocity = Vector3.ProjectOnPlane(horizontalVelocity, groundNormal);
-
-                Vector3 gravityVelocity = Vector3.ProjectOnPlane(Vector3.up * verticalVelocity, groundNormal);
-
-                finalVelocity += gravityVelocity;
-            }
-            else
-                finalVelocity.y = verticalVelocity;
-
-            characterController.Move(finalVelocity * Time.deltaTime);
-
-
-            //Debug
-            debugFinalVelocity = finalVelocity;
-            Debug.Log($"isGrounded: {isGrounded} | isSliding: {isSliding}");
+        if (ProbeGround(snapDistance, true, out RaycastHit hit, out Vector3 normal) && 
+            Vector3.Angle(normal, Vector3.up) <= characterController.slopeLimit)
+        {
+            float drop = hit.distance - 0.1f - groundRadiusShrink;
+            if (drop > 0.001f)
+                characterController.Move(Vector3.down * drop);
         }
     }
 
@@ -168,13 +177,9 @@ public class PlayerMovement : MonoBehaviour
         if (CanJump() && PlayerInput.Instance.jumpAction.WasPressedThisFrame())
         {
             DataManager.Instance?.AddData(DataManager.Data.Jump, 1);
-            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-
             playerAnimatorController.PlayJump();
             GCamarada.AudioManager.I?.OnShotClip("Jump");
-
-            hasJumped = true;
-            currentCoyoteTime = 0f;
+            StartJump();
         }
         else
         {
@@ -184,6 +189,15 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+    private void StartJump()
+    {
+        verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        hasJumped = true;
+        lastJumpTime = Time.time;
+    }
+
+    public void Launch() => StartJump();
 
     private void ApplyGravity()
     {
@@ -201,111 +215,34 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void Launch()
-    {
-        verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-    }
+    
 
     private bool CanJump()
     {
-        if (isGrounded)
-        {
-            return true;
-        }
-
-        else if (!isGrounded && !hasJumped && currentCoyoteTime > 0f)
-        {
-            currentCoyoteTime -= Time.deltaTime;
-            return true;
-        }
-
-        return false;
+        return !hasJumped && (isGrounded || Time.time - lastGroundedTime <= coyoteTime);
     }
 
     private void CheckGrounded()
     {
-        debugHits.Clear();
-
         isGrounded = false;
         isSliding = false;
-
         groundNormal = Vector3.up;
         groundAngle = 0f;
 
-        Vector3 feetPosition = transform.position + Vector3.up * probeHeight;
-
-        Vector3[] probePositions =
-            {
-                feetPosition,
-                feetPosition + transform.forward * probeOffset,
-                feetPosition - transform.forward * probeOffset,
-                feetPosition + transform.right * probeOffset,
-                feetPosition - transform.right * probeOffset,
-                feetPosition + (transform.forward + transform.right).normalized * probeOffset,
-                feetPosition + (transform.forward - transform.right).normalized * probeOffset,
-                feetPosition + (-transform.forward + transform.right).normalized * probeOffset,
-                feetPosition + (-transform.forward - transform.right).normalized * probeOffset
-            };
-
-        debugProbePositions = probePositions;
-
-        float primaryAngle = float.MaxValue;
-        Vector3 primaryNormal = Vector3.up;
-
-        //float secondaryAngle = float.MaxValue;
-        //Vector3 secondaryNormal = Vector3.up;
-
-        for(int p = 0; p < probePositions.Length; p++)
-        {
-            int hitCount = Physics.SphereCastNonAlloc(
-                probePositions[p],
-                groundProbeRadius,
-                Vector3.down,
-                groundHits,
-                groundProbeDistance,
-                groundLayerMask,
-                QueryTriggerInteraction.Ignore
-            );
-
-            for (int i = 0; i < hitCount; i++)
-            {
-                RaycastHit hit = groundHits[i];
-
-                if (hit.collider == null)
-                    continue;
-
-                debugHits.Add(hit);
-
-                float angle = Vector3.Angle(hit.normal, Vector3.up);
-
-                if (angle < primaryAngle)
-                {
-                    primaryAngle = angle;
-                    primaryNormal = hit.normal;
-                }
-
-            }
-        }
-
-        if (primaryAngle == float.MaxValue)
-        {
-            isGrounded = false;
-            isSliding = false;
+        if (verticalVelocity > 0.01f || Time.time < lastJumpTime + ignoreGroundAfterJump)
             return;
-        }
 
-        groundAngle = primaryAngle;
-        groundNormal = primaryNormal;
+        if (!ProbeGround(groundCheckDistance, false, out RaycastHit hit, out Vector3 normal))
+            return;
 
-        if (groundAngle <= characterController.slopeLimit)
+        groundNormal = normal;
+        groundAngle = Vector3.Angle(normal, Vector3.up);
+
+        if(groundAngle <= characterController.slopeLimit)
         {
             isGrounded = true;
-
-            if (verticalVelocity <= 0f)
-            {
-                currentCoyoteTime = coyoteAirTime;
-                hasJumped = false;
-            }
+            hasJumped = false;
+            lastGroundedTime = Time.time;
         }
         else
         {
@@ -313,84 +250,114 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //private void OnControllerColliderHit(ControllerColliderHit hit)
-    //{
-    //    if (hit.normal.y < 0f)
-    //    {
-    //        hasCollision = true;
-    //        collisionNormal = hit.normal;
+    private bool ProbeGround(float extraDistance, bool isSnapProbe, out RaycastHit hit, out Vector3 normal)
+    {
+        const float lift = 0.1f;
+        float radius = characterController.radius - groundRadiusShrink;
 
-    //        if (verticalVelocity > 0f)
-    //            verticalVelocity = 0f;
-    //    }
-    //}
+        Vector3 center = transform.TransformPoint(characterController.center);
+        Vector3 origin = center
+            + Vector3.down * (characterController.height * 0.5f - characterController.radius)
+            + Vector3.up * lift;
 
-    
+        float distance = lift + groundRadiusShrink + extraDistance;
 
+        normal = Vector3.up;
+        bool found  = Physics.SphereCast(origin, radius, Vector3.down, out hit, distance, groundLayerMask, QueryTriggerInteraction.Ignore);
+
+        if (found)
+        {
+            normal = hit.normal;
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit rayHit, distance + radius, groundLayerMask, QueryTriggerInteraction.Ignore))
+                normal = rayHit.normal;
+        }
+
+#if UNITY_EDITOR
+        ProbeDebug dbg = new ProbeDebug
+        {
+            valid = true,
+            origin = origin,
+            radius = radius,
+            distance = distance,
+            hit = found,
+            hitPoint = found ? hit.point : Vector3.zero,
+            hitNormal = normal,
+            sphereCenter = found ? origin + Vector3.down * hit.distance : Vector3.zero
+        };
+
+        if (isSnapProbe) debugSnap = dbg;
+        else debugGround = dbg;
+#endif
+
+        return found;
+    }
+
+#if UNITY_EDITOR
     [Header("Debug Data")]
-    private Vector3[] debugProbePositions;
-    private List<RaycastHit> debugHits = new List<RaycastHit>();
+    [SerializeField] private bool drawGizmos = true;
+    [SerializeField] private float vectorGizmoScale = 0.2f;
+
+    private struct ProbeDebug
+    {
+        public bool valid;
+        public Vector3 origin;
+        public float radius;
+        public float distance;
+        public bool hit;
+        public Vector3 hitPoint;
+        public Vector3 hitNormal;     // normal do raio central (a usada na lógica)
+        public Vector3 sphereCenter;  // onde a esfera parou (ou fim do cast se não acertou)
+    }
+
+    private ProbeDebug debugGround;   // sonda do CheckGrounded
+    private ProbeDebug debugSnap;     // sonda do SnapToGround (só preenchida quando snap roda)
     private Vector3 debugFinalVelocity;
-    private float vectorGizmoScale = 0.2f;
 
     private void OnDrawGizmos()
     {
-        if (characterController == null)
+        if (!drawGizmos || !Application.isPlaying || characterController == null)
             return;
 
-        if (debugProbePositions != null)
-        {
-            foreach (Vector3 position in debugProbePositions)
-            {
-                Gizmos.color = Color.cyan;
+        DrawProbe(debugGround, Color.cyan);
+        DrawProbe(debugSnap, Color.magenta);
 
-                Gizmos.DrawWireSphere(
-                    position,
-                    groundProbeRadius
-                );
+        // Estado do chão logo acima da cabeça
+        Vector3 top = transform.position + Vector3.up * (characterController.height + 0.3f);
+        Gizmos.color = isGrounded ? Color.green : (isSliding ? Color.yellow : Color.red);
+        Gizmos.DrawSphere(top, 0.08f);
 
-                Gizmos.DrawLine(
-                    position,
-                    position + Vector3.down * groundProbeDistance
-                );
-
-                Gizmos.DrawWireSphere(
-                    position + Vector3.down * groundProbeDistance,
-                    groundProbeRadius
-                );
-            }
-        }
-
-        if (debugHits != null)
-        {
-            foreach (RaycastHit hit in debugHits)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(hit.point, 0.035f);
-
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(
-                    hit.point,
-                    hit.point + hit.normal * 0.3f
-                );
-            }
-        }
-
-        // Vetor finalVelocity
+        // Vetor de velocidade final
+        Vector3 origin = transform.position;
         Gizmos.color = Color.green;
-
-        Vector3 origin = characterController.transform.position;
-
-        Gizmos.DrawLine(
-            origin,
-            origin + debugFinalVelocity * vectorGizmoScale
-        );
-
-        Gizmos.DrawSphere(
-            origin + debugFinalVelocity * vectorGizmoScale,
-            0.05f
-        );
+        Gizmos.DrawLine(origin, origin + debugFinalVelocity * vectorGizmoScale);
+        Gizmos.DrawSphere(origin + debugFinalVelocity * vectorGizmoScale, 0.05f);
     }
+
+    private void DrawProbe(ProbeDebug p, Color color)
+    {
+        if (!p.valid) return;
+
+        Vector3 end = p.origin + Vector3.down * p.distance;
+
+        Gizmos.color = color;
+        Gizmos.DrawWireSphere(p.origin, p.radius);   // início do cast
+        Gizmos.DrawLine(p.origin, end);              // trajeto
+        Gizmos.DrawWireSphere(end, p.radius);        // fim máximo do cast
+
+        if (!p.hit) return;
+
+        // Esfera na posição em que realmente parou
+        Gizmos.color = new Color(color.r, color.g, color.b, 0.5f);
+        Gizmos.DrawWireSphere(p.sphereCenter, p.radius);
+
+        // Ponto de contato + normal
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(p.hitPoint, 0.035f);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(p.hitPoint, p.hitPoint + p.hitNormal * 0.3f);
+    }
+#endif
 
     public void TeleportTo(Transform teleportPoint)
     {
