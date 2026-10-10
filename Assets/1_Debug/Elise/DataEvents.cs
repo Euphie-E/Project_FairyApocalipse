@@ -18,7 +18,7 @@ public class DataEvents
         DeathTotal,
         Death,
         GDuration,
-        CheckPoints
+        CheckPoint
     };
 
     string user;
@@ -29,8 +29,7 @@ public class DataEvents
         try
         {
             // Initialize fundamental Unity Gaming Services
-            await UnityServices.InitializeAsync();
-            new InitializationOptions().SetEnvironmentName(environment);
+            await UnityServices.InitializeAsync(new InitializationOptions().SetEnvironmentName(environment));
             // Explicitly opt-in / start data collection for this player
             //AnalyticsService.Instance.StartDataCollection();
             EndUserConsent.SetConsentState(new ConsentState 
@@ -48,10 +47,16 @@ public class DataEvents
         }
         user = SystemInfo.deviceUniqueIdentifier;
     }
-    public void AddPlayerCT()
+    public int AddPlayerCT(int start)
+    {
+        playerCT = start+1;
+        return AddPlayerCT();
+    }
+    public int AddPlayerCT()
     {
         user = playerCT.ToString();
         playerCT++;
+        return playerCT-1;
     }
     public void Add(Statistics statistics,int value)
     {
@@ -78,9 +83,13 @@ public class DataEvents
     }
 }
 
+[Serializable]
 public class PlayerDataGroup
 {
     public PlayerData[] group;
+    public int JumpTotal;
+    public int DeathTotal;
+    public int TimeTravelTotal;
     public PlayerDataGroup(int size)
     {
         group = new PlayerData[size];
@@ -91,15 +100,13 @@ public class PlayerDataGroup
     }
 }
 
+[Serializable]
 public class PlayerData
 {
-    public int index;
-    public static int JumpTotal;
+    public int index = -1;
     public int Jump;
-    public static int TimeTravelTotal;
     public int TimeTravel;
-    public static int DeathTotal;
     public int Death;
-    public float Duration;
-    public List<float> CheckPoints = new List<float>();
+    public double Duration;
+    public double[] CheckPoints = new double[4];
 }

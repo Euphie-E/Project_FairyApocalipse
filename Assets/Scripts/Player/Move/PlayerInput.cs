@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -27,6 +26,7 @@ public class PlayerInput : MonoBehaviour
     public InputAction tres { get; private set; }
     public InputAction quatro { get; private set; }
     public InputAction test { get; private set; }
+    Vector3[] tpPositions = new Vector3[4];
 
     private void Awake()
     {
@@ -57,42 +57,51 @@ public class PlayerInput : MonoBehaviour
     {
         um.performed += ctx =>
         {
-            transform.GetComponent<PlayerMovement>().enabled = false;
-            transform.GetComponent<PlayerDeathController>().enabled = false;
-            transform.localPosition = new Vector3(14,10.1f,60);
-            StartCoroutine("Gambi");
+            this.gameObject.GetComponent<CharacterController>().enabled = false;
+            transform.position = tpPositions[0];
+            this.gameObject.GetComponent<CharacterController>().enabled = true;
         };
         dois.performed += ctx =>
         {
-            transform.GetComponent<PlayerMovement>().enabled = false;
-            transform.GetComponent<PlayerDeathController>().enabled = false;
-            transform.localPosition = new Vector3(76.5f,-38.8f,147);
-            StartCoroutine("Gambi");
+            this.gameObject.GetComponent<CharacterController>().enabled = false;
+            transform.position = tpPositions[1];
+            this.gameObject.GetComponent<CharacterController>().enabled = true;
         };
         tres.performed += ctx =>
         {
-            transform.GetComponent<PlayerMovement>().enabled = false;
-            transform.GetComponent<PlayerDeathController>().enabled = false;
-            transform.localPosition = new Vector3(87.5f,-129,131.9f);
-            StartCoroutine("Gambi");
+            this.gameObject.GetComponent<CharacterController>().enabled = false;
+            transform.position = tpPositions[2];
+            this.gameObject.GetComponent<CharacterController>().enabled = true;
         };
         quatro.performed += ctx =>
         {
-            transform.GetComponent<PlayerMovement>().enabled = false;
-            transform.GetComponent<PlayerDeathController>().enabled = false;
-            transform.localPosition = new Vector3(-23,-156.5f,135);
-            StartCoroutine("Gambi");
+            this.gameObject.GetComponent<CharacterController>().enabled = false;
+            transform.position = tpPositions[3];
+            this.gameObject.GetComponent<CharacterController>().enabled = true;
         };
 
     }
-    IEnumerator Gambi()
+
+    //this should not be done but the idex starts at 1
+    Dictionary<Vector3,int> tpSort = new();
+    public void AddCheckpoint(GameObject position, int index)
     {
-        yield return new WaitForSeconds(0.5f);
-        transform.GetComponent<PlayerMovement>().enabled = true;
-        transform.GetComponent<PlayerDeathController>().enabled = true;
+        tpSort.Add(position.transform.position + Vector3.up * 1.5f,index);
+        List<KeyValuePair<Vector3,int>> valuePairs = new();
+        foreach (var item in tpSort)
+        {
+            valuePairs.Add(item);
+        }
+        valuePairs.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+        int i = 0;
+        foreach (var item in valuePairs)
+        {
+            tpPositions[i] = item.Key;
+            i++;
+            if(i>=tpPositions.Length) break;
+        }
     }
     
-
     private void OnEnable()
     {
         playerMap.Enable();
@@ -139,8 +148,6 @@ public class PlayerInput : MonoBehaviour
         resetAction.Disable();
         travelAction.Disable();
         escapeAction.Disable();
-        if (DataManager.Instance != null)
-            DataManager.Instance.AddData(DataManager.Data.Death,1);
     }
 
     public void OnRevive()
@@ -152,6 +159,8 @@ public class PlayerInput : MonoBehaviour
         resetAction.Enable();
         travelAction.Enable();
         escapeAction.Enable();
+        if (DataManager.Instance != null)
+            DataManager.Instance.AddData(DataManager.Data.Death,1);
     }
     /// <summary>
     /// Type:<br />
@@ -208,46 +217,6 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void ZAddAction(Action action,int type)
-    {
-        if(type == 1)
-        {
-            moveAction.performed += ctx => action();
-        }
-        if(type == 2)
-        {
-            jumpAction.performed += ctx => action();
-        }
-        if(type == 3)
-        {
-            interactAction.performed += ctx => action();
-        }
-        if(type == 4)
-        {
-            resetAction.performed += ctx => action();
-        }
-        if(type == 5)
-        {
-            travelAction.performed += ctx => action();
-        }
-        if(type == 6)
-        {
-            escapeAction.performed += ctx => action();
-        }
-    }
-
-
-    /// <summary>
-    /// Type:<br />
-    /// 1: Move<br />
-    /// 2: Jump<br />
-    /// 3: Interact<br />
-    /// 4: Reset<br />
-    /// 5: Travel<br />
-    /// 6: Esc<br />
-    /// </summary>
-    /// <param name="action"></param>
-    /// <param name="type"></param>
     public void AddCancelAction(Action<InputAction.CallbackContext> action,int type)
     {
         if(type == 1)
@@ -273,45 +242,6 @@ public class PlayerInput : MonoBehaviour
         if(type == 6)
         {
             escapeAction.canceled += action;
-        }
-    }
-
-    /// <summary>
-    /// Type:<br />
-    /// 1: Move<br />
-    /// 2: Jump<br />
-    /// 3: Interact<br />
-    /// 4: Reset<br />
-    /// 5: Travel<br />
-    /// 6: Esc<br />
-    /// </summary>
-    /// <param name="action"></param>
-    /// <param name="type"></param>
-    public void ZAddCancelAction(Action action,int type)
-    {
-        if(type == 1)
-        {
-            moveAction.canceled += ctx => action();
-        }
-        if(type == 2)
-        {
-            jumpAction.canceled += ctx => action();
-        }
-        if(type == 3)
-        {
-            interactAction.canceled += ctx => action();
-        }
-        if(type == 4)
-        {
-            resetAction.canceled += ctx => action();
-        }
-        if(type == 5)
-        {
-            travelAction.canceled += ctx => action();
-        }
-        if(type == 6)
-        {
-            escapeAction.canceled += ctx => action();
         }
     }
 
@@ -366,46 +296,6 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void ZRemoveAction(Action action,int type)
-    {
-        if(type == 1)
-        {
-            moveAction.performed -= ctx => action();
-        }
-        if(type == 2)
-        {
-            jumpAction.performed -= ctx => action();
-        }
-        if(type == 3)
-        {
-            interactAction.performed -= ctx => action();
-        }
-        if(type == 4)
-        {
-            resetAction.performed -= ctx => action();
-        }
-        if(type == 5)
-        {
-            travelAction.performed -= ctx => action();
-        }
-        if(type == 6)
-        {
-            escapeAction.performed -= ctx => action();
-        }
-    }
-
-
-    /// <summary>
-    /// Type:<br />
-    /// 1: Move<br />
-    /// 2: Jump<br />
-    /// 3: Interact<br />
-    /// 4: Reset<br />
-    /// 5: Travel<br />
-    /// 6: Esc<br />
-    /// </summary>
-    /// <param name="action"></param>
-    /// <param name="type"></param>
     public void RemoveCancelAction(Action<InputAction.CallbackContext> action,int type)
     {
         if(type == 1)
@@ -434,42 +324,4 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Type:<br />
-    /// 1: Move<br />
-    /// 2: Jump<br />
-    /// 3: Interact<br />
-    /// 4: Reset<br />
-    /// 5: Travel<br />
-    /// 6: Esc<br />
-    /// </summary>
-    /// <param name="action"></param>
-    /// <param name="type"></param>
-    public void ZRemoveCancelAction(Action action,int type)
-    {
-        if(type == 1)
-        {
-            moveAction.canceled -= ctx => action();
-        }
-        if(type == 2)
-        {
-            jumpAction.canceled -= ctx => action();
-        }
-        if(type == 3)
-        {
-            interactAction.canceled -= ctx => action();
-        }
-        if(type == 4)
-        {
-            resetAction.canceled -= ctx => action();
-        }
-        if(type == 5)
-        {
-            travelAction.canceled -= ctx => action();
-        }
-        if(type == 6)
-        {
-            escapeAction.canceled -= ctx => action();
-        }
-    }
 }
