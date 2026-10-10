@@ -21,20 +21,20 @@ public class MenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
             if (pausePanel.activeSelf)
-            {
-                pausePanel.SetActive(true);
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.Confined;
-            }
-            
-            else
             {
                 pausePanel.SetActive(false);
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
+            }
+            
+            else
+            {
+                pausePanel.SetActive(true);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.Confined;
             }
             
         }
