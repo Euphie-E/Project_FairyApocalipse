@@ -197,7 +197,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -351,6 +351,7 @@ Transform:
   - {fileID: 7619737976519255206}
   - {fileID: 6473515822294795086}
   - {fileID: 6066199232302060918}
+  - {fileID: 8860302277884567041}
   m_Father: {fileID: 4321345822756146143}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &3572608386581383816
@@ -648,8 +649,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2911940494488221763}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0344411, y: 0.000000023805121, z: -8.1988855e-10, w: 0.9994068}
-  m_LocalPosition: {x: 0, y: 1.6070004, z: -3.5}
+  m_LocalRotation: {x: 0.02535874, y: -0.6762628, z: 0.023305085, w: 0.735855}
+  m_LocalPosition: {x: 2.9897966, y: 1.6070004, z: -0.25279236}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -732,7 +733,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 0
+    Value: -94.7268
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -829,7 +830,7 @@ MonoBehaviour:
         LegacyInput: 
         LegacyGain: 1
         CancelDeltaTime: 0
-      InputValue: 0
+      InputValue: -0
       Driver:
         AccelTime: 0.2
         DecelTime: 0.2
@@ -842,7 +843,7 @@ MonoBehaviour:
         LegacyInput: 
         LegacyGain: 1
         CancelDeltaTime: 0
-      InputValue: 0
+      InputValue: -0
       Driver:
         AccelTime: 0
         DecelTime: 0
@@ -901,6 +902,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   deoccluder: {fileID: 5473680821810858504}
   timeTravel: {fileID: 4516296378048804947}
+--- !u!1 &3820764818641556204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8860302277884567041}
+  - component: {fileID: 6254855481284082220}
+  m_Layer: 3
+  m_Name: Dropshadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8860302277884567041
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3820764818641556204}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1.734, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6930695564496406604}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &6254855481284082220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3820764818641556204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.DecalProjector
+  m_Material: {fileID: 2100000, guid: 204bfc71df8d1564ba3813ffa2eaf818, type: 2}
+  m_DrawDistance: 1000
+  m_FadeScale: 0.907
+  m_StartAngleFade: 180
+  m_EndAngleFade: 180
+  m_UVScale: {x: 1, y: 1}
+  m_UVBias: {x: 0, y: 0}
+  m_RenderingLayerMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ScaleMode: 0
+  m_Offset: {x: 0, y: 0, z: 10}
+  m_Size: {x: 1.2, y: 1.2, z: 20}
+  m_FadeFactor: 0.8
+  version: 1
+  m_DecalLayerMask: 1
 --- !u!1 &4765192337138125808
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,7 +1112,7 @@ Transform:
   m_GameObject: {fileID: 4866208252250051175}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 1.734, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1068,7 +1129,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.23018861, g: 0.18272625, b: 0.12986112, a: 1}
-  m_Intensity: 500
+  m_Intensity: 250
   m_Range: 50
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1213,8 +1274,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8630161350924461642}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.034441102, y: 0.000000023805137, z: -8.20362e-10, w: 0.99940675}
-  m_LocalPosition: {x: 0, y: 1.6069999, z: -3.5}
+  m_LocalRotation: {x: 0.025358675, y: -0.6762628, z: 0.023305038, w: 0.7358549}
+  m_LocalPosition: {x: 2.9897966, y: 1.6070004, z: -0.25279236}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1407,6 +1468,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 8c3f5381a36c5464c8397a7047604a97, type: 3}
       propertyPath: m_Name
       value: Girl
+      objectReference: {fileID: 0}
+    - target: {fileID: 1630794972795428178, guid: 8c3f5381a36c5464c8397a7047604a97, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 8c3f5381a36c5464c8397a7047604a97, type: 3}
       propertyPath: m_Controller

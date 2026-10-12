@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6686720549792411989}
   - component: {fileID: 7738269913808207600}
   - component: {fileID: 5514424875532519994}
+  - component: {fileID: 6727602319449234143}
+  - component: {fileID: 1224257933158305718}
   m_Layer: 0
   m_Name: RockSmall
   m_TagString: Untagged
@@ -91,6 +93,48 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6727602319449234143
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6307238798197402607}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.55, y: 0.27, z: 0.62}
+  m_Center: {x: -0.04, y: 0.18, z: -0.0016324008}
+--- !u!65 &1224257933158305718
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6307238798197402607}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.55, y: 0.63, z: 0.59}
+  m_Center: {x: 0.05, y: 0.23, z: -0.0016324008}
 --- !u!1001 &270804738569091913
 PrefabInstance:
   m_ObjectHideFlags: 0
