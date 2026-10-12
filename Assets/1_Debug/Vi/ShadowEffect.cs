@@ -15,7 +15,7 @@ public class ShadowEffect : MonoBehaviour
         decalProjector = GetComponent<DecalProjector>();
     }
 
-    void Onable()
+    void OnEnable()
     {
         isFalling = false;
     }

@@ -49,6 +49,8 @@ public class PlayerStateController : MonoBehaviour
         playerSwingController.initialForwardSpeed = forwardSpeed;
         playerSwingController.enabled = true;
         playerSwingController.SetCurrentBar(swingPivot, currentBar);
+        
+        DropshadowController.Instance.DisableDropshadow();
         //ChangeCameraTracking(currentPlayerState);
     }
 
@@ -60,6 +62,7 @@ public class PlayerStateController : MonoBehaviour
         playerMovement.characterController.enabled = true;
         playerSwingController.enabled = false;
         playerMovement.Launch();
+        DropshadowController.Instance.ActiveDropshadow();
         //ChangeCameraTracking(currentPlayerState);
     }
 
