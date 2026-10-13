@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InteractController : MonoBehaviour
 {
+    static public InteractController Instance;
     public Interactable atteched = null;
     TimeTravel timeTravel;
     [SerializeField] 
@@ -12,8 +14,15 @@ public class InteractController : MonoBehaviour
     [SerializeField]
     bool gizmo = false;
     Collider[] list = new Collider[10];
-    void Start()
+    public List<Seed> seeds;
+
+    void Awake()
     {
+        if(Instance == null) 
+        {
+            Instance = this;
+        }
+
         PlayerInput.Instance.AddAction(Press,3);
         PlayerInput.Instance.AddCancelAction(Cancel,3);
         timeTravel = transform.GetComponent<TimeTravel>();
@@ -48,6 +57,16 @@ public class InteractController : MonoBehaviour
             atteched.end = Time.time;
             atteched.Throw();
         }
+    }
+
+    public void AddSeed(Seed seed)
+    {
+        seeds.Add(seed);
+    }
+
+    public void RemoveSeed(Seed seed)
+    {
+        seeds.Remove(seed);
     }
 
     public static void DrawDebugSphere(Vector3 center, float radius, Color color, float duration)

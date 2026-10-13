@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PastFutureChange : Interactable
@@ -11,7 +13,7 @@ public class PastFutureChange : Interactable
 
     [SerializeField] private bool interactInFuture = false;
     [SerializeField] private bool isReversible = false;
-
+    [SerializeField] private List<Seed> seeds;
 
     void Start()
     {
@@ -23,10 +25,16 @@ public class PastFutureChange : Interactable
 
     protected override void Interact(InteractController player, GameObject attach)
     {
-        if (player.GetComponent<TimeTravel>().isTravelling ^ interactInFuture) // se for pra funcionar no passado funciona no passado, se for pra funcionar no futuro funciona no futuro
+        if (player.GetComponent<TimeTravel>().isTravelling ^ interactInFuture && CheckSeeds(player.seeds)) // se for pra funcionar no passado funciona no passado, se for pra funcionar no futuro funciona no futuro
         {
             Change();
         }
+    }
+
+    private bool CheckSeeds(List<Seed> seeds)
+    {
+        //encontrar a seed em comum e remover ela do player
+        return false;
     }
 
     public void Change()
