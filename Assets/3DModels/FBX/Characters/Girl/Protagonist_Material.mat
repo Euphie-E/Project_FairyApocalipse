@@ -108,6 +108,7 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
+    - _Ambient: 0.1
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BlendOp: 0
@@ -119,7 +120,7 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _ColorMode: 0
-    - _Cull: 2
+    - _Cull: 0
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
@@ -140,11 +141,14 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OutlineBrightness: 1
+    - _OutlinePower: 0.1
+    - _OutlineSize: 0.67
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RimBrightness: 2
+    - _RimBrightness: 1
     - _RimPower: 1
     - _SampleGI: 0
     - _Smoothness: 0.5
@@ -156,8 +160,9 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _ToonRampOffset: 0.44
-    - _ToonRampSmoothness: 0.05
+    - _ToonRampOffset: 0.5
+    - _ToonRampOffsetPoint: 0.5
+    - _ToonRampSmoothness: 0.02
     - _TwoSided: 0
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
@@ -171,8 +176,9 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorAddSubDiff: {r: -1, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _ToonRampTint: {r: 0.45945597, g: 0.2966803, b: 0.5566038, a: 1}
+    - _ToonRampTint: {r: 0.42352942, g: 0, b: 0.8509804, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
