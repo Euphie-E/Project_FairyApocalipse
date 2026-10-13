@@ -14,6 +14,7 @@ public class PastFutureChange : Interactable
     [SerializeField] private bool interactInFuture = false;
     [SerializeField] private bool isReversible = false;
     [SerializeField] private List<Seed> seeds;
+    [SerializeField] private Seed plantedSeed = null;
 
     void Start()
     {
@@ -25,15 +26,19 @@ public class PastFutureChange : Interactable
 
     protected override void Interact(InteractController player, GameObject attach)
     {
-        if (player.GetComponent<TimeTravel>().isTravelling ^ interactInFuture && CheckSeeds(player.seeds)) // se for pra funcionar no passado funciona no passado, se for pra funcionar no futuro funciona no futuro
+        if (player.GetComponent<TimeTravel>().isTravelling ^ interactInFuture && (CheckSeed() ^ isChanged)) // se for pra funcionar no passado funciona no passado, se for pra funcionar no futuro funciona no futuro
         {
             Change();
         }
     }
 
-    private bool CheckSeeds(List<Seed> seeds)
+    private bool CheckSeed()
     {
-        //encontrar a seed em comum e remover ela do player
+        if (seeds.Contains(PlayerPocket.Instance.seed)) 
+        {
+            return true;
+        }
+        
         return false;
     }
 
@@ -41,8 +46,18 @@ public class PastFutureChange : Interactable
     {
         if (isReversible || !isChanged)
         {
-            Debug.Log("foi");
-            isChanged = true;
+            if (isChanged)
+            {
+                PlayerPocket.Instance.PickSeed(plantedSeed);
+                plantedSeed = null;
+            }
+            else
+            {
+                plantedSeed = PlayerPocket.Instance.UseSeed();
+            }
+
+            isChanged = !isChanged;
+
             DisableAll(pastObject);
             DisableAll(futureObject);
             ActiveAll(pastChangedObject);
