@@ -4,5 +4,5 @@ using UnityEngine;
 public class Seed : ScriptableObject
 {
     public int seedIndex;
-    public GameObject prefab;
+    public GameObject plantedPrefab;
 }
