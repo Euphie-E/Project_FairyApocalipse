@@ -18,6 +18,7 @@ public class PlayerInput : MonoBehaviour
     public InputAction resetAction { get; private set; }
     public InputAction travelAction { get; private set; }
     public InputAction escapeAction { get; private set; }
+    public InputAction dashAction { get; private set; }
 
 
     // gambiarra
@@ -43,6 +44,7 @@ public class PlayerInput : MonoBehaviour
         resetAction = inputSystemActions.Player.Reset;
         travelAction = inputSystemActions.Player.Travel;
         escapeAction = inputSystemActions.Player.Escape;
+        dashAction = inputSystemActions.Player.Dash;
 
         // gambiarra
         um = inputSystemActions.Player.Previous;
@@ -114,6 +116,7 @@ public class PlayerInput : MonoBehaviour
         resetAction.Enable();
         travelAction.Enable();
         escapeAction.Enable();
+        dashAction.Enable();
 
         //gambiarra
 
@@ -133,6 +136,7 @@ public class PlayerInput : MonoBehaviour
         resetAction.Disable();
         travelAction.Disable();
         escapeAction.Disable();
+        dashAction.Disable();
 
         //gambiarra
 
@@ -151,6 +155,7 @@ public class PlayerInput : MonoBehaviour
         resetAction.Disable();
         travelAction.Disable();
         escapeAction.Disable();
+        dashAction.Disable();
     }
 
     public void OnRevive()
@@ -162,6 +167,7 @@ public class PlayerInput : MonoBehaviour
         resetAction.Enable();
         travelAction.Enable();
         escapeAction.Enable();
+        dashAction.Enable();
         if (DataManager.Instance != null)
             DataManager.Instance.AddData(DataManager.Data.Death,1);
     }

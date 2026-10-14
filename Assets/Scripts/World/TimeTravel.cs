@@ -36,6 +36,19 @@ public class TimeTravel : MonoBehaviour
     [Header("Time Dome")]
     [SerializeField] private MeshRenderer timeDome;
 
+    public bool TravelBlocked { get; private set; }
+
+    public void SetTravelBlocked(bool blocked)
+    {
+        TravelBlocked = blocked;
+
+        // Entrou na area bloqueada estando no passado
+        if (blocked && isTravelling)
+        {
+            EndTravel();
+        }
+    }
+
     private void Awake()
     {
         /* playerMap = inputActions.FindActionMap("Player");
@@ -134,7 +147,10 @@ public class TimeTravel : MonoBehaviour
     {
         if (!ctx.performed) return;
         if (onCooldown) return;
-        if(isTravelling) 
+
+        if (TravelBlocked)
+            return;
+        if (isTravelling) 
         {
             EndTravel();
             return;

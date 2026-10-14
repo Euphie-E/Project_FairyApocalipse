@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 {
     [Header("Footsteps Audio")]
     [SerializeField] private float stepInterval = 0.4f;
@@ -27,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 horizontalVelocity { get; private set; }
     public float verticalVelocity { get; private set; }
 
+    private bool mushroomBounceActive;
+
     [Header("Ground Check")]
     [SerializeField] LayerMask groundLayerMask;
     [SerializeField] private float groundCheckDistance = 0.15f;
@@ -44,6 +47,15 @@ public class PlayerMovement : MonoBehaviour
     private const float ignoreGroundAfterJump = 0.1f;
     private bool hasJumped;
 
+    [Header("Dash")]
+    [SerializeField] private float dashDistance = 3f;
+    [SerializeField] private float dashDuration = 0.18f;
+    public bool isDashing { get; private set; }
+    private bool canDash = true;
+    private Vector3 dashDirection;
+    private float dashTraveled;
+    private float DashSpeed => dashDistance / dashDuration;
+
     private void Awake()
     {
         playerAnimatorController = GetComponent<PlayerAnimatorController>();
@@ -59,7 +71,20 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!characterController.enabled) return;
 
+        if (isDashing)
+        {
+            UpdateDash();
+            return;
+        }
+
         CheckGrounded();
+
+        if (StartDash())
+        {
+            UpdateDash();
+            return;
+        }
+
         HandleMovement();
         HandleJump();
         ApplyGravity();
@@ -183,7 +208,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (hasJumped && PlayerInput.Instance.jumpAction.WasReleasedThisFrame() && verticalVelocity > 0f)
+            if (hasJumped && !mushroomBounceActive &&
+            PlayerInput.Instance.jumpAction.WasReleasedThisFrame() && verticalVelocity > 0f)
             {
                 verticalVelocity *= 0.5f;
             }
@@ -198,6 +224,25 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void Launch() => StartJump();
+
+    public void BounceFromMushroom(float height)
+    {
+        if (height <= 0f || !characterController.enabled)
+            return;
+
+        verticalVelocity = Mathf.Sqrt(
+            2f * Mathf.Abs(gravity) * height
+        );
+
+        hasJumped = true;
+        mushroomBounceActive = true;
+
+        lastJumpTime = Time.time;
+        lastGroundedTime = -10f;
+
+        isGrounded = false;
+        isSliding = false;
+    }
 
     private void ApplyGravity()
     {
@@ -214,8 +259,6 @@ public class PlayerMovement : MonoBehaviour
             verticalVelocity = maxGravityVelocity;
         }
     }
-
-    
 
     private bool CanJump()
     {
@@ -240,14 +283,74 @@ public class PlayerMovement : MonoBehaviour
 
         if(groundAngle <= characterController.slopeLimit)
         {
+            canDash = true;
             isGrounded = true;
             hasJumped = false;
+            mushroomBounceActive = false;
             lastGroundedTime = Time.time;
         }
         else
         {
             isSliding = true;
         }
+    }
+
+    private bool StartDash()
+    {
+        if (!canDash || isGrounded) return false;
+        if (!PlayerInput.Instance.dashAction.WasPressedThisFrame()) return false;
+
+        Vector2 input = PlayerInput.Instance.moveAction.ReadValue<Vector2>();
+
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 dir = right * input.x + forward * input.y;
+
+        if (dir.sqrMagnitude < 0.001f)
+            dir = transform.forward;
+
+        dashDirection = dir.normalized;
+        dashTraveled = 0f;
+        isDashing = true;
+        canDash = false;
+
+        lastGroundedTime = -10f;
+        verticalVelocity = 0f;
+
+        transform.rotation = Quaternion.LookRotation(dashDirection);
+
+        //Trigger animação
+        //Trigger audio
+
+        return true;
+    }
+
+    private void UpdateDash()
+    {
+        float step = Mathf.Min(DashSpeed * Time.deltaTime, dashDistance - dashTraveled);
+
+        Vector3 before = transform.position;
+        CollisionFlags flags = characterController.Move(dashDirection * step);
+        dashTraveled += Vector3.Distance(before, transform.position);
+
+        bool reachedDistance = dashTraveled >= dashDistance - 0.001f;
+        bool hitWall = (flags & CollisionFlags.Sides) != 0;
+
+        if (reachedDistance || hitWall)
+            EndDash();
+    }
+
+    private void EndDash()
+    {
+        isDashing = false;
+
+        horizontalVelocity = dashDirection * maxSpeed;
+        verticalVelocity = 0f;
     }
 
     private bool ProbeGround(float extraDistance, bool isSnapProbe, out RaycastHit hit, out Vector3 normal)
@@ -367,6 +470,7 @@ public class PlayerMovement : MonoBehaviour
         // Zera todo movimento anterior
         horizontalVelocity = Vector3.zero;
         verticalVelocity = 0f;
+        mushroomBounceActive = false;
 
         // Teleporta exatamente o PlayerCharacter
         transform.position = teleportPoint.position;

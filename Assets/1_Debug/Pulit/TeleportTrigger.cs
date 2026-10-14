@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TeleportTrigger : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class TeleportTrigger : MonoBehaviour
 
     [Header("Fade")]
     public CanvasGroup blackScreen;
+    public Image blackImage;
 
     public float fadeDuration = 0.5f;
     public float blackScreenDuration = 2f;
@@ -21,8 +23,18 @@ public class TeleportTrigger : MonoBehaviour
 
     private void Start()
     {
-            blackScreen.alpha = 0f;
-            blackScreen.blocksRaycasts = false;
+        // Mantém a tela invisível ao iniciar
+        blackScreen.alpha = 0f;
+        blackScreen.blocksRaycasts = false;
+
+        // Deixa a imagem preta opaca internamente,
+        // mas o CanvasGroup continua escondendo ela.
+        if (blackImage != null)
+        {
+            Color color = blackImage.color;
+            color.a = 1f;
+            blackImage.color = color;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -50,7 +62,13 @@ public class TeleportTrigger : MonoBehaviour
         // Teleporta através do próprio PlayerMovement
         player.TeleportTo(teleportPoint);
 
-        if(nitghChange)
+        PlayerDeathController deathController =
+         player.GetComponent<PlayerDeathController>();
+
+        if (deathController != null)
+            deathController.ResetFallAfterTeleport();
+
+        if (nitghChange)
             SkyboxManager.Instance.SetNight();
 
         // Mantém tela preta

@@ -293,7 +293,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!114 &8142608918824613382
 MonoBehaviour:
@@ -880,6 +880,7 @@ MonoBehaviour:
   teleportPoint: {fileID: 3939916641467945643}
   nitghChange: 0
   blackScreen: {fileID: 18978093753196383}
+  blackImage: {fileID: 587237920691411621}
   fadeDuration: 0.5
   blackScreenDuration: 2
   teleportCooldown: 0
@@ -942,7 +943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1047,8 +1048,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TeleportTrigger
   teleportPoint: {fileID: 1734102616396161488}
-  nitghChange: 1
+  nitghChange: 0
   blackScreen: {fileID: 18978093753196383}
+  blackImage: {fileID: 587237920691411621}
   fadeDuration: 0.5
   blackScreenDuration: 2
   teleportCooldown: 0
@@ -1130,6 +1132,7 @@ MonoBehaviour:
   teleportPoint: {fileID: 4002503187638144502}
   nitghChange: 0
   blackScreen: {fileID: 18978093753196383}
+  blackImage: {fileID: 587237920691411621}
   fadeDuration: 0.5
   blackScreenDuration: 2
   teleportCooldown: 0
