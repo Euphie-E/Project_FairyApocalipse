@@ -123,11 +123,8 @@ public class MushroomBounce : MonoBehaviour
 
         springVisual.Play();
 
-        // Som opcional
-        if (audioSource != null && bounceSound != null)
-        {
-            audioSource.PlayOneShot(bounceSound);
-        }
+        // Colocar som aqui 
+       
     }
 
     private void OnDisable()
