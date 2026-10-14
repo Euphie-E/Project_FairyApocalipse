@@ -326,6 +326,7 @@ GameObject:
   - component: {fileID: 4516296378048804947}
   - component: {fileID: 8922974664084637939}
   - component: {fileID: 6038228782548844420}
+  - component: {fileID: 5671333806328644038}
   - component: {fileID: 4285460171558593203}
   m_Layer: 3
   m_Name: PlayerCharacter
@@ -522,7 +523,20 @@ MonoBehaviour:
   atteched: {fileID: 0}
   radiusCheck: 1.5
   gizmo: 1
-  seeds: []
+--- !u!114 &5671333806328644038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2664642316351876537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d80491872281304185b4f0222edcaf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPocket
+  seed: {fileID: 0}
+  gnomes: []
 --- !u!82 &4285460171558593203
 AudioSource:
   m_ObjectHideFlags: 0
