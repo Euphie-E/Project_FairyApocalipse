@@ -4,15 +4,14 @@ using UnityEngine;
 [RequireComponent(typeof(MeshCollider))]
 public class SkinnedMeshCollider : MonoBehaviour
 {
-    public SkinnedMeshRenderer skinnedMesh;
-
+    private SkinnedMeshRenderer skinnedMesh;
     private MeshCollider meshCollider;
     private Mesh bakedMesh;
 
     void Start()
     {
-        if (skinnedMesh == null)
-            skinnedMesh = GetComponent<SkinnedMeshRenderer>();
+       
+         skinnedMesh = GetComponent<SkinnedMeshRenderer>();
 
         meshCollider = GetComponent<MeshCollider>();
 
@@ -22,9 +21,7 @@ public class SkinnedMeshCollider : MonoBehaviour
 
     void LateUpdate()
     {
-        if (skinnedMesh == null) return;
-
-        // Evita incluir a escala do Transform no BakeMesh
+               
         skinnedMesh.BakeMesh(bakedMesh, false);
 
         meshCollider.sharedMesh = null;
@@ -33,7 +30,7 @@ public class SkinnedMeshCollider : MonoBehaviour
 
     void OnDestroy()
     {
-        if (bakedMesh != null)
+    
             Destroy(bakedMesh);
     }
 }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 {
     [Header("Footsteps Audio")]
     [SerializeField] private float stepInterval = 0.4f;
@@ -26,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxGravityVelocity = -10f;
     public Vector3 horizontalVelocity { get; private set; }
     public float verticalVelocity { get; private set; }
+
+    private bool mushroomBounceActive;
 
     [Header("Ground Check")]
     [SerializeField] LayerMask groundLayerMask;
@@ -183,7 +185,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (hasJumped && PlayerInput.Instance.jumpAction.WasReleasedThisFrame() && verticalVelocity > 0f)
+            if (hasJumped && !mushroomBounceActive &&
+            PlayerInput.Instance.jumpAction.WasReleasedThisFrame() && verticalVelocity > 0f)
             {
                 verticalVelocity *= 0.5f;
             }
@@ -198,6 +201,25 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void Launch() => StartJump();
+
+    public void BounceFromMushroom(float height)
+    {
+        if (height <= 0f || !characterController.enabled)
+            return;
+
+        verticalVelocity = Mathf.Sqrt(
+            2f * Mathf.Abs(gravity) * height
+        );
+
+        hasJumped = true;
+        mushroomBounceActive = true;
+
+        lastJumpTime = Time.time;
+        lastGroundedTime = -10f;
+
+        isGrounded = false;
+        isSliding = false;
+    }
 
     private void ApplyGravity()
     {
@@ -242,6 +264,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = true;
             hasJumped = false;
+            mushroomBounceActive = false;
             lastGroundedTime = Time.time;
         }
         else
@@ -367,6 +390,7 @@ public class PlayerMovement : MonoBehaviour
         // Zera todo movimento anterior
         horizontalVelocity = Vector3.zero;
         verticalVelocity = 0f;
+        mushroomBounceActive = false;
 
         // Teleporta exatamente o PlayerCharacter
         transform.position = teleportPoint.position;
