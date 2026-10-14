@@ -9,14 +9,11 @@ public class InteractController : MonoBehaviour
     static public InteractController Instance;
     public Interactable atteched = null;
     TimeTravel timeTravel;
-    [SerializeField] 
-    float radiusCheck = 1;
-    [SerializeField]
-    bool gizmo = false;
+    [SerializeField] float radiusCheck = 1;
+    [SerializeField] bool gizmo = false;
     Collider[] list = new Collider[10];
-    public List<Seed> seeds;
 
-    void Awake()
+    void Start()
     {
         if(Instance == null) 
         {
@@ -57,16 +54,6 @@ public class InteractController : MonoBehaviour
             atteched.end = Time.time;
             atteched.Throw();
         }
-    }
-
-    public void AddSeed(Seed seed)
-    {
-        seeds.Add(seed);
-    }
-
-    public void RemoveSeed(Seed seed)
-    {
-        seeds.Remove(seed);
     }
 
     public static void DrawDebugSphere(Vector3 center, float radius, Color color, float duration)
