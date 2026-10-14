@@ -2,17 +2,14 @@ using UnityEngine;
 
 public class CollectibleSeed : Collectible
 {
-    [SerializeField] Seed seed;
-
-    void Awake()
-    {
-        
-    }
+    [SerializeField] private Seed seed;
 
     protected override void Collect()
     {
-        PlayerPocket.Instance.CollectSeed(seed);
-        base.Collect();
+        if (PlayerPocket.Instance.CollectSeed(seed))
+        {
+            base.Collect();
+        }
     }
 
     protected override void CollectEffect()
@@ -23,5 +20,13 @@ public class CollectibleSeed : Collectible
     protected override void CollectInfo()
     {
         base.CollectInfo();
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (!Collected)
+        {
+            Collect();
+        }
     }
 }
