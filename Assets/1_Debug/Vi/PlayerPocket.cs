@@ -19,7 +19,7 @@ public class PlayerPocket : MonoBehaviour
 
     public bool CollectSeed(Seed seed)
     {
-        if (seed == null)
+        if (this.seed == null)
         {
             this.seed = seed;
             return true;

@@ -2,9 +2,13 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
-    [SerializeField] protected ScriptableObject info;
-    [SerializeField] private GameObject collectible;
+    private GameObject collectible;
     public bool Collected = false;
+
+    void Start()
+    {
+        collectible = transform.GetChild(0).gameObject;
+    }
 
     /// <summary>
     /// Chama o efeito após coletar e passa infos para outros códigos.

@@ -13,7 +13,7 @@ public class InteractController : MonoBehaviour
     [SerializeField] bool gizmo = false;
     Collider[] list = new Collider[10];
 
-    void Awake()
+    void Start()
     {
         if(Instance == null) 
         {
