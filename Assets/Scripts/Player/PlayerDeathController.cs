@@ -106,4 +106,11 @@ public class PlayerDeathController : MonoBehaviour
         if (DataManager.Instance != null)
             DataManager.Instance.AddData(DataManager.Data.TimeStamp,Time.time);
     }
+
+    public void ResetFallAfterTeleport()
+    {
+        isFalling = false;
+        fallHeight = 0f;
+        yfall = transform.position.y;
+    }
 }
