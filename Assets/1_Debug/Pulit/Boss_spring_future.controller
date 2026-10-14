@@ -1,14 +1,14 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1102 &-3732663495201843083
+--- !u!1102 &-5439854089935086878
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Armature2|FuturoGolpe 0
-  m_Speed: 1
+  m_Name: CaudaEsquerda
+  m_Speed: 0.67
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -20,21 +20,21 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 49721368677219624, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
+  m_Motion: {fileID: 8638560144367935220, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &-1416317200821984259
+--- !u!1102 &-4652986547505878149
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Armature2|CaldaDireita
-  m_Speed: 1
+  m_Name: CaudaDireita
+  m_Speed: 0.67
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -47,6 +47,32 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: -8476675316452979587, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &-3272794723258164526
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Idle
+  m_Speed: 0.6
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: -2942027457444133551, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -84,23 +110,23 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: 1127559755100871499}
-    m_Position: {x: 30, y: 190, z: 0}
+    m_State: {fileID: -3272794723258164526}
+    m_Position: {x: 30, y: 220, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -1416317200821984259}
-    m_Position: {x: 360, y: 170, z: 0}
+    m_State: {fileID: 4382947710800629956}
+    m_Position: {x: 380, y: 180, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 3858859280707734498}
-    m_Position: {x: 360, y: -20, z: 0}
+    m_State: {fileID: -5439854089935086878}
+    m_Position: {x: 380, y: 70, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 7891123548888470707}
-    m_Position: {x: 360, y: 70, z: 0}
+    m_State: {fileID: 6554633562542855303}
+    m_Position: {x: 380, y: 20, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 8681008913042790344}
-    m_Position: {x: 350, y: 290, z: 0}
+    m_State: {fileID: -4652986547505878149}
+    m_Position: {x: 380, y: 120, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -3732663495201843083}
-    m_Position: {x: 350, y: 370, z: 0}
+    m_State: {fileID: 9197461276567637103}
+    m_Position: {x: 370, y: 240, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -110,16 +136,16 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 1127559755100871499}
---- !u!1102 &1127559755100871499
+  m_DefaultState: {fileID: -3272794723258164526}
+--- !u!1102 &4382947710800629956
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Armature2|FuturaIdle
-  m_Speed: 1
+  m_Name: Golpe
+  m_Speed: 0.5
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -131,47 +157,21 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -2942027457444133551, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
+  m_Motion: {fileID: 49721368677219624, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &3858859280707734498
+--- !u!1102 &6554633562542855303
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Armature2|CaldaEsquerda
-  m_Speed: 1
-  m_CycleOffset: 0
-  m_Transitions: []
-  m_StateMachineBehaviours: []
-  m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
-  m_Mirror: 0
-  m_SpeedParameterActive: 0
-  m_MirrorParameterActive: 0
-  m_CycleOffsetParameterActive: 0
-  m_TimeParameterActive: 0
-  m_Motion: {fileID: 8638560144367935220, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
---- !u!1102 &7891123548888470707
-AnimatorState:
-  serializedVersion: 6
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Armature2|CaudaMeio
-  m_Speed: 1
+  m_Name: CaudaMeio
+  m_Speed: 0.67
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -189,15 +189,15 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &8681008913042790344
+--- !u!1102 &9197461276567637103
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Armature2|FuturoGolpe
-  m_Speed: 1
+  m_Name: Golpe0
+  m_Speed: 0.5
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -209,7 +209,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 49721368677219624, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
+  m_Motion: {fileID: 1817903249271773886, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
