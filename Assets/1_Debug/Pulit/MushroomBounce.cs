@@ -27,6 +27,9 @@ public class MushroomBounce : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip bounceSound;
 
+    [Header("Efeito Visual")]
+    public MushroomSpringVisual springVisual;
+
 
     private Collider triggerCollider;
 
@@ -117,6 +120,8 @@ public class MushroomBounce : MonoBehaviour
 
         playersInside.Add(player);
         nextBounceTime = Time.time + cooldown;
+
+        springVisual.Play();
 
         // Som opcional
         if (audioSource != null && bounceSound != null)

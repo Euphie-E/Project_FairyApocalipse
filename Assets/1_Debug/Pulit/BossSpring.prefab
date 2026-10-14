@@ -149,6 +149,7 @@ MonoBehaviour:
   cooldown: 0.3
   audioSource: {fileID: 0}
   bounceSound: {fileID: 0}
+  springVisual: {fileID: 6647715093651354325}
 --- !u!1 &1593630746438223502
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,118 +408,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossAttackZone
   boss: {fileID: 7882975586310328552}
   attackType: 2
---- !u!1 &2922940971298725532
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5082302371125165527}
-  - component: {fileID: 8848124398677884281}
-  - component: {fileID: 2769448578706844432}
-  - component: {fileID: 665685197981359042}
-  m_Layer: 0
-  m_Name: Cube (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5082302371125165527
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2922940971298725532}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.37436765, z: -0, w: 0.92728037}
-  m_LocalPosition: {x: -48.96, y: 4.85, z: -13.25}
-  m_LocalScale: {x: 88.6012, y: 13.182999, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4107258544718304265}
-  m_LocalEulerAnglesHint: {x: 0, y: -43.97, z: 0}
---- !u!33 &8848124398677884281
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2922940971298725532}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &2769448578706844432
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2922940971298725532}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_MaskInteraction: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &665685197981359042
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2922940971298725532}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3294589361092226523
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,6 +627,7 @@ MonoBehaviour:
   cooldown: 0.3
   audioSource: {fileID: 0}
   bounceSound: {fileID: 0}
+  springVisual: {fileID: 3783330686611045550}
 --- !u!1 &4111200157577031146
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,6 +709,7 @@ MonoBehaviour:
   cooldown: 0.3
   audioSource: {fileID: 0}
   bounceSound: {fileID: 0}
+  springVisual: {fileID: 2071627633487857554}
 --- !u!1 &4559714221863861034
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,6 +1038,7 @@ MonoBehaviour:
   cooldown: 0.3
   audioSource: {fileID: 0}
   bounceSound: {fileID: 0}
+  springVisual: {fileID: 4265965899774153873}
 --- !u!1 &5448702748364611405
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,6 +1120,7 @@ MonoBehaviour:
   cooldown: 0.3
   audioSource: {fileID: 0}
   bounceSound: {fileID: 0}
+  springVisual: {fileID: 315342058803060399}
 --- !u!1 &5593332072273425653
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,6 +1416,7 @@ MonoBehaviour:
   cooldown: 0.3
   audioSource: {fileID: 0}
   bounceSound: {fileID: 0}
+  springVisual: {fileID: 9101559240803400354}
 --- !u!1 &5891804951481420469
 GameObject:
   m_ObjectHideFlags: 0
@@ -2232,6 +2126,7 @@ MonoBehaviour:
   cooldown: 0.3
   audioSource: {fileID: 0}
   bounceSound: {fileID: 0}
+  springVisual: {fileID: 248627058802801778}
 --- !u!1 &8412737378251211979
 GameObject:
   m_ObjectHideFlags: 0
@@ -2313,6 +2208,7 @@ MonoBehaviour:
   cooldown: 0.3
   audioSource: {fileID: 0}
   bounceSound: {fileID: 0}
+  springVisual: {fileID: 2141939288468028119}
 --- !u!1 &8444098764208030005
 GameObject:
   m_ObjectHideFlags: 0
@@ -2448,7 +2344,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6623357755009911969}
-  - {fileID: 5082302371125165527}
   - {fileID: 5305909375294723722}
   - {fileID: 364897958755024923}
   - {fileID: 8197209923857448246}
@@ -3232,6 +3127,30 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4681743586388636663, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4898480229190242161}
+    - targetCorrespondingSourceObject: {fileID: 4299568151469704539, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6647715093651354325}
+    - targetCorrespondingSourceObject: {fileID: 207348884285779280, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9101559240803400354}
+    - targetCorrespondingSourceObject: {fileID: 4481228201841592187, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2141939288468028119}
+    - targetCorrespondingSourceObject: {fileID: 989481709406004557, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3783330686611045550}
+    - targetCorrespondingSourceObject: {fileID: 6183323110226635634, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4265965899774153873}
+    - targetCorrespondingSourceObject: {fileID: 392590600786008067, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 248627058802801778}
+    - targetCorrespondingSourceObject: {fileID: 8740072755739994620, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 315342058803060399}
+    - targetCorrespondingSourceObject: {fileID: 890451368006588516, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2071627633487857554}
     - targetCorrespondingSourceObject: {fileID: 377787775598380122, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
       insertIndex: -1
       addedObject: {fileID: 832081735190292474}
@@ -3263,6 +3182,30 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2728114131360451847}
   m_SourcePrefab: {fileID: 100100000, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+--- !u!1 &283052435995096677 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 207348884285779280, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+  m_PrefabInstance: {fileID: 75782769164589877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9101559240803400354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283052435995096677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c379c4ab775147b90565113cb613e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MushroomSpringVisual
+  mushroomBone: {fileID: 528446032230905613}
+  squashY: 0.35
+  stretchXZ: 0.2
+  squashTime: 0.08
+  springDuration: 0.55
+  springFrequency: 3
+  damping: 6
 --- !u!1 &302611971484704623 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 377787775598380122, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
@@ -3290,6 +3233,30 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5840581131417395784, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
+--- !u!1 &324258162413093686 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 392590600786008067, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+  m_PrefabInstance: {fileID: 75782769164589877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &248627058802801778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324258162413093686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c379c4ab775147b90565113cb613e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MushroomSpringVisual
+  mushroomBone: {fileID: 2519424879979362599}
+  squashY: 0.35
+  stretchXZ: 0.2
+  squashTime: 0.08
+  springDuration: 0.55
+  springFrequency: 3
+  damping: 6
 --- !u!1 &485049710994806759 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 555633951333862610, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
@@ -3317,6 +3284,59 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2746142260806068395, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
+--- !u!4 &528446032230905613 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 457210861819325496, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+  m_PrefabInstance: {fileID: 75782769164589877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &916029910395567736 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 989481709406004557, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+  m_PrefabInstance: {fileID: 75782769164589877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3783330686611045550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916029910395567736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c379c4ab775147b90565113cb613e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MushroomSpringVisual
+  mushroomBone: {fileID: 8320803791025774404}
+  squashY: 0.35
+  stretchXZ: 0.2
+  squashTime: 0.08
+  springDuration: 0.55
+  springFrequency: 3
+  damping: 6
+--- !u!1 &961158755929391953 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 890451368006588516, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+  m_PrefabInstance: {fileID: 75782769164589877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2071627633487857554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961158755929391953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c379c4ab775147b90565113cb613e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MushroomSpringVisual
+  mushroomBone: {fileID: 3053167347757836620}
+  squashY: 0.35
+  stretchXZ: 0.2
+  squashTime: 0.08
+  springDuration: 0.55
+  springFrequency: 3
+  damping: 6
 --- !u!1 &1483596614312835071 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1557109968928255178, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
@@ -3435,6 +3455,30 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2228417370725966487, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
+--- !u!1 &4226098778795007598 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4299568151469704539, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+  m_PrefabInstance: {fileID: 75782769164589877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6647715093651354325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226098778795007598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c379c4ab775147b90565113cb613e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MushroomSpringVisual
+  mushroomBone: {fileID: 6733410211659325305}
+  squashY: 0.35
+  stretchXZ: 0.2
+  squashTime: 0.08
+  springDuration: 0.55
+  springFrequency: 3
+  damping: 6
 --- !u!1 &4274968321056982290 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4205941004081094183, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
@@ -3462,6 +3506,30 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 1043136491311213571, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
+--- !u!1 &4557002118805691470 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4481228201841592187, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+  m_PrefabInstance: {fileID: 75782769164589877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2141939288468028119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4557002118805691470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c379c4ab775147b90565113cb613e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MushroomSpringVisual
+  mushroomBone: {fileID: 5510208454138758640}
+  squashY: 0.35
+  stretchXZ: 0.2
+  squashTime: 0.08
+  springDuration: 0.55
+  springFrequency: 3
+  damping: 6
 --- !u!1 &4752943551221786818 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4681743586388636663, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
@@ -3545,6 +3613,30 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5581382035931209413, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
   m_PrefabInstance: {fileID: 75782769164589877}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6107637134596976711 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6183323110226635634, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+  m_PrefabInstance: {fileID: 75782769164589877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4265965899774153873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6107637134596976711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c379c4ab775147b90565113cb613e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MushroomSpringVisual
+  mushroomBone: {fileID: 8237702992919819751}
+  squashY: 0.35
+  stretchXZ: 0.2
+  squashTime: 0.08
+  springDuration: 0.55
+  springFrequency: 3
+  damping: 6
 --- !u!4 &6733410211659325305 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6664444469751284812, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
@@ -3651,6 +3743,30 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3541629673168548286, guid: d90a13f6870495b4fab4a7a952533f85, type: 3}
+--- !u!1 &8667113554984645321 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8740072755739994620, guid: 04bd25b0ed71f1342b29ccca303cfdad, type: 3}
+  m_PrefabInstance: {fileID: 75782769164589877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &315342058803060399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8667113554984645321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c379c4ab775147b90565113cb613e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MushroomSpringVisual
+  mushroomBone: {fileID: 7762195455942344621}
+  squashY: 0.35
+  stretchXZ: 0.2
+  squashTime: 0.08
+  springDuration: 0.55
+  springFrequency: 3
+  damping: 6
 --- !u!1001 &5893830273477618437
 PrefabInstance:
   m_ObjectHideFlags: 0
