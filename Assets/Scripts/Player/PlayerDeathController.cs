@@ -20,6 +20,9 @@ public class PlayerDeathController : MonoBehaviour
     [SerializeField] private const float toReviveTime = 2f;
     private float toReviveTimer = 0f;
 
+    [SerializeField] private Animator[] animatorsCheckpoint;
+    [SerializeField] private UnityEngine.VFX.VisualEffect[] respawnVFXs;
+
     void Start()
     {
         playerMovement = gameObject.GetComponent<PlayerMovement>();
@@ -87,7 +90,7 @@ public class PlayerDeathController : MonoBehaviour
         }
     }
 
-    private void Revive()
+    /*private void Revive()
     {
         isFalling = false;
         fallHeight = 0;
@@ -96,6 +99,41 @@ public class PlayerDeathController : MonoBehaviour
         transform.position = checkpoints[caughtCheckpointIndex].transform.position + Vector3.up * 1.5f;
         playerCharacterController.enabled = true;
         playerInput.OnRevive();
+        isDead = false;
+    }*/
+
+
+    private void Revive()
+    {
+        isFalling = false;
+        fallHeight = 0;
+        toReviveTimer = 0;
+
+        playerCharacterController.enabled = false;
+
+        transform.position = checkpoints[caughtCheckpointIndex].transform.position + Vector3.up * 1.5f;
+
+        playerCharacterController.enabled = true;
+
+        playerInput.OnRevive();
+
+        foreach (Animator animator in animatorsCheckpoint)
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger("Respawn");
+            }
+        }
+
+        foreach (UnityEngine.VFX.VisualEffect vfx in respawnVFXs)
+        {
+            if (vfx != null)
+            {
+                vfx.Stop();
+                vfx.Play();
+            }
+        }
+
         isDead = false;
     }
 
