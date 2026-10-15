@@ -5,7 +5,6 @@ public class ArchiveEntry : MonoBehaviour
     public ArchiveData info;
     public ArchivePanel panel;
 
-    // Chame este método no OnClick do Button (via Inspector)
     public void OnEntryClicked()
     {
         if (panel == null)
