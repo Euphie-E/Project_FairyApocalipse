@@ -26,6 +26,7 @@ public class DataEvents
     int playerCT = 0;
     public async void Run(string environment)
     {
+        if(environment == "disable") return;
         try
         {
             // Initialize fundamental Unity Gaming Services
