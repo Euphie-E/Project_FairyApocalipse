@@ -14,6 +14,7 @@ public class PlayerAnimatorController : MonoBehaviour
         swing = GetComponent<PlayerSwingController>();
     }
 
+    [SerializeField] float dumpTime = 0.5f;
     private void Update()
     {
         //if (movement.enabled) UpdateMovementAnimation();
@@ -31,7 +32,7 @@ public class PlayerAnimatorController : MonoBehaviour
         animator.SetBool("isSwinging", isSwinging);
         if(swingDir == 0 && animator.GetFloat(SwingDirHash)<0.1f && animator.GetFloat(SwingDirHash) > -0.1f)
             animator.SetFloat(SwingDirHash,swingDir);
-        else animator.SetFloat(SwingDirHash,swingDir,0.1f,Time.deltaTime);
+        else animator.SetFloat(SwingDirHash,swingDir,dumpTime,Time.deltaTime);
     }
 
     private void UpdateMovementAnimation()
