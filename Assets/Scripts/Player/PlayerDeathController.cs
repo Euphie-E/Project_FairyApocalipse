@@ -23,6 +23,13 @@ public class PlayerDeathController : MonoBehaviour
     [SerializeField] private Animator[] animatorsCheckpoint;
     [SerializeField] private UnityEngine.VFX.VisualEffect[] respawnVFXs;
 
+    [SerializeField] private UnityEngine.VFX.VisualEffect deathVFX;
+    [SerializeField] private Renderer[] playerRenderers;
+    [SerializeField] private float deathEffectDuration = 1.5f;
+
+    private bool deathEffectStarted = false;
+    private float deathEffectTimer = 0f;
+
     void Start()
     {
         playerMovement = gameObject.GetComponent<PlayerMovement>();
@@ -39,7 +46,18 @@ public class PlayerDeathController : MonoBehaviour
     {
         CheckFall();
         CheckFallDistance();
-        CheckDeath();
+
+        if (isDead)
+    {
+        playerInput.OnDeath();
+
+        if (!deathEffectStarted)
+        {
+            PlayDeathEffect();
+        }
+
+        UpdateDeathEffect();
+    }
     }
 
     private void CheckFall()
@@ -90,6 +108,57 @@ public class PlayerDeathController : MonoBehaviour
         }
     }
 
+    private void PlayDeathEffect()
+    {
+        if (deathEffectStarted)
+            return;
+
+        deathEffectStarted = true;
+        deathEffectTimer = 0f;
+
+        if (deathVFX != null)
+        {
+            deathVFX.Stop();
+            deathVFX.Play();
+        }
+
+        foreach (Renderer renderer in playerRenderers)
+        {
+            if (renderer != null)
+            {
+                renderer.material.SetFloat("_DissolveAmount", 0f);
+            }
+        }
+    }
+
+    
+    private void UpdateDeathEffect()
+    {
+        if (!isDead || !deathEffectStarted)
+        {
+            return;
+        }
+
+        deathEffectTimer += Time.deltaTime;
+
+        float dissolve = Mathf.Clamp01(deathEffectTimer / deathEffectDuration);
+
+        foreach (Renderer renderer in playerRenderers)
+        {
+            if (renderer != null)
+            {
+                renderer.material.SetFloat("_DissolveAmount", dissolve);
+            }
+        }
+
+        toReviveTimer += Time.deltaTime;
+
+        if (toReviveTimer >= toReviveTime)
+        {
+            Revive();
+        }
+    }
+
     /*private void Revive()
     {
         isFalling = false;
@@ -116,6 +185,18 @@ public class PlayerDeathController : MonoBehaviour
         playerCharacterController.enabled = true;
 
         playerInput.OnRevive();
+
+        foreach (Renderer renderer in playerRenderers)
+        {
+            if (renderer != null)
+            {
+                renderer.material.SetFloat("_DissolveAmount", 0f);
+            }
+        }
+
+        deathEffectStarted = false;
+        deathEffectTimer = 0f;
+        toReviveTimer = 0f;
 
         foreach (Animator animator in animatorsCheckpoint)
         {

@@ -26,7 +26,7 @@ public class BossTimeTravelBlockZone : MonoBehaviour
             if (timeTravel != null)
                 timeTravel.SetTravelBlocked(true);
 
-            Debug.Log("Viagem temporal bloqueada!");
+            Debug.Log("Viagem temporal bloqueada");
         }
     }
 
@@ -40,7 +40,7 @@ public class BossTimeTravelBlockZone : MonoBehaviour
             if (timeTravel != null)
                 timeTravel.SetTravelBlocked(false);
 
-            Debug.Log("Viagem temporal liberada!");
+            Debug.Log("Viagem temporal liberada");
         }
     }
 

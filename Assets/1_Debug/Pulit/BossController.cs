@@ -1,4 +1,4 @@
-
+using UnityEngine.VFX;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,6 +45,30 @@ public class BossController : MonoBehaviour
     private float nextAttackTime;
     private BossAttackType currentAttack;
 
+    [Header("VFX do Terremoto Forte")]
+    [SerializeField] private VisualEffect strongEarthquakeVFX;
+
+    [Header("VFX do Terremoto Fraco")]
+    [SerializeField] private VisualEffect weakEarthquakeVFX;
+
+    [Header("Camera Shake")]
+    [SerializeField] private CameraShake cameraShake;
+
+    private Coroutine attackRoutine;
+    private float attackStartTime;
+
+    [Header("Impacto da Pisada")]
+    [Range(0f, 1f)] public float ImpactNormalized = 0.917f;
+
+
+    [Header("Shake do Terremoto Fraco")]
+    public float weakShakeMagnitude = 0.8f;
+    public float weakShakeDuration = 0.3f;
+    public float weakShakeFrequency = 2f;
+    public float weakImpactTime = 1f;
+
+    private bool impactTriggered;
+
     private void Awake()
     {
         if (animator == null)
@@ -55,7 +79,7 @@ public class BossController : MonoBehaviour
     {
         if (animator == null)
         {
-            Debug.LogError("Boss sem Animator!", this);
+            Debug.LogError("Boss sem Animator", this);
             enabled = false;
             return;
         }
@@ -70,37 +94,48 @@ public class BossController : MonoBehaviour
 
         if (pendingAttacks.Count > 0)
         {
-            StartCoroutine(
-                ExecuteAttack(pendingAttacks.Dequeue())
-            );
+            attackRoutine = StartCoroutine(ExecuteAttack(pendingAttacks.Dequeue()));
         }
         else if (quakeZones.Count > 0)
         {
-            StartCoroutine(
-                ExecuteAttack(BossAttackType.TerremotoFraco)
-            );
+            attackRoutine = StartCoroutine(ExecuteAttack(BossAttackType.TerremotoFraco));
         }
     }
 
     public void EnterZone(BossAttackZone zone)
     {
-        // NOVO: aplica espera aleatoria na primeira
-        // entrada em uma regiao de ataque.
-        bool firstActivation =
-            !attacking &&
-            quakeZones.Count == 0 &&
-            pendingAttacks.Count == 0;
+        Debug.Log("EnterZone: " + zone.name + " tipo=" + zone.attackType +
+                " attacking=" + attacking);
 
-        if (firstActivation)
-            ScheduleNextAttack();
+        if (zone.attackType == BossAttackType.PisadaForte)
+        {
+            if (attacking && currentAttack == BossAttackType.PisadaForte)
+                return;
+
+            if (attackRoutine != null)
+                StopCoroutine(attackRoutine);
+
+            pendingAttacks.Clear();
+            attackRoutine = StartCoroutine(ExecuteAttack(BossAttackType.PisadaForte));
+            return;
+        }
 
         if (zone.attackType == BossAttackType.TerremotoFraco)
         {
+            bool firstActivation =
+                !attacking && quakeZones.Count == 0 && pendingAttacks.Count == 0;
+
+            if (firstActivation)
+                ScheduleNextAttack();
+
             quakeZones.Add(zone);
         }
         else
         {
             pendingAttacks.Enqueue(zone.attackType);
+
+            if (!attacking)
+                nextAttackTime = Time.time;
         }
     }
 
@@ -110,7 +145,6 @@ public class BossController : MonoBehaviour
             quakeZones.Remove(zone);
     }
 
-    // NOVO: sorteia o tempo de espera.
     private void ScheduleNextAttack()
     {
         float min = Mathf.Max(
@@ -126,10 +160,31 @@ public class BossController : MonoBehaviour
         nextAttackTime = Time.time + randomDelay;
     }
 
+    private IEnumerator WaitForNormalizedTime(string state, float target, float timeout)
+    {
+        int hash = Animator.StringToHash(state);
+        float t = 0f;
+
+        while (t < timeout)
+        {
+            AnimatorStateInfo info = animator.IsInTransition(0)
+                ? animator.GetNextAnimatorStateInfo(0)
+                : animator.GetCurrentAnimatorStateInfo(0);
+
+            if (info.fullPathHash == hash && info.normalizedTime >= target)
+                yield break;
+
+            t += Time.deltaTime;
+            yield return null;
+        }
+    }
+    
     private IEnumerator ExecuteAttack(BossAttackType type)
     {
         attacking = true;
         currentAttack = type;
+        impactTriggered = false;
+        attackStartTime = Time.time;
 
         string state = GetState(type);
         float duration = GetDuration(type);
@@ -138,26 +193,52 @@ public class BossController : MonoBehaviour
         {
             Debug.LogError("Estado nao encontrado: " + state, this);
             attacking = false;
+            attackRoutine = null;
             nextAttackTime = Time.time + 1f;
             yield break;
         }
 
-        animator.CrossFadeInFixedTime(
-            state, transitionTime, 0
-        );
+        if (type == BossAttackType.PisadaForte && strongEarthquakeVFX != null)
+            strongEarthquakeVFX.Stop();
 
-        yield return new WaitForSeconds(
-            Mathf.Max(0.1f, duration)
-        );
+        if (type == BossAttackType.TerremotoFraco && weakEarthquakeVFX != null)
+            weakEarthquakeVFX.Stop();
 
-        animator.CrossFadeInFixedTime(
-            idleState, transitionTime, 0
-        );
+        animator.CrossFadeInFixedTime(state, transitionTime, 0);
 
-        // NOVO: sorteia outro intervalo depois do ataque.
+        if (type == BossAttackType.PisadaForte)
+        {
+            yield return WaitForNormalizedTime(state, ImpactNormalized, 5f);
+            DoStrongImpact();
+
+            yield return WaitForNormalizedTime(state, 1f, 5f);
+            animator.CrossFadeInFixedTime(idleState, transitionTime, 0);
+
+            float elapsed = Time.time - attackStartTime;
+            yield return new WaitForSeconds(Mathf.Max(0f, duration - elapsed));
+        }
+        else if (type == BossAttackType.TerremotoFraco)
+        {
+            yield return WaitForNormalizedTime(state, ImpactNormalized, 5f);
+            DoWeakImpact();
+
+            yield return WaitForNormalizedTime(state, 1f, 5f);
+            animator.CrossFadeInFixedTime(idleState, transitionTime, 0);
+
+            float elapsed = Time.time - attackStartTime;
+            yield return new WaitForSeconds(Mathf.Max(0f, duration - elapsed));
+        }
+        else
+        {
+            yield return new WaitForSeconds(Mathf.Max(0.1f, duration));
+        }
+
+        animator.CrossFadeInFixedTime(idleState, transitionTime, 0);
+
         ScheduleNextAttack();
 
         attacking = false;
+        attackRoutine = null;
     }
 
     private string GetState(BossAttackType type)
@@ -209,23 +290,45 @@ public class BossController : MonoBehaviour
     }
 
     // Chamados por Animation Events nos frames de impacto.
+    private void DoStrongImpact()
+    {
+        Debug.Log("IMPACTO FORTE por tempo em " + (Time.time - attackStartTime).ToString("F2") + " s");
+
+        onStrongEarthquake?.Invoke();
+
+        if (strongEarthquakeVFX != null)
+        {
+            strongEarthquakeVFX.Stop();
+            strongEarthquakeVFX.Play();
+        }
+
+        if (cameraShake != null)
+            cameraShake.Shake();
+    }
+
+    private void DoWeakImpact()
+    {
+        Debug.Log("IMPACTO FRACO por tempo em " + (Time.time - attackStartTime).ToString("F2") + " s");
+
+        onWeakEarthquake?.Invoke();
+
+        if (weakEarthquakeVFX != null)
+        {
+            weakEarthquakeVFX.Stop();
+            weakEarthquakeVFX.Play();
+        }
+
+        if (cameraShake != null)
+            cameraShake.Shake(weakShakeMagnitude, weakShakeDuration, weakShakeFrequency);
+    }
 
     public void Event_WeakEarthquake()
     {
-        if (attacking &&
-            currentAttack == BossAttackType.TerremotoFraco &&
-            quakeZones.Count > 0)
-        {
-            onWeakEarthquake?.Invoke();
-        }
+        Debug.Log("Animation Event WEAK ignorado");
     }
 
     public void Event_StrongEarthquake()
     {
-        if (attacking &&
-            currentAttack == BossAttackType.PisadaForte)
-        {
-            onStrongEarthquake?.Invoke();
-        }
+        Debug.Log("Animation Event STRONG ignorado");
     }
 }

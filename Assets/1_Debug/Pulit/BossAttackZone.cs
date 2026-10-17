@@ -26,8 +26,14 @@ public class BossAttackZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("ENTROU NO TRIGGER: " + other.name);
-        if (!other.transform.root.CompareTag("Player"))
+        bool isPlayer = other.GetComponentInParent<PlayerMovement>() != null;
+
+        Debug.Log("Trigger " + name + " <- " + other.name +
+                " | isPlayer=" + isPlayer +
+                " | tipo=" + attackType +
+                " | boss=" + (boss != null));
+
+        if (!isPlayer)
             return;
 
         if (collidersDoPlayer.Add(other) &&
@@ -35,6 +41,8 @@ public class BossAttackZone : MonoBehaviour
         {
             if (boss != null)
                 boss.EnterZone(this);
+            else
+                Debug.LogError("BossAttackZone sem boss atribuido", this);
         }
     }
 
