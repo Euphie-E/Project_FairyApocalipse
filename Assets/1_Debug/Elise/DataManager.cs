@@ -21,6 +21,7 @@ public class DataManager : MonoBehaviour
     InputSystem_Actions act;
     public enum Environment
     {
+        disable,
         production,
         playtest
     }

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerAnimatorController : MonoBehaviour
 {
+    private static readonly int SwingDirHash = Animator.StringToHash("SwingDir");
     public Animator animator;
 
     private PlayerMovement movement;
@@ -13,6 +14,7 @@ public class PlayerAnimatorController : MonoBehaviour
         swing = GetComponent<PlayerSwingController>();
     }
 
+    [SerializeField] float dumpTime = 0.5f;
     private void Update()
     {
         //if (movement.enabled) UpdateMovementAnimation();
@@ -22,11 +24,15 @@ public class PlayerAnimatorController : MonoBehaviour
         float speed = movement.horizontalVelocity.magnitude;
         bool isGrounded = movement.isGrounded;
         bool isSwinging = swing.isSwinging;
+        float swingDir = swing.swingDir;
 
         animator.SetFloat("Speed", speed, 0.1f, Time.deltaTime);
         animator.SetFloat("VerticalSpeed", movement.verticalVelocity, 0.1f, Time.deltaTime);
         animator.SetBool("isGrounded", isGrounded);
         animator.SetBool("isSwinging", isSwinging);
+        if(swingDir == 0 && animator.GetFloat(SwingDirHash)<0.1f && animator.GetFloat(SwingDirHash) > -0.1f)
+            animator.SetFloat(SwingDirHash,swingDir);
+        else animator.SetFloat(SwingDirHash,swingDir,dumpTime,Time.deltaTime);
     }
 
     private void UpdateMovementAnimation()

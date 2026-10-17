@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XInput;
+using UnityEngine.InputSystem.DualShock;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -20,6 +22,13 @@ public class PlayerInput : MonoBehaviour
     public InputAction escapeAction { get; private set; }
     public InputAction dashAction { get; private set; }
 
+    public enum InputType
+    {
+        Xbox,
+        PlayStation,
+        Keyboard
+    }
+
 
     // gambiarra
     public InputAction um { get; private set; }
@@ -28,6 +37,7 @@ public class PlayerInput : MonoBehaviour
     public InputAction quatro { get; private set; }
     public InputAction test { get; private set; }
     Vector3[] tpPositions = new Vector3[4];
+
 
     private void Awake()
     {
@@ -85,8 +95,9 @@ public class PlayerInput : MonoBehaviour
             this.gameObject.GetComponent<CharacterController>().enabled = true;
         };
 
-    }
 
+        moveAction.performed += CheckControl;
+    }
     //this should not be done but the idex starts at 1
     Dictionary<Vector3,int> tpSort = new();
     public void AddCheckpoint(GameObject position, int index)
@@ -333,4 +344,33 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    List<Action<InputType>> KeyMappingList = new();
+    public void KeyMapping(Action<InputType> action)
+    {
+        KeyMappingList.Add(action);
+    }
+    public void RemoveKeyMapping(Action<InputType> action)
+    {
+        KeyMappingList.Remove(action);
+    }
+    void CheckControl(InputAction.CallbackContext ctx)
+    {
+        InputType resp = InputType.Keyboard;
+        if(ctx.control.device is Gamepad && Gamepad.current != null)
+        {
+            if(Gamepad.current is XInputController || Gamepad.current.layout.Contains("Xbox"))
+            {
+                resp = InputType.Xbox;
+            }
+            if(Gamepad.current is DualShockGamepad || Gamepad.current.layout.Contains("DualShock"))
+            {
+                resp = InputType.PlayStation;
+            }
+        } 
+        foreach (var item in KeyMappingList)
+        {
+            item(resp);
+        }
+        Debug.Log(resp.ToString());
+    }
 }

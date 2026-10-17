@@ -17,6 +17,7 @@ public class PlayerSwingController : MonoBehaviour
     [SerializeField] private float maxAngularVelocity = 180f;
     [SerializeField] private float initialMultiplier = 20f;
     public float initialForwardSpeed = 0f;
+    public float swingDir;
 
 
     [Header("Angle")]
@@ -43,6 +44,7 @@ public class PlayerSwingController : MonoBehaviour
         //Pega a dire��o da camera e passa pra dire��o do input
         float cameraDirection = GetCameraDirection();
         input.y *= cameraDirection;
+        swingDir=input.y;
 
         ApplyInputForce(input);
 
