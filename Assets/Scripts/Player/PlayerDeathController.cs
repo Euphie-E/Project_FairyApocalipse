@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+using System.Collections;
 public class PlayerDeathController : MonoBehaviour
 {
     private PlayerMovement playerMovement;
@@ -19,8 +19,19 @@ public class PlayerDeathController : MonoBehaviour
 
     [Header("Boss Death")]
     [SerializeField] private Animator deathAnimator;
+    [Header("Retorno da Animacao")]
+    [SerializeField]
+    private string respawnAnimatorStates =
+    "Base Layer.Ground Movement";
 
-    [SerializeField] private const float toReviveTime = 2f;
+    [Header("Boss Knockback")]
+    [SerializeField] private float bossPushDistance = 1.5f;
+    [SerializeField] private float bossPushDuration = 0.2f;
+
+    private Coroutine bossPushCoroutine;
+
+
+    [SerializeField] private float toReviveTime = 3f;
     private float toReviveTimer = 0f;
 
     [SerializeField] private Animator[] animatorsCheckpoint;
@@ -189,6 +200,24 @@ public class PlayerDeathController : MonoBehaviour
 
         playerInput.OnRevive();
 
+        deathAnimator.ResetTrigger("Death");
+        deathAnimator.SetFloat("Speed", 0f);
+
+
+        if (deathAnimator.HasState(
+            0, Animator.StringToHash(respawnAnimatorStates)))
+        {
+            deathAnimator.Play(respawnAnimatorStates, 0, 0f);
+            deathAnimator.SetFloat("DeathValue", 0f);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "Estado de respawn nao encontrado: " +
+                respawnAnimatorStates
+            );
+        }
+
         foreach (Renderer renderer in playerRenderers)
         {
             if (renderer != null)
@@ -241,10 +270,10 @@ public class PlayerDeathController : MonoBehaviour
         if (isDead)
             return;
 
-       
+        deathAnimator.ResetTrigger("Death");
         deathAnimator.SetFloat("DeathValue", 1f);
-        deathAnimator.SetTrigger("Death");
- 
+        deathAnimator.Play("Base Layer.DeathTree", 0, 0f);
+
         isFalling = false;
         fallHeight = 0f;
         yfall = transform.position.y;
@@ -252,5 +281,60 @@ public class PlayerDeathController : MonoBehaviour
         toReviveTimer = 0f;
 
         isDead = true;
+    }
+
+    public void PushAwayFromBoss(Vector3 hitPosition)
+    {
+        if (playerCharacterController == null ||
+            !playerCharacterController.enabled)
+            return;
+
+        Vector3 direction = transform.position - hitPosition;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.001f)
+            direction = -transform.forward;
+
+        direction.Normalize();
+
+        if (bossPushCoroutine != null)
+            StopCoroutine(bossPushCoroutine);
+
+        bossPushCoroutine = StartCoroutine(
+            BossPushRoutine(direction)
+        );
+    }
+
+    private IEnumerator BossPushRoutine(Vector3 direction)
+    {
+        float timer = 0f;
+        float previousProgress = 0f;
+        float duration = Mathf.Max(0.01f, bossPushDuration);
+
+        while (timer < duration && isDead)
+        {
+            if (!playerCharacterController.enabled)
+                break;
+
+            timer += Time.deltaTime;
+
+            float t = Mathf.Clamp01(timer / duration);
+
+       
+            float progress = 1f - Mathf.Pow(1f - t, 2f);
+
+            float distanceStep =
+                (progress - previousProgress) * bossPushDistance;
+
+            playerCharacterController.Move(
+                direction * distanceStep
+            );
+
+            previousProgress = progress;
+
+            yield return null;
+        }
+
+        bossPushCoroutine = null;
     }
 }

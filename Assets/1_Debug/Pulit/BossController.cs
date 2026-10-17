@@ -42,7 +42,7 @@ public class BossController : MonoBehaviour
     public UnityEvent onStrongEarthquake;
 
     private readonly HashSet<BossAttackZone> quakeZones = new();
-    private readonly Queue<BossAttackType> pendingAttacks = new();
+    private readonly HashSet<BossAttackZone> activeAttackZones = new();
 
     private bool attacking;
     private float nextAttackTime;
@@ -95,57 +95,103 @@ public class BossController : MonoBehaviour
         if (attacking || Time.time < nextAttackTime)
             return;
 
-        if (pendingAttacks.Count > 0)
+        BossAttackType? nextAttack = GetActiveAttack();
+
+        if (nextAttack.HasValue)
         {
-            attackRoutine = StartCoroutine(ExecuteAttack(pendingAttacks.Dequeue()));
+            attackRoutine = StartCoroutine(
+                ExecuteAttack(nextAttack.Value)
+            );
         }
-        else if (quakeZones.Count > 0)
+    }
+    private BossAttackType? GetActiveAttack()
+    {
+        BossAttackType? tailAttack = null;
+
+        foreach (BossAttackZone zone in activeAttackZones)
         {
-            attackRoutine = StartCoroutine(ExecuteAttack(BossAttackType.TerremotoFraco));
+            if (zone == null || !zone.isActiveAndEnabled)
+                continue;
+
+            
+            if (zone.attackType == BossAttackType.PisadaForte)
+                return BossAttackType.PisadaForte;
+
+            if (!tailAttack.HasValue)
+                tailAttack = zone.attackType;
         }
+
+        
+        if (tailAttack.HasValue)
+            return tailAttack.Value;
+
+        if (quakeZones.Count > 0)
+            return BossAttackType.TerremotoFraco;
+
+        return null;
     }
 
     public void EnterZone(BossAttackZone zone)
     {
-        Debug.Log("EnterZone: " + zone.name + " tipo=" + zone.attackType +
-                " attacking=" + attacking);
+        if (zone == null)
+            return;
+
+        Debug.Log("EnterZone: " + zone.name +
+                  " tipo=" + zone.attackType);
+
+        if (zone.attackType == BossAttackType.TerremotoFraco)
+        {
+            bool firstActivation =
+                !attacking &&
+                quakeZones.Count == 0 &&
+                activeAttackZones.Count == 0;
+
+            if (quakeZones.Add(zone) && firstActivation)
+                ScheduleNextAttack();
+
+            return;
+        }
+
+        if (!activeAttackZones.Add(zone))
+            return;
 
         if (zone.attackType == BossAttackType.PisadaForte)
         {
-            if (attacking && currentAttack == BossAttackType.PisadaForte)
+            if (attacking &&
+                currentAttack == BossAttackType.PisadaForte)
                 return;
 
             if (attackRoutine != null)
                 StopCoroutine(attackRoutine);
 
-            pendingAttacks.Clear();
-            attackRoutine = StartCoroutine(ExecuteAttack(BossAttackType.PisadaForte));
+            if (damageEvents != null)
+                damageEvents.DisableAll();
+
+            attackRoutine = StartCoroutine(
+                ExecuteAttack(BossAttackType.PisadaForte)
+            );
+
             return;
         }
 
-        if (zone.attackType == BossAttackType.TerremotoFraco)
-        {
-            bool firstActivation =
-                !attacking && quakeZones.Count == 0 && pendingAttacks.Count == 0;
-
-            if (firstActivation)
-                ScheduleNextAttack();
-
-            quakeZones.Add(zone);
-        }
-        else
-        {
-            pendingAttacks.Enqueue(zone.attackType);
-
-            if (!attacking)
-                nextAttackTime = Time.time;
-        }
+       
+        if (!attacking)
+            nextAttackTime = Time.time;
     }
 
     public void ExitZone(BossAttackZone zone)
     {
+        if (zone == null)
+            return;
+
         if (zone.attackType == BossAttackType.TerremotoFraco)
+        {
             quakeZones.Remove(zone);
+        }
+        else
+        {
+            activeAttackZones.Remove(zone);
+        }
     }
 
     private void ScheduleNextAttack()
@@ -237,7 +283,7 @@ public class BossController : MonoBehaviour
         {
             yield return new WaitForSeconds(Mathf.Max(0.1f, duration));
         }
-
+        damageEvents.DisableAll();
         animator.CrossFadeInFixedTime(idleState, transitionTime, 0);
 
         ScheduleNextAttack();
@@ -294,7 +340,7 @@ public class BossController : MonoBehaviour
         }
     }
 
-    // Chamados por Animation Events nos frames de impacto.
+    
     private void DoStrongImpact()
     {
         Debug.Log("IMPACTO FORTE por tempo em " + (Time.time - attackStartTime).ToString("F2") + " s");

@@ -46,6 +46,7 @@ public class BossDamageTrigger : MonoBehaviour
         damageActive = false;
 
         player.KillFromBoss();
+        player.PushAwayFromBoss(transform.position);
     }
 
     private void OnDisable()
