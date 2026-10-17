@@ -24,6 +24,9 @@ public class BossController : MonoBehaviour
     public float tail3Duration = 2f;
     public float stompDuration = 3f;
 
+    [Header("Dano")]
+    public BossDamageEvents damageEvents;
+
     [Header("Intervalo Aleatorio Entre Ataques")]
     [Min(0f)]
     public float minAttackDelay = 2f;
@@ -203,6 +206,8 @@ public class BossController : MonoBehaviour
 
         if (type == BossAttackType.TerremotoFraco && weakEarthquakeVFX != null)
             weakEarthquakeVFX.Stop();
+
+        damageEvents.DisableAll();
 
         animator.CrossFadeInFixedTime(state, transitionTime, 0);
 

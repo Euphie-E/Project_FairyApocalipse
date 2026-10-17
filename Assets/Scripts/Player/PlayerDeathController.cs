@@ -15,7 +15,10 @@ public class PlayerDeathController : MonoBehaviour
     [SerializeField] private bool isFalling = false;
     private float yfall;
     private float fallHeight = 0;
-    private bool isDead = false;   
+    private bool isDead = false;
+
+    [Header("Boss Death")]
+    [SerializeField] private Animator deathAnimator;
 
     [SerializeField] private const float toReviveTime = 2f;
     private float toReviveTimer = 0f;
@@ -231,5 +234,23 @@ public class PlayerDeathController : MonoBehaviour
         isFalling = false;
         fallHeight = 0f;
         yfall = transform.position.y;
+    }
+
+    public void KillFromBoss()
+    {
+        if (isDead)
+            return;
+
+       
+        deathAnimator.SetFloat("DeathValue", 1f);
+        deathAnimator.SetTrigger("Death");
+ 
+        isFalling = false;
+        fallHeight = 0f;
+        yfall = transform.position.y;
+
+        toReviveTimer = 0f;
+
+        isDead = true;
     }
 }
