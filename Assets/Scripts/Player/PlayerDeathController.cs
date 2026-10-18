@@ -4,11 +4,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections;
+using Unity.Cinemachine;
+
 public class PlayerDeathController : MonoBehaviour
 {
     private PlayerMovement playerMovement;
     private PlayerInput playerInput;
     private CharacterController playerCharacterController;
+    [SerializeField] private CinemachineCamera cinemachineCamera;
     [SerializeField] private GameObject[] checkpoints;
     private int caughtCheckpointIndex = 0;
     [SerializeField] private float maxHeight = 25f;
@@ -194,9 +197,13 @@ public class PlayerDeathController : MonoBehaviour
 
         playerCharacterController.enabled = false;
 
+        Vector3 difference = checkpoints[caughtCheckpointIndex].transform.position + Vector3.up * 1.5f - transform.position; // pelo cinemachine.OnTargetObjectWarped
+
         transform.position = checkpoints[caughtCheckpointIndex].transform.position + Vector3.up * 1.5f;
 
         playerCharacterController.enabled = true;
+
+        cinemachineCamera.OnTargetObjectWarped(cinemachineCamera.Target.TrackingTarget, difference);
 
         playerInput.OnRevive();
 
