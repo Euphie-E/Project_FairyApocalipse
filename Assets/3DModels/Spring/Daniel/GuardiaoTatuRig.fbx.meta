@@ -12,13 +12,33 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: CoguAmareloFuturo
+    second: {fileID: 2100000, guid: 74e5c11450999f645bdba359e856fc91, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: CoguAzul.001
+    second: {fileID: 2100000, guid: b0072aae80f5ae547b09c167435cd7fd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CoguAzulFuturo
     second: {fileID: 2100000, guid: b0072aae80f5ae547b09c167435cd7fd, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: CoguRosa.001
     second: {fileID: 2100000, guid: 70f8b1ae7430c4a41a21363d3981603c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CoguRosaFuturo
+    second: {fileID: 2100000, guid: 70f8b1ae7430c4a41a21363d3981603c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GramaSeca
+    second: {fileID: 2100000, guid: da5d93f7cf071c34f9a9264b79b62f8e, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -32,6 +52,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Raiz
+    second: {fileID: 2100000, guid: efd2a53ddb1104c47930cd3b9a530267, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Tatu.002
     second: {fileID: 2100000, guid: a8adbb760b5757746a9035201eebd02e, type: 2}
   - first:
@@ -39,6 +64,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Tree
     second: {fileID: 2100000, guid: feb29f049911bd847ad1c3c05fdeafb4, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: "Sem T\xEDtulo-2"
+    second: {fileID: 2800000, guid: 8ec4ca69f11002f43a163ce12ee9d5fd, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -67,7 +97,7 @@ ModelImporter:
     clipAnimations:
     - serializedVersion: 16
       name: CaudaDireita
-      takeName: Armature2|CaldaDireita
+      takeName: Armature2|CaudaDireita
       internalID: -8476675316452979587
       firstFrame: 0
       lastFrame: 48
@@ -90,7 +120,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.2782395
+      - time: 0.30864492
         functionName: CaudaDireitaAvisoOn
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -124,7 +154,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: CaudaEsquerda
-      takeName: Armature2|CaldaEsquerda
+      takeName: Armature2|CaudaEsquerda
       internalID: 8638560144367935220
       firstFrame: 0
       lastFrame: 48
@@ -218,15 +248,15 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.8811453
-        functionName: CaudaMeioOff
+      - time: 0.7083107
+        functionName: CaudaMeioAvisoOff
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.7083107
-        functionName: CaudaMeioAvisoOff
+      - time: 0.7291183
+        functionName: CaudaMeioOff
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -237,11 +267,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Idle
-      takeName: Armature2|FuturaIdle
+      name: FuturoIdle
+      takeName: Armature2|FuturoIdle
       internalID: -2942027457444133551
       firstFrame: 0
-      lastFrame: 48
+      lastFrame: 70
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -261,22 +291,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0
-        functionName: CaudaMeioOn
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.24791397
-        functionName: CaudaMeioOff
+        functionName: CaudaMeioOn
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.7346081
-        functionName: CaudaMeioOn
+        functionName: CaudaMeioOff
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -311,7 +334,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.61537105
+      - time: 0.56131697
         functionName: PisadaAvisoOn
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -325,14 +348,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.8702205
+      - time: 0.8904907
         functionName: PatasOff
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.87291414
+      - time: 0.89318436
         functionName: PisadaAvisoOff
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -374,10 +397,10 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Golpe0
-      takeName: Armature2|FuturoGolpe
+      takeName: Armature2|FuturoAngry
       internalID: 1817903249271773886
       firstFrame: 0
-      lastFrame: 48
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -396,35 +419,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.609991
-        functionName: PisadaAvisoOn
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.79341084
-        functionName: PatasOn
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.87924933
-        functionName: PatasOff
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.88022405
-        functionName: PisadaAvisoOff
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
