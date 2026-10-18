@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class PlantBranchGrowth : MonoBehaviour
@@ -21,11 +22,19 @@ public class PlantBranchGrowth : MonoBehaviour
     public Vector3 rotacaoInicial =
         new Vector3(0f, 0f, 30f);
 
+    [Header("Collider")]
+    [Min(0f)]
+    public float tempoAtivarCollider = 2f;
+
+    private MeshCollider colliderGalho;
+
     private Vector3 escalaFinal;
     private Quaternion rotacaoFinal;
 
     private float tempo;
     private bool iniciou;
+
+    public float ProgressoGalho { get; private set; }
 
     private void Awake()
     {
@@ -43,20 +52,29 @@ public class PlantBranchGrowth : MonoBehaviour
         escalaFinal = visual.localScale;
         rotacaoFinal = visual.localRotation;
 
+        colliderGalho =
+            visual.GetComponentInChildren<MeshCollider>(true);
+
+        if (colliderGalho != null)
+            colliderGalho.enabled = false;
+
         AplicarCrescimento(0f);
     }
 
     private void Update()
     {
-        // Espera o tronco chegar ao ponto desejado
         if (tronco.ProgressoCrescimento < inicioNoTronco)
         {
-            // Permite reiniciar junto com o tronco
             if (iniciou)
             {
                 iniciou = false;
                 tempo = 0f;
+                ProgressoGalho = 0f;
+
                 AplicarCrescimento(0f);
+
+                if (colliderGalho != null)
+                    colliderGalho.enabled = false;
             }
 
             return;
@@ -66,6 +84,7 @@ public class PlantBranchGrowth : MonoBehaviour
         {
             iniciou = true;
             tempo = 0f;
+            ProgressoGalho = 0f;
         }
 
         tempo += Time.deltaTime;
@@ -74,7 +93,18 @@ public class PlantBranchGrowth : MonoBehaviour
             tempo / duracao
         );
 
+        ProgressoGalho = Mathf.Clamp01(
+            curvaCrescimento.Evaluate(progresso)
+        );
+
         AplicarCrescimento(progresso);
+
+        // Ativa o collider pelo tempo configurado
+        if (colliderGalho != null)
+        {
+            colliderGalho.enabled =
+                tempo >= tempoAtivarCollider;
+        }
     }
 
     private void AplicarCrescimento(float progresso)
@@ -83,14 +113,12 @@ public class PlantBranchGrowth : MonoBehaviour
             curvaCrescimento.Evaluate(progresso)
         );
 
-        // Cresce ate a escala original
         visual.localScale = Vector3.Lerp(
             Vector3.zero,
             escalaFinal,
             valor
         );
 
-        // Gira ate a rotacao original
         Vector3 rotacaoExtra =
             rotacaoInicial * (1f - valor);
 
