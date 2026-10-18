@@ -41,6 +41,9 @@ public class BossController : MonoBehaviour
     public UnityEvent onWeakEarthquake;
     public UnityEvent onStrongEarthquake;
 
+    [Header("Avisos dos Ataques")]
+    public BossAttackWarningEvents warningEvents;
+
     private readonly HashSet<BossAttackZone> quakeZones = new();
     private readonly HashSet<BossAttackZone> activeAttackZones = new();
 
@@ -254,7 +257,7 @@ public class BossController : MonoBehaviour
             weakEarthquakeVFX.Stop();
 
         damageEvents.DisableAll();
-
+        warningEvents.HideAll();
         animator.CrossFadeInFixedTime(state, transitionTime, 0);
 
         if (type == BossAttackType.PisadaForte)
@@ -286,6 +289,7 @@ public class BossController : MonoBehaviour
         damageEvents.DisableAll();
         animator.CrossFadeInFixedTime(idleState, transitionTime, 0);
 
+        warningEvents.HideAll();
         ScheduleNextAttack();
 
         attacking = false;
@@ -346,6 +350,7 @@ public class BossController : MonoBehaviour
         Debug.Log("IMPACTO FORTE por tempo em " + (Time.time - attackStartTime).ToString("F2") + " s");
 
         onStrongEarthquake?.Invoke();
+        warningEvents.PisadaAvisoOff();
 
         if (strongEarthquakeVFX != null)
         {
