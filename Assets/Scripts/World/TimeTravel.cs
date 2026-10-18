@@ -41,6 +41,7 @@ public class TimeTravel : MonoBehaviour
     [SerializeField] private MeshRenderer timeDome;
 
     public bool TravelBlocked { get; private set; }
+    PlayerSwingController psc;
 
     public void SetTravelBlocked(bool blocked)
     {
@@ -89,7 +90,7 @@ public class TimeTravel : MonoBehaviour
         // Dome começa desligado.
         //timeDome.enabled = false;
 
-
+        psc = GetComponent<PlayerSwingController>();
     }
 
     /* private void OnEnable()
@@ -228,6 +229,7 @@ public class TimeTravel : MonoBehaviour
 
     bool CheckTravel()
     {
+        if(psc.enabled) return false;
         if(layerCheckBody == null || layerCheckFeet == null) return true;
         bool notBody = Physics.CheckSphere(layerCheckBody.transform.position,layerCheckBody.radius,notPlayer);
         bool notFeet = Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,notPlayer);
