@@ -164,6 +164,7 @@ public class TimeTravel : MonoBehaviour
         // Física do passado
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, true);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, false);
+        PlayerStateController.Instance.ActivatePastLayer();        
 
         // Visual do passado
         pastCamera.enabled = true;
@@ -182,6 +183,7 @@ public class TimeTravel : MonoBehaviour
         // Física do futuro
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
+        PlayerStateController.Instance.ActivateFutureLayer();
 
         // Visual do passado desligado
         pastCamera.enabled = false;

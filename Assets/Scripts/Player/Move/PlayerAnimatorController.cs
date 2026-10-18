@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAnimatorController : MonoBehaviour
@@ -30,9 +31,16 @@ public class PlayerAnimatorController : MonoBehaviour
         animator.SetFloat("VerticalSpeed", movement.verticalVelocity, 0.1f, Time.deltaTime);
         animator.SetBool("isGrounded", isGrounded);
         animator.SetBool("isSwinging", isSwinging);
-        if(swingDir == 0 && animator.GetFloat(SwingDirHash)<0.1f && animator.GetFloat(SwingDirHash) > -0.1f)
-            animator.SetFloat(SwingDirHash,swingDir);
-        else animator.SetFloat(SwingDirHash,swingDir,dumpTime,Time.deltaTime);
+
+        if (isSwinging)
+        {
+            if (Vector3.Dot(swing.currentBar.transform.forward, movement.transform.forward) < 0)
+                swingDir = -swingDir;
+
+            if (swingDir == 0 && animator.GetFloat(SwingDirHash) < 0.1f && animator.GetFloat(SwingDirHash) > -0.1f)
+                animator.SetFloat(SwingDirHash, swingDir);
+            else animator.SetFloat(SwingDirHash, swingDir, dumpTime, Time.deltaTime);
+        }
     }
 
     private void UpdateMovementAnimation()
@@ -55,5 +63,10 @@ public class PlayerAnimatorController : MonoBehaviour
     public void PlayJump()
     {
         animator.SetTrigger("Jump");
+    }
+
+    public void PlayDash()
+    {
+        animator.SetTrigger("Dash");
     }
 }

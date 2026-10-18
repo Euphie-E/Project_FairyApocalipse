@@ -570,9 +570,12 @@ MonoBehaviour:
   jumpHeight: 2
   gravity: -15
   maxGravityVelocity: -10
-  groundLayerMask:
+  groundLayerMaskPast:
     serializedVersion: 2
-    m_Bits: 193
+    m_Bits: 129
+  groundLayerMaskFuture:
+    serializedVersion: 2
+    m_Bits: 65
   groundCheckDistance: 0.15
   snapDistance: 0.4
   groundRadiusShrink: 0
@@ -640,8 +643,16 @@ MonoBehaviour:
   - {fileID: 6099451806421071561}
   maxHeight: 25
   isFalling: 0
+  deathAnimator: {fileID: 0}
+  respawnAnimatorStates: Base Layer.Ground Movement
+  bossPushDistance: 1.5
+  bossPushDuration: 0.2
+  toReviveTime: 3
   animatorsCheckpoint: []
   respawnVFXs: []
+  deathVFX: {fileID: 0}
+  playerRenderers: []
+  deathEffectDuration: 1.5
 --- !u!114 &6038228782548844420
 MonoBehaviour:
   m_ObjectHideFlags: 0
