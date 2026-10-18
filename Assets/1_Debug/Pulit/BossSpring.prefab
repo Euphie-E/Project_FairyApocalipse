@@ -5012,6 +5012,7 @@ Transform:
   - {fileID: 4107258544718304265}
   - {fileID: 6457494633687349920}
   - {fileID: 2410930022644793753}
+  - {fileID: 9141004996151397121}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8489257051098581322
@@ -7267,7 +7268,19 @@ MonoBehaviour:
   transitionTime: 0.15
   onWeakEarthquake:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3053911306790742185}
+        m_TargetAssemblyTypeName: EartquakeController, Assembly-CSharp
+        m_MethodName: StartEarthquake
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onStrongEarthquake:
     m_PersistentCalls:
       m_Calls: []
@@ -7509,6 +7522,79 @@ MonoBehaviour:
   springDuration: 0.55
   springFrequency: 3
   damping: 6
+--- !u!1001 &4410286819869125555
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7401419267496397236}
+    m_Modifications:
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5005782657433919752, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+      propertyPath: m_Name
+      value: Earthquake Controller
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+--- !u!114 &3053911306790742185 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1681479120039265050, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+  m_PrefabInstance: {fileID: 4410286819869125555}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a948d7590eb88344c8b29b6dac5a1d05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+--- !u!4 &9141004996151397121 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4895170773851709618, guid: 73bcb7161094aca4a8e264353ed43252, type: 3}
+  m_PrefabInstance: {fileID: 4410286819869125555}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5893830273477618437
 PrefabInstance:
   m_ObjectHideFlags: 0
