@@ -230,11 +230,10 @@ public class TimeTravel : MonoBehaviour
     bool CheckTravel()
     {
         if(psc.enabled) return false;
-        if(layerCheckBody == null || layerCheckFeet == null) return true;
-        bool notBody = Physics.CheckSphere(layerCheckBody.transform.position,layerCheckBody.radius,notPlayer);
-        bool notFeet = Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,notPlayer);
-        bool feet = Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,realPlayer);
-        bool genericFeet = Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,1 << 0);
+        bool notBody = layerCheckBody == null || Physics.CheckSphere(layerCheckBody.transform.position,layerCheckBody.radius,notPlayer);
+        bool notFeet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,notPlayer);
+        bool feet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,realPlayer);
+        bool genericFeet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,1 << 0);
         if (notBody) return false;
         if (genericFeet) return true;
         if (!notFeet && feet) return false;
