@@ -255,7 +255,7 @@ public class PlayerDeathController : MonoBehaviour
         caughtCheckpointIndex = index;
         checkpoints[index] = checkpoint;
         if (DataManager.Instance != null)
-            DataManager.Instance.AddData(DataManager.Data.TimeStamp,Time.time);
+            DataManager.Instance.AddData(DataManager.Data.TimeStamp,Time.time,index);
     }
 
     public void ResetFallAfterTeleport()
