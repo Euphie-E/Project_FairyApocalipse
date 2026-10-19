@@ -65,7 +65,6 @@ public class FairyController : MonoBehaviour
 
     void LateUpdate()
     {
-        Debug.Log(state);
         if (state == 0)
         {
             // conferindo se vai pro ombro direito ou esquerdo
