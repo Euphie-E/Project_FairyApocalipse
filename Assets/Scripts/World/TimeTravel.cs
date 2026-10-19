@@ -15,6 +15,10 @@ public class TimeTravel : MonoBehaviour
     private int playerLayer;
     public int pastLayer;
     public int futureLayer;
+    int notPlayer;
+    int realPlayer;
+    [SerializeField] SphereCollider layerCheckBody;
+    [SerializeField] SphereCollider layerCheckFeet;
 
     [Header("Player")]
     [SerializeField] public bool isTravelling = false;
@@ -36,7 +40,8 @@ public class TimeTravel : MonoBehaviour
     [Header("Time Dome")]
     [SerializeField] private MeshRenderer timeDome;
 
-    public bool TravelBlocked { get; private set; }
+    public bool TravelBlocked ;//{ get; private set; }
+    PlayerSwingController psc;
 
     public void SetTravelBlocked(bool blocked)
     {
@@ -45,7 +50,7 @@ public class TimeTravel : MonoBehaviour
         // Entrou na area bloqueada estando no passado
         if (blocked && isTravelling)
         {
-            EndTravel();
+            EndTravel(true);
         }
     }
 
@@ -73,6 +78,8 @@ public class TimeTravel : MonoBehaviour
         // Estado físico inicial: FUTURO
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
+        notPlayer = 1 << pastLayer;
+        realPlayer = 1 << futureLayer;
 
         // Main Camera nunca renderiza o passado.
         SetMainCameraToFuture();
@@ -83,7 +90,7 @@ public class TimeTravel : MonoBehaviour
         // Dome começa desligado.
         //timeDome.enabled = false;
 
-
+        psc = GetComponent<PlayerSwingController>();
     }
 
     /* private void OnEnable()
@@ -147,7 +154,7 @@ public class TimeTravel : MonoBehaviour
     {
         if (!ctx.performed) return;
         if (onCooldown) return;
-
+        if (!CheckTravel()) return;
         if (TravelBlocked)
             return;
         if (isTravelling) 
@@ -164,6 +171,9 @@ public class TimeTravel : MonoBehaviour
         // Física do passado
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, true);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, false);
+        PlayerStateController.Instance.ActivatePastLayer();     
+        notPlayer = 1 << futureLayer; 
+        realPlayer = 1 << pastLayer;  
 
         // Visual do passado
         pastCamera.enabled = true;
@@ -172,8 +182,9 @@ public class TimeTravel : MonoBehaviour
             DataManager.Instance.AddData(DataManager.Data.TimeTravel,1);
     }
 
-    private void EndTravel()
+    private void EndTravel(bool force = false)
     {
+        if(!force && !CheckTravel()) return;
         isTravelling = false;
 
         GCamarada.AudioManager.I?.StopClip("StartTravel");
@@ -182,6 +193,9 @@ public class TimeTravel : MonoBehaviour
         // Física do futuro
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
+        PlayerStateController.Instance.ActivateFutureLayer();
+        notPlayer = 1 << pastLayer;
+        realPlayer = 1 << futureLayer;
 
         // Visual do passado desligado
         pastCamera.enabled = false;
@@ -211,5 +225,18 @@ public class TimeTravel : MonoBehaviour
 
         timeTravelMaterial.SetVector("_SphereCenter", center);
         timeTravelMaterial.SetFloat("_SphereRadius", isTravelling ? radius : 0f);
+    }
+
+    bool CheckTravel()
+    {
+        if(psc.enabled) return false;
+        bool notBody = layerCheckBody == null || Physics.CheckSphere(layerCheckBody.transform.position,layerCheckBody.radius,notPlayer);
+        bool notFeet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,notPlayer);
+        bool feet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,realPlayer);
+        bool genericFeet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,1 << 0);
+        if (notBody) return false;
+        if (genericFeet) return true;
+        if (!notFeet && feet) return false;
+        return true;
     }
 }

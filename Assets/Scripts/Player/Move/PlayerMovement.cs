@@ -2,16 +2,16 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-
 public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 {
     [Header("Footsteps Audio")]
     [SerializeField] private float stepInterval = 0.4f;
     private float stepTimer;
     [Header("References")]
-    [SerializeField] private Transform cameraTransform;
+    public Transform cameraTransform;
     private PlayerAnimatorController playerAnimatorController;
     public CharacterController characterController { get; private set; }
+    private TimeTravel timeTravel;
 
     [Header("Movement")]
     [SerializeField] private float maxSpeed = 6f;
@@ -31,7 +31,9 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     private bool mushroomBounceActive;
 
     [Header("Ground Check")]
-    [SerializeField] LayerMask groundLayerMask;
+    private LayerMask groundLayerMask;
+    [SerializeField] LayerMask groundLayerMaskPast;
+    [SerializeField] LayerMask groundLayerMaskFuture;
     [SerializeField] private float groundCheckDistance = 0.15f;
     [SerializeField] private float snapDistance = 0.4f;
     [SerializeField] private float groundRadiusShrink = 0.05f;
@@ -56,15 +58,27 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     private float dashTraveled;
     private float DashSpeed => dashDistance / dashDuration;
 
+    private void OnEnable()
+    {
+        canDash = true;
+    }
+
+    private void OnDisable()
+    {
+        isDashing = false;        
+    }
+
     private void Awake()
     {
         playerAnimatorController = GetComponent<PlayerAnimatorController>();
         characterController = GetComponent<CharacterController>();
+        timeTravel = GetComponent<TimeTravel>();
     }
 
     private void Start()
     {
         cameraTransform = Camera.main.transform;
+        FutureCollision();
     }
 
     private void Update()
@@ -324,7 +338,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 
         transform.rotation = Quaternion.LookRotation(dashDirection);
 
-        //Trigger animação
+        playerAnimatorController.PlayDash();
         //Trigger audio
 
         return true;
@@ -495,4 +509,15 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
             stepTimer = 0f; 
         }
     }
+
+    public void PastCollision()
+    {
+        groundLayerMask = groundLayerMaskPast;
+    }
+
+    public void FutureCollision()
+    {
+        groundLayerMask = groundLayerMaskFuture;
+    }
+
 }

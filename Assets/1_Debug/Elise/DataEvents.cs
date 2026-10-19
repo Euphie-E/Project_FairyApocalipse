@@ -110,4 +110,5 @@ public class PlayerData
     public int Death;
     public double Duration;
     public double[] CheckPoints = new double[4];
+    public Seed seed;
 }

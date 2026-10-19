@@ -219,6 +219,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""cinco"",
+                    ""type"": ""Button"",
+                    ""id"": ""089e7fe2-efcd-45e1-80b3-db16d32293e0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Test"",
                     ""type"": ""Button"",
                     ""id"": ""60234e5d-c2cc-4e83-a7c9-603dc6d46600"",
@@ -697,6 +706,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""cuatro"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d287b99-1c5c-4d3f-a569-d945dc472f3e"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""cinco"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1320,6 +1340,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_treis = m_Player.FindAction("treis", throwIfNotFound: true);
         m_Player_cuatro = m_Player.FindAction("cuatro", throwIfNotFound: true);
+        m_Player_cinco = m_Player.FindAction("cinco", throwIfNotFound: true);
         m_Player_Test = m_Player.FindAction("Test", throwIfNotFound: true);
         m_Player_AddTester = m_Player.FindAction("AddTester", throwIfNotFound: true);
         // UI
@@ -1429,6 +1450,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_treis;
     private readonly InputAction m_Player_cuatro;
+    private readonly InputAction m_Player_cinco;
     private readonly InputAction m_Player_Test;
     private readonly InputAction m_Player_AddTester;
     /// <summary>
@@ -1498,6 +1520,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/cuatro".
         /// </summary>
         public InputAction @cuatro => m_Wrapper.m_Player_cuatro;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/cinco".
+        /// </summary>
+        public InputAction @cinco => m_Wrapper.m_Player_cinco;
         /// <summary>
         /// Provides access to the underlying input action "Player/Test".
         /// </summary>
@@ -1574,6 +1600,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @cuatro.started += instance.OnCuatro;
             @cuatro.performed += instance.OnCuatro;
             @cuatro.canceled += instance.OnCuatro;
+            @cinco.started += instance.OnCinco;
+            @cinco.performed += instance.OnCinco;
+            @cinco.canceled += instance.OnCinco;
             @Test.started += instance.OnTest;
             @Test.performed += instance.OnTest;
             @Test.canceled += instance.OnTest;
@@ -1633,6 +1662,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @cuatro.started -= instance.OnCuatro;
             @cuatro.performed -= instance.OnCuatro;
             @cuatro.canceled -= instance.OnCuatro;
+            @cinco.started -= instance.OnCinco;
+            @cinco.performed -= instance.OnCinco;
+            @cinco.canceled -= instance.OnCinco;
             @Test.started -= instance.OnTest;
             @Test.performed -= instance.OnTest;
             @Test.canceled -= instance.OnTest;
@@ -2037,6 +2069,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCuatro(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "cinco" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCinco(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Test" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
