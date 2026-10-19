@@ -451,6 +451,7 @@ GameObject:
   - component: {fileID: 8922974664084637939}
   - component: {fileID: 6038228782548844420}
   - component: {fileID: 5671333806328644038}
+  - component: {fileID: 6235956394809265416}
   - component: {fileID: 4285460171558593203}
   m_Layer: 3
   m_Name: PlayerCharacter
@@ -694,6 +695,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPocket
   seed: {fileID: 0}
   gnomes: []
+--- !u!114 &6235956394809265416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2664642316351876537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f78e58d8493b86f46a206dedd00acc95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPlantStep
 --- !u!82 &4285460171558593203
 AudioSource:
   m_ObjectHideFlags: 0
