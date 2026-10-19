@@ -5,12 +5,13 @@ public class InitialMenuController : MonoBehaviour
 {
     public void Play()
     {
-        SceneManager.LoadScene(1);
         Debug.Log("Jogar");
+        SceneManager.LoadScene(1);
     }
 
     public void Quit()
     {
+        Debug.Log("Fechou");
         Application.Quit();
     }
 }

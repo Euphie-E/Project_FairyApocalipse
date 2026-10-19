@@ -38,7 +38,6 @@ public class MenuController : MonoBehaviour
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
             }
-            
             else
             {
                 pausePanel.SetActive(true);
@@ -77,5 +76,10 @@ public class MenuController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    public void InitialMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
