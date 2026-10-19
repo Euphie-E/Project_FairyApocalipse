@@ -31,6 +31,14 @@ public class PlantTrunkGrowth : MonoBehaviour
     private static readonly int GrowthHeight =
         Shader.PropertyToID("_GrowthHeight");
 
+    private static readonly int GrowthAxis =
+    Shader.PropertyToID("_GrowthAxis");
+
+    private static readonly int EnableGrowth =
+    Shader.PropertyToID("_EnableGrowth");
+
+    private Vector3 eixoCrescimento = Vector3.up;
+
     public float ProgressoCrescimento { get; private set; }
 
     private float alturaMinima;
@@ -64,8 +72,29 @@ public class PlantTrunkGrowth : MonoBehaviour
 
         Bounds bounds = filtro.sharedMesh.bounds;
 
-        alturaMinima = bounds.min.y - 0.01f;
-        alturaMaxima = bounds.max.y + 0.01f;
+        // Descobre o eixo escolhido no material.
+        Material material = troncoRenderer.sharedMaterial;
+
+        if (material != null && material.HasProperty(GrowthAxis))
+        {
+            Vector4 eixo = material.GetVector(GrowthAxis);
+
+            if (eixo.x > 0.5f)
+                eixoCrescimento = Vector3.right;
+            else if (eixo.z > 0.5f)
+                eixoCrescimento = Vector3.forward;
+            else
+                eixoCrescimento = Vector3.up;
+        }
+
+        // Calcula os limites no eixo escolhido.
+        alturaMinima = Vector3.Dot(
+            bounds.min, eixoCrescimento
+        ) - 0.01f;
+
+        alturaMaxima = Vector3.Dot(
+            bounds.max, eixoCrescimento
+        ) + 0.01f;
 
         propriedades = new MaterialPropertyBlock();
 
@@ -145,6 +174,16 @@ public class PlantTrunkGrowth : MonoBehaviour
         propriedades.SetFloat(
             GrowthHeight,
             altura
+        );
+
+        propriedades.SetFloat(
+            EnableGrowth,
+            1f
+        );
+
+        propriedades.SetVector(
+            GrowthAxis,
+            eixoCrescimento
         );
 
         troncoRenderer.SetPropertyBlock(propriedades);

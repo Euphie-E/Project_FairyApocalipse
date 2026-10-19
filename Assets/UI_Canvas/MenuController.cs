@@ -1,9 +1,17 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
     private MenuController instance;
+    public TimeTravel timeTravel;
+    
+    public Image iconTimeTravel;
+    public Sprite iconTimeAvalible, iconTimeUnavalible;
+    public GameObject blockTimeTravel;
     public GameObject pausePanel;
+
     void Start()
     {
         pausePanel.SetActive(false);
@@ -15,10 +23,11 @@ public class MenuController : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-
+        
+        timeTravel = FindFirstObjectByType<TimeTravel>();
+        iconTimeTravel.sprite = iconTimeAvalible;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -29,7 +38,6 @@ public class MenuController : MonoBehaviour
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
             }
-            
             else
             {
                 pausePanel.SetActive(true);
@@ -38,6 +46,40 @@ public class MenuController : MonoBehaviour
             }
             
         }
+
+        TimeTravelIcon();
         
+    }
+
+    void TimeTravelIcon()
+    {
+        if(timeTravel.isTravelling)
+        {
+            iconTimeTravel.sprite = iconTimeUnavalible;
+        }
+        else
+        {
+            iconTimeTravel.sprite = iconTimeAvalible;
+        }
+
+        if(timeTravel.TravelBlocked)
+        {
+            blockTimeTravel.SetActive(true);
+        }
+        else
+        {
+            blockTimeTravel.SetActive(false);
+        }
+    }
+
+    public void CloseButton()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    public void InitialMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
