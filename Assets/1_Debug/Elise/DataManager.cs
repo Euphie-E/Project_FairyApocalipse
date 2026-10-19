@@ -19,6 +19,7 @@ public class DataManager : MonoBehaviour
     private bool testing = false;
     InputAction add;
     InputSystem_Actions act;
+    bool reset = false;
     public enum Environment
     {
         disable,
@@ -50,7 +51,6 @@ public class DataManager : MonoBehaviour
     void Start()
     {
         savePath = Path.Combine(Application.persistentDataPath, "playerData.json");
-        LoadGame();
         Run(SceneManager.GetActiveScene(),LoadSceneMode.Single);
         if(ENVIRONMENT == Environment.playtest) testing = true;
         SceneManager.activeSceneChanged += SaveGame;
@@ -101,10 +101,10 @@ public class DataManager : MonoBehaviour
     }
     void Run(Scene scene, LoadSceneMode loaded)
     {
-        if(playerDataGroup == null) LoadGame();
+        LoadGame();
         int index = CheckSceneIDX(scene);
         dataEvents.index = index;
-        if(testing || playerData == null || index != playerData.index)
+        if(testing || reset || playerData == null || index != playerData.index)
         {
             playerData = new();
             strTime = Time.time;
@@ -112,6 +112,15 @@ public class DataManager : MonoBehaviour
         playerDataGroup.group[index] = playerData;
         playerData.index = index;
         if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize) playerData.CheckPoints = new double[ckpSize];
+        if(reset) return;
+        if(!(index >= 0 && index <= 3)) return;
+        //GameObject player = GameObject.FindGameObjectWithTag("Player");
+        //player.GetComponent<PlayerPocket>().seed = playerData.seed;
+        //double pos = -1;
+        //for (int i = 0; i<playerData.CheckPoints.Length; i++)
+        //{
+        //    
+        //}
     }
     void SaveGame(Scene current, Scene Next)
     {
@@ -166,7 +175,6 @@ public class DataManager : MonoBehaviour
     
     public void AddData(Data data, int value)
     {
-        if(!TestInit()) return;
         switch (data)
         {
             case Data.Death:
@@ -186,14 +194,13 @@ public class DataManager : MonoBehaviour
         }
         
     }
-    int ckpPt = 0;
-    public void AddData(Data data, float value)
+    public void AddData(Data data, float value, int pos)
     {
-        if(!TestInit()) return;
         switch (data)
         {
             case Data.TimeStamp:
-                playerData.CheckPoints[ckpPt] = (int)(value*100)/100f;
+                if(pos >= ckpSize) return;
+                playerData.CheckPoints[pos] = (int)(value*100)/100f;
                 break;
             default:
                 break;

@@ -37,11 +37,11 @@ public class PastFutureChange : Interactable
 
     private bool CheckSeed()
     {
-        if (seeds.Contains(PlayerPocket.Instance.seed)) 
+        if (seeds.Contains(PlayerPocket.Instance.seed))
         {
             return true;
         }
-        
+
         return false;
     }
 
