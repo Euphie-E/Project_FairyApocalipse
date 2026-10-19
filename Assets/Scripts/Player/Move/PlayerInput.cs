@@ -347,7 +347,7 @@ public class PlayerInput : MonoBehaviour
     List<Action<InputType>> KeyMappingList = new();
     public void KeyMapping(Action<InputType> action)
     {
-        KeyMappingList.Add(action);
+        if(!KeyMappingList.Contains(action)) KeyMappingList.Add(action);
     }
     public void RemoveKeyMapping(Action<InputType> action)
     {
