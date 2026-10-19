@@ -79,7 +79,7 @@ public class PlantTrunkGrowth : MonoBehaviour
         AplicarRotacao(progressoInicial);
     }
 
-    private void Start()
+    private void OnEnable()
     {
         if (iniciarAutomaticamente)
             IniciarCrescimento();
