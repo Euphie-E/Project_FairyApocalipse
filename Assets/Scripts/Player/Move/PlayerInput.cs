@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XInput;
 using UnityEngine.InputSystem.DualShock;
+using UnityEngine.SceneManagement;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -99,9 +100,8 @@ public class PlayerInput : MonoBehaviour
 
         cinco.performed += ctx =>
         {
-            this.gameObject.GetComponent<CharacterController>().enabled = false;
-            transform.position = tpPositions[3];
-            this.gameObject.GetComponent<CharacterController>().enabled = true;
+            if (SceneManager.GetActiveScene().buildIndex == 1) SceneManager.LoadScene(2);
+            else if (SceneManager.GetActiveScene().buildIndex == 2) SceneManager.LoadScene(1);
         };
 
 
