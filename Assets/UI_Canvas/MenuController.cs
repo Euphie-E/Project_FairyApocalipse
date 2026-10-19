@@ -14,7 +14,10 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
+        
         pausePanel.SetActive(false);
+        
         if(instance == null)
         {
             instance = this;
@@ -34,21 +37,31 @@ public class MenuController : MonoBehaviour
         {
             if (pausePanel.activeSelf)
             {
-                pausePanel.SetActive(false);
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                ResumeGame();
             }
             else
             {
-                pausePanel.SetActive(true);
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.Confined;
+                PauseGame();
             }
-            
         }
 
         TimeTravelIcon();
-        
+    }
+
+    void PauseGame()
+    {
+        pausePanel.SetActive(true);
+        Time.timeScale = 0f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    void ResumeGame()
+    {
+        pausePanel.SetActive(false);
+        Time.timeScale = 1f;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void TimeTravelIcon()
@@ -74,12 +87,12 @@ public class MenuController : MonoBehaviour
 
     public void CloseButton()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        ResumeGame();
     }
 
     public void InitialMenu()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
 }
