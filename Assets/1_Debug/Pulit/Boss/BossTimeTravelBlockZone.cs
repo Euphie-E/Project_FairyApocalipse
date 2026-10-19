@@ -17,30 +17,42 @@ public class BossTimeTravelBlockZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponentInParent<PlayerMovement>() == null)
-            return;
-
-        if (playerColliders.Add(other) &&
-            playerColliders.Count == 1)
+        //if (other.GetComponentInParent<PlayerMovement>() == null)
+        //    return;
+        //
+        //if (playerColliders.Add(other) &&
+        //    playerColliders.Count == 1)
+        //{
+        //    if (timeTravel != null)
+        //        timeTravel.SetTravelBlocked(true);
+        //
+        //    Debug.Log("Viagem temporal bloqueada");
+        //}
+        if (other.CompareTag("Player"))
         {
-            if (timeTravel != null)
-                timeTravel.SetTravelBlocked(true);
-
+            timeTravel = other.GetComponent<TimeTravel>();
+            timeTravel.SetTravelBlocked(true);
             Debug.Log("Viagem temporal bloqueada");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!playerColliders.Remove(other))
-            return;
-
-        if (playerColliders.Count == 0)
+        //if (!playerColliders.Remove(other))
+        //    return;
+//
+        //if (playerColliders.Count == 0)
+        //{
+        //    if (timeTravel != null)
+        //        timeTravel.SetTravelBlocked(false);
+//
+        //    Debug.Log("Viagem temporal liberada");
+        //}
+        if (other.CompareTag("Player"))
         {
             if (timeTravel != null)
                 timeTravel.SetTravelBlocked(false);
-
-            Debug.Log("Viagem temporal liberada");
+            Debug.Log("Viagem temporal bloqueada");
         }
     }
 

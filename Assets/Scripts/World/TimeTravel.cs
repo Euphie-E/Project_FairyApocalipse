@@ -40,7 +40,7 @@ public class TimeTravel : MonoBehaviour
     [Header("Time Dome")]
     [SerializeField] private MeshRenderer timeDome;
 
-    public bool TravelBlocked { get; private set; }
+    public bool TravelBlocked ;//{ get; private set; }
     PlayerSwingController psc;
 
     public void SetTravelBlocked(bool blocked)
@@ -50,7 +50,7 @@ public class TimeTravel : MonoBehaviour
         // Entrou na area bloqueada estando no passado
         if (blocked && isTravelling)
         {
-            EndTravel();
+            EndTravel(true);
         }
     }
 
@@ -182,9 +182,9 @@ public class TimeTravel : MonoBehaviour
             DataManager.Instance.AddData(DataManager.Data.TimeTravel,1);
     }
 
-    private void EndTravel()
+    private void EndTravel(bool force = false)
     {
-        if(!CheckTravel()) return;
+        if(!force && !CheckTravel()) return;
         isTravelling = false;
 
         GCamarada.AudioManager.I?.StopClip("StartTravel");
