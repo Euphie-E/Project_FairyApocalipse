@@ -14,7 +14,7 @@ public class CollectibleSeed : Collectible
 
     protected override void CollectEffect()
     {
-        base.CollectEffect();
+        FairyController.Instance.PickSeed(transform);
     }
 
     protected override void CollectInfo()
@@ -29,4 +29,6 @@ public class CollectibleSeed : Collectible
             Collect();
         }
     }
+
+
 }

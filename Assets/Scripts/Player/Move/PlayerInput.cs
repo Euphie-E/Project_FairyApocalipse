@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XInput;
 using UnityEngine.InputSystem.DualShock;
+using UnityEngine.SceneManagement;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class PlayerInput : MonoBehaviour
     public InputAction dois { get; private set; }
     public InputAction tres { get; private set; }
     public InputAction quatro { get; private set; }
+    public InputAction cinco { get; private set; }
     public InputAction test { get; private set; }
     Vector3[] tpPositions = new Vector3[4];
 
@@ -61,6 +63,7 @@ public class PlayerInput : MonoBehaviour
         dois = inputSystemActions.Player.Next;
         tres = inputSystemActions.Player.treis;
         quatro = inputSystemActions.Player.cuatro;
+        cinco = inputSystemActions.Player.cinco;
         test = inputSystemActions.Player.Test;
 
         Cursor.visible = false;
@@ -93,6 +96,12 @@ public class PlayerInput : MonoBehaviour
             this.gameObject.GetComponent<CharacterController>().enabled = false;
             transform.position = tpPositions[3];
             this.gameObject.GetComponent<CharacterController>().enabled = true;
+        };
+
+        cinco.performed += ctx =>
+        {
+            if (SceneManager.GetActiveScene().buildIndex == 1) SceneManager.LoadScene(2);
+            else if (SceneManager.GetActiveScene().buildIndex == 2) SceneManager.LoadScene(1);
         };
 
 
@@ -135,6 +144,7 @@ public class PlayerInput : MonoBehaviour
         dois.Enable();
         tres.Enable();
         quatro.Enable();
+        cinco.Enable();
         test.Enable();
     }
 
@@ -155,6 +165,8 @@ public class PlayerInput : MonoBehaviour
         dois.Disable();
         tres.Enable();
         quatro.Disable();
+        cinco.Disable();
+        test.Disable();
     }
 
     public void OnDeath()

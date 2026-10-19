@@ -4,10 +4,28 @@ public class Collectible : MonoBehaviour
 {
     private GameObject collectible;
     public bool Collected = false;
+    [Header("Effect")]
+    [SerializeField] private float rotationSpeed = 15f;
+    [SerializeField] private float verticalAmplitude = 2;
+    [SerializeField] private float verticalSpeed = 1;
+
+    Vector3 originalPos;
+    float timeVariation;
 
     void Start()
     {
         collectible = transform.GetChild(0).gameObject;
+        originalPos = transform.position;
+    }
+
+    void Update()
+    {
+        if (!Collected)
+        {
+            timeVariation = Mathf.Abs(Mathf.Sin(Time.time * 1.5f)) * 0.45f + 0.55f;
+            transform.Rotate(Vector3.up, rotationSpeed/10 * timeVariation);
+            transform.position = originalPos + transform.up * verticalAmplitude/100 * Mathf.Sin(Time.time * verticalSpeed);
+        }
     }
 
     /// <summary>
