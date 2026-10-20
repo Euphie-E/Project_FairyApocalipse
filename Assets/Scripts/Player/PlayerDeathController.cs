@@ -37,16 +37,6 @@ public class PlayerDeathController : MonoBehaviour
     [SerializeField] private float toReviveTime = 3f;
     private float toReviveTimer = 0f;
 
-    [SerializeField] private Animator[] animatorsCheckpoint;
-    [SerializeField] private UnityEngine.VFX.VisualEffect[] respawnVFXs;
-
-    [SerializeField] private UnityEngine.VFX.VisualEffect deathVFX;
-    [SerializeField] private Renderer[] playerRenderers;
-    [SerializeField] private float deathEffectDuration = 1.5f;
-
-    private bool deathEffectStarted = false;
-    private float deathEffectTimer = 0f;
-
     void Start()
     {
         playerMovement = gameObject.GetComponent<PlayerMovement>();
@@ -59,22 +49,26 @@ public class PlayerDeathController : MonoBehaviour
         DataManager.Instance?.SetTotalCheckpoints(checkpoints.Length);
     }
 
+    
     void Update()
     {
         CheckFall();
         CheckFallDistance();
 
         if (isDead)
-    {
-        playerInput.OnDeath();
-
-        if (!deathEffectStarted)
         {
-            PlayDeathEffect();
-        }
+            playerInput.OnDeath();
 
-        UpdateDeathEffect();
-    }
+            if (playerMovement.isGrounded || fallHeight > maxHeight * 2.5f)
+            {
+                toReviveTimer += Time.deltaTime;
+
+                if (toReviveTimer >= toReviveTime)
+                {
+                    Revive();
+                }
+            }
+        }
     }
 
     private void CheckFall()
@@ -125,91 +119,33 @@ public class PlayerDeathController : MonoBehaviour
         }
     }
 
-    private void PlayDeathEffect()
-    {
-        if (deathEffectStarted)
-            return;
-
-        deathEffectStarted = true;
-        deathEffectTimer = 0f;
-
-        if (deathVFX != null)
-        {
-            deathVFX.Stop();
-            deathVFX.Play();
-        }
-
-        foreach (Renderer renderer in playerRenderers)
-        {
-            if (renderer != null)
-            {
-                renderer.material.SetFloat("_DissolveAmount", 0f);
-            }
-        }
-    }
-
-    
-    private void UpdateDeathEffect()
-    {
-        if (!isDead || !deathEffectStarted)
-        {
-            return;
-        }
-
-        deathEffectTimer += Time.deltaTime;
-
-        float dissolve = Mathf.Clamp01(deathEffectTimer / deathEffectDuration);
-
-        foreach (Renderer renderer in playerRenderers)
-        {
-            if (renderer != null)
-            {
-                renderer.material.SetFloat("_DissolveAmount", dissolve);
-            }
-        }
-
-        toReviveTimer += Time.deltaTime;
-
-        if (toReviveTimer >= toReviveTime)
-        {
-            Revive();
-        }
-    }
-
-    /*private void Revive()
-    {
-        isFalling = false;
-        fallHeight = 0;
-        toReviveTimer = 0;
-        playerCharacterController.enabled = false;
-        transform.position = checkpoints[caughtCheckpointIndex].transform.position + Vector3.up * 1.5f;
-        playerCharacterController.enabled = true;
-        playerInput.OnRevive();
-        isDead = false;
-    }*/
-
-
     private void Revive()
     {
         isFalling = false;
-        fallHeight = 0;
-        toReviveTimer = 0;
+        fallHeight = 0f;
+        toReviveTimer = 0f;
 
         playerCharacterController.enabled = false;
 
-        Vector3 difference = checkpoints[caughtCheckpointIndex].transform.position + Vector3.up * 1.5f - transform.position; // pelo cinemachine.OnTargetObjectWarped
+        Vector3 respawnPosition =
+            checkpoints[caughtCheckpointIndex].transform.position
+            + Vector3.up * 1.5f;
 
-        transform.position = checkpoints[caughtCheckpointIndex].transform.position + Vector3.up * 1.5f;
+        Vector3 difference = respawnPosition - transform.position;
+
+        transform.position = respawnPosition;
 
         playerCharacterController.enabled = true;
 
-        cinemachineCamera.OnTargetObjectWarped(cinemachineCamera.Target.TrackingTarget, difference);
+        cinemachineCamera.OnTargetObjectWarped(
+            cinemachineCamera.Target.TrackingTarget,
+            difference
+        );
 
         playerInput.OnRevive();
 
         deathAnimator.ResetTrigger("Death");
         deathAnimator.SetFloat("Speed", 0f);
-
 
         if (deathAnimator.HasState(
             0, Animator.StringToHash(respawnAnimatorStates)))
@@ -225,33 +161,12 @@ public class PlayerDeathController : MonoBehaviour
             );
         }
 
-        foreach (Renderer renderer in playerRenderers)
-        {
-            if (renderer != null)
-            {
-                renderer.material.SetFloat("_DissolveAmount", 0f);
-            }
-        }
+        Checkpoint checkpoint =
+            checkpoints[caughtCheckpointIndex].GetComponent<Checkpoint>();
 
-        deathEffectStarted = false;
-        deathEffectTimer = 0f;
-        toReviveTimer = 0f;
-
-        foreach (Animator animator in animatorsCheckpoint)
+        if (checkpoint != null)
         {
-            if (animator != null)
-            {
-                animator.SetTrigger("Respawn");
-            }
-        }
-
-        foreach (UnityEngine.VFX.VisualEffect vfx in respawnVFXs)
-        {
-            if (vfx != null)
-            {
-                vfx.Stop();
-                vfx.Play();
-            }
+            checkpoint.PlayRespawnEffect();
         }
 
         isDead = false;
