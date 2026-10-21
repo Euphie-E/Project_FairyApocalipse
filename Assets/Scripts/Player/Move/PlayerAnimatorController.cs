@@ -43,6 +43,12 @@ public class PlayerAnimatorController : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        animator.ResetTrigger("Jump");
+    }
+
+
     private void UpdateMovementAnimation()
     {
         float speed = movement.horizontalVelocity.magnitude;

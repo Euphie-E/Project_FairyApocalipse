@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ControlUiChange : MonoBehaviour
 {
-    PlayerInput playerInput;
+    [SerializeField] PlayerInput playerInput;
     [Header("Xbox")]
     public GameObject xbox;
     [Header("Playstation")]
@@ -27,7 +27,11 @@ public class ControlUiChange : MonoBehaviour
     }
     void OnEnable()
     {
-        playerInput.KeyMapping(ChangeIMG);
+        if(PlayerInput.Instance==null)
+        {
+            return;
+        }
+        PlayerInput.Instance.KeyMapping(ChangeIMG);
     }
     void Set(int i)
     {
