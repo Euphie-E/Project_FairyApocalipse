@@ -110,5 +110,70 @@ public class PlayerData
     public int Death;
     public double Duration;
     public double[] CheckPoints = new double[4];
-    public Seed seed;
+    public List<Save> LevelData = new();
+
+    public Save Load(string ClassName)
+    {
+        return LevelData.Find(item => item.Key == ClassName);
+    }
+
+
 }
+
+[Serializable]
+public class Save
+{
+    public string Key {get; private set;}
+    public int ID {get; private set;}
+    public List<KeyValue> Values {get; private set;} = new();
+    public Save(string Name, int ID)
+    {
+        Key = Name;
+        this.ID = ID;
+    }
+    public void Add(KeyValue value)
+    {
+        Values.Add(value);
+    }
+    public void Sort()
+    {
+        Values.Sort((p1, p2) => p1*p2);
+    }
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+        Save temp = (Save)obj;
+        return this.Key == temp.Key && this.ID == temp.ID;
+    }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Key, ID);
+    }
+}
+
+[Serializable]
+public class KeyValue
+{
+    public string key;
+    public int value;
+    public static int operator *(KeyValue p1,KeyValue p2)
+    {
+        return p1.key.CompareTo(p2.key);
+    }
+}
+
+[Serializable]
+public abstract class Savable: MonoBehaviour
+{
+    public abstract Save Save();
+    public abstract void Load(Save save);
+    public Save saveData;
+}
+
+
+
+
+

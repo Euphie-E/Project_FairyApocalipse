@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class Checkpoint : MonoBehaviour
+public class Checkpoint : Savable
 {
     [SerializeField] private int index = 0;
     [SerializeField] private Animator animatorCheckpoint;
@@ -10,6 +10,7 @@ public class Checkpoint : MonoBehaviour
     void Start()
     {
         PlayerInput.Instance?.AddCheckpoint(gameObject, index);
+        LevelManager.Instance?.Add(this);
     }
 
     void OnTriggerEnter(Collider other)
@@ -39,4 +40,15 @@ public class Checkpoint : MonoBehaviour
             vfxCheckpoint.Play();
         }
     }
+
+    public override Save Save()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Load(Save save)
+    {
+        throw new System.NotImplementedException();
+    }
+
 }
