@@ -16,6 +16,10 @@ public class FairyController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 3f;
     [SerializeField] private float lieDownDistance = 1f;
     [SerializeField] private float lieDownAngle = 25f;
+    [SerializeField] private float pickingDistance = 1f;
+    [SerializeField] private float pickingSpeedMultiplier = 1.2f;
+    [SerializeField] private float dashSpeed = 2f;
+    private float speedMultiplier = 1f;
     private bool carringSeed = false;
     private float distance = 0;
 
@@ -94,13 +98,31 @@ public class FairyController : MonoBehaviour
         if (target != null)
         {
             // position
-            transform.position = Vector3.Lerp(transform.position, target.position, followSpeed * Time.deltaTime);
+            Vector3 pos = transform.position;
+            Vector3 targetPos = target.position;
+
+            pos.y = 0;
+            targetPos.y = 0;
+
+            distance = Vector3.Distance(pos, targetPos);
+
+            if (distance > 2f && !animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && !animator.IsInTransition(0))
+            {
+                animator.SetTrigger("Dash");
+                Debug.Log("triggei animação");
+            }
+
+            speedMultiplier = animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") ? dashSpeed : 1;
+            speedMultiplier *= state == 1 ? pickingSpeedMultiplier : 1;
+            speedMultiplier *= Mathf.Max(distance/1.8f, 1f);
+            
+            transform.position = Vector3.Lerp(transform.position, target.position, followSpeed * speedMultiplier * Time.deltaTime);
 
             // rotação
             Vector3 direction = target.forward;
             direction.y = 0;
 
-            if (direction.sqrMagnitude > 0.001f)
+            if (direction.magnitude > 0.5f)
             {
                 distance = Vector3.Distance(transform.position, target.position);
 
@@ -114,11 +136,10 @@ public class FairyController : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
             }
 
-            if (distance < 0.8f && target == seedTarget)
+            if (distance < pickingDistance && target == seedTarget)
             {
                 animator.SetBool("isHolding", true);
             }
         }
-        
     }
 }
