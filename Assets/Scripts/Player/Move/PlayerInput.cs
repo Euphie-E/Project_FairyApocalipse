@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XInput;
 using UnityEngine.InputSystem.DualShock;
+using UnityEngine.SceneManagement;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class PlayerInput : MonoBehaviour
     public InputAction dois { get; private set; }
     public InputAction tres { get; private set; }
     public InputAction quatro { get; private set; }
+    public InputAction cinco { get; private set; }
     public InputAction test { get; private set; }
     Vector3[] tpPositions = new Vector3[4];
 
@@ -61,6 +63,7 @@ public class PlayerInput : MonoBehaviour
         dois = inputSystemActions.Player.Next;
         tres = inputSystemActions.Player.treis;
         quatro = inputSystemActions.Player.cuatro;
+        cinco = inputSystemActions.Player.cinco;
         test = inputSystemActions.Player.Test;
 
         Cursor.visible = false;
@@ -70,29 +73,15 @@ public class PlayerInput : MonoBehaviour
     // gambiarra
     void Start()
     {
-        um.performed += ctx =>
+        um.performed += ctx => TeleportToCheckpoint(0);
+        dois.performed += ctx => TeleportToCheckpoint(1);
+        tres.performed += ctx => TeleportToCheckpoint(2);
+        quatro.performed += ctx => TeleportToCheckpoint(3);
+
+        cinco.performed += ctx =>
         {
-            this.gameObject.GetComponent<CharacterController>().enabled = false;
-            transform.position = tpPositions[0];
-            this.gameObject.GetComponent<CharacterController>().enabled = true;
-        };
-        dois.performed += ctx =>
-        {
-            this.gameObject.GetComponent<CharacterController>().enabled = false;
-            transform.position = tpPositions[1];
-            this.gameObject.GetComponent<CharacterController>().enabled = true;
-        };
-        tres.performed += ctx =>
-        {
-            this.gameObject.GetComponent<CharacterController>().enabled = false;
-            transform.position = tpPositions[2];
-            this.gameObject.GetComponent<CharacterController>().enabled = true;
-        };
-        quatro.performed += ctx =>
-        {
-            this.gameObject.GetComponent<CharacterController>().enabled = false;
-            transform.position = tpPositions[3];
-            this.gameObject.GetComponent<CharacterController>().enabled = true;
+            if (SceneManager.GetActiveScene().buildIndex == 1) SceneManager.LoadScene(2);
+            else if (SceneManager.GetActiveScene().buildIndex == 2) SceneManager.LoadScene(1);
         };
 
 
@@ -135,6 +124,7 @@ public class PlayerInput : MonoBehaviour
         dois.Enable();
         tres.Enable();
         quatro.Enable();
+        cinco.Enable();
         test.Enable();
     }
 
@@ -153,8 +143,10 @@ public class PlayerInput : MonoBehaviour
 
         um.Disable();
         dois.Disable();
-        tres.Enable();
+        tres.Disable();
         quatro.Disable();
+        cinco.Disable();
+        test.Disable();
     }
 
     public void OnDeath()
@@ -373,4 +365,39 @@ public class PlayerInput : MonoBehaviour
         }
         Debug.Log(resp.ToString());
     }
-}
+
+
+    private void TeleportToCheckpoint(int index)
+    {
+        if (index < 0 || index >= tpPositions.Length)
+            return;
+
+        CharacterController characterController =
+            GetComponent<CharacterController>();
+
+        characterController.enabled = false;
+        transform.position = tpPositions[index];
+        characterController.enabled = true;
+
+        PlayerDeathController deathController =
+            GetComponent<PlayerDeathController>();
+
+        if (deathController != null)
+            deathController.ResetFallAfterTeleport();
+
+        Checkpoint[] checkpoints =
+            FindObjectsByType<Checkpoint>(FindObjectsSortMode.None);
+
+        foreach (Checkpoint checkpoint in checkpoints)
+        {
+            if (checkpoint != null &&
+                Vector3.Distance(
+                    checkpoint.transform.position + Vector3.up * 1.5f,
+                    tpPositions[index]) < 0.1f)
+            {
+                checkpoint.PlayRespawnEffect();
+                break;
+            }
+        }
+    }
+    }
