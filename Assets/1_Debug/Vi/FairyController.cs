@@ -22,6 +22,7 @@ public class FairyController : MonoBehaviour
     private float speedMultiplier = 1f;
     private bool carringSeed = false;
     private float distance = 0;
+    CollectibleSeed holdingRef = null;
 
     /// <summary>
     /// 0 - Follow
@@ -35,11 +36,15 @@ public class FairyController : MonoBehaviour
             Instance = this;
     }
 
-    public void PickSeed(Transform seed)
+    public void PickSeed(CollectibleSeed seed)
     {
         if (seedTarget == null)
         {
-            seedTarget = seed;
+            holdingRef = seed;
+            holdingRef.SaveState(true);
+            holdingRef.SaveMe();
+            holdingRef.enabled = false;
+            seedTarget = seed.transform;
             state = 1;
         }
         
@@ -61,6 +66,13 @@ public class FairyController : MonoBehaviour
 
     public void UseSeed()
     {
+        if(holdingRef != null)
+        {
+            holdingRef.enabled = true;
+            holdingRef.SaveState(false);
+            holdingRef.SaveMe();
+            holdingRef = null;
+        }
         Destroy(seedTarget.gameObject);
         seedTarget = null;
         carringSeed = false;

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
+    private static WaitForSeconds _waitForSeconds180 = new WaitForSeconds(30);
+
     public static DataManager Instance {get; private set;}
     public readonly DataEvents dataEvents = new();
     string savePath;
@@ -55,6 +59,17 @@ public class DataManager : MonoBehaviour
         SceneManager.activeSceneChanged += SaveGame;
         SceneManager.sceneLoaded += Run;
         add.performed += AddNewTester;
+        StartCoroutine(Cycle());
+    }
+    IEnumerator Cycle()
+    {
+        yield return new WaitForFixedUpdate();
+        LevelManager.Instance?.Load(Get());
+        while (true)
+        {
+            yield return _waitForSeconds180;
+            playerData.LevelData = LevelManager.Instance?.Save();
+        }
     }
     void OnEnable()
     {
@@ -73,6 +88,7 @@ public class DataManager : MonoBehaviour
     void SaveData()
     {
         playerData.Duration = (int)((Time.time - strTime)*100)/100f;
+        playerData.LevelData = LevelManager.Instance?.Save();
         string json = JsonUtility.ToJson(playerDataGroup, true);
         File.WriteAllText(savePath, json);
     }
@@ -103,16 +119,19 @@ public class DataManager : MonoBehaviour
         LoadGame();
         int index = CheckSceneIDX(scene);
         dataEvents.index = index;
-        if(testing || reset || playerData == null || index != playerData.index)
+        if(testing || reset ||  playerDataGroup?.group[index] == null)
         {
             playerData = new();
             strTime = Time.time;
         }
-        playerDataGroup.group[index] = playerData;
+        else
+        {
+            playerData = playerDataGroup.group[index];
+        }
         playerData.index = index;
         if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize) playerData.CheckPoints = new double[ckpSize];
-        if(reset) return;
-        if(!(index >= 0 && index <= 3)) return;
+        //if(reset) return;
+        //if(!(index >= 0 && index <= 3)) return;
         //GameObject player = GameObject.FindGameObjectWithTag("Player");
         //player.GetComponent<PlayerPocket>().seed = playerData.seed;
         //double pos = -1;
@@ -239,5 +258,10 @@ public class DataManager : MonoBehaviour
         PlayerPrefs.SetInt("TotalTester", user);
         PlayerPrefs.Save();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public List<Save> Get()
+    {
+        return playerData.LevelData;
     }
 }

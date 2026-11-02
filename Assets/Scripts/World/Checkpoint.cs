@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -6,10 +7,12 @@ public class Checkpoint : Savable
     [SerializeField] private int index = 0;
     [SerializeField] private Animator animatorCheckpoint;
     [SerializeField] private VisualEffect vfxCheckpoint;
+    static int ct = 0;
 
     void Start()
     {
         PlayerInput.Instance?.AddCheckpoint(gameObject, index);
+        saveData = new Save(Types.Checkpoint,index);
         LevelManager.Instance?.Add(this);
     }
 
@@ -23,6 +26,7 @@ public class Checkpoint : Savable
             {
                 playerDeath.NewCheckpoint(index, gameObject);
             }
+            saveData.Add(new KeyValue{key = "Count",value =ct++});
         }
     }
 
@@ -43,12 +47,12 @@ public class Checkpoint : Savable
 
     public override Save Save()
     {
-        throw new System.NotImplementedException();
+        return saveData;
     }
 
-    public override void Load(Save save)
+    public override void Load(List<Save> save)
     {
-        throw new System.NotImplementedException();
+        
     }
 
 }
