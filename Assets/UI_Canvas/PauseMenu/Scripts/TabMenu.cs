@@ -20,11 +20,11 @@ public class TabMenu : MonoBehaviour
     {
         toggleGroup = GetComponentInChildren<ToggleGroup>();
         
-        tabs.Clear();
-        pages.Clear();
+        //tabs.Clear();
+        //pages.Clear();
         
-        tabs.AddRange(GetComponentsInChildren<Toggle>());
-        pages.AddRange(GetComponentsInChildren<CanvasGroup>());
+        //tabs.AddRange(GetComponentsInChildren<Toggle>());
+        //pages.AddRange(GetComponentsInChildren<CanvasGroup>());
     }
 
     private void Reset()

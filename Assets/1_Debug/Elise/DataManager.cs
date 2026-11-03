@@ -1,12 +1,15 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
+    private static WaitForSeconds _waitForSeconds180 = new WaitForSeconds(30);
+
     public static DataManager Instance {get; private set;}
     public readonly DataEvents dataEvents = new();
     string savePath;
@@ -19,6 +22,7 @@ public class DataManager : MonoBehaviour
     private bool testing = false;
     InputAction add;
     InputSystem_Actions act;
+    bool reset = false;
     public enum Environment
     {
         disable,
@@ -50,12 +54,22 @@ public class DataManager : MonoBehaviour
     void Start()
     {
         savePath = Path.Combine(Application.persistentDataPath, "playerData.json");
-        LoadGame();
         Run(SceneManager.GetActiveScene(),LoadSceneMode.Single);
         if(ENVIRONMENT == Environment.playtest) testing = true;
         SceneManager.activeSceneChanged += SaveGame;
         SceneManager.sceneLoaded += Run;
         add.performed += AddNewTester;
+        StartCoroutine(Cycle());
+    }
+    IEnumerator Cycle()
+    {
+        yield return new WaitForFixedUpdate();
+        LevelManager.Instance?.Load(Get());
+        while (true)
+        {
+            yield return _waitForSeconds180;
+            playerData.LevelData = LevelManager.Instance?.Save();
+        }
     }
     void OnEnable()
     {
@@ -74,6 +88,7 @@ public class DataManager : MonoBehaviour
     void SaveData()
     {
         playerData.Duration = (int)((Time.time - strTime)*100)/100f;
+        playerData.LevelData = LevelManager.Instance?.Save();
         string json = JsonUtility.ToJson(playerDataGroup, true);
         File.WriteAllText(savePath, json);
     }
@@ -101,17 +116,29 @@ public class DataManager : MonoBehaviour
     }
     void Run(Scene scene, LoadSceneMode loaded)
     {
-        if(playerDataGroup == null) LoadGame();
+        LoadGame();
         int index = CheckSceneIDX(scene);
         dataEvents.index = index;
-        if(testing || playerData == null || index != playerData.index)
+        if(testing || reset ||  playerDataGroup?.group[index] == null)
         {
             playerData = new();
             strTime = Time.time;
         }
-        playerDataGroup.group[index] = playerData;
+        else
+        {
+            playerData = playerDataGroup.group[index];
+        }
         playerData.index = index;
         if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize) playerData.CheckPoints = new double[ckpSize];
+        //if(reset) return;
+        //if(!(index >= 0 && index <= 3)) return;
+        //GameObject player = GameObject.FindGameObjectWithTag("Player");
+        //player.GetComponent<PlayerPocket>().seed = playerData.seed;
+        //double pos = -1;
+        //for (int i = 0; i<playerData.CheckPoints.Length; i++)
+        //{
+        //    
+        //}
     }
     void SaveGame(Scene current, Scene Next)
     {
@@ -166,7 +193,6 @@ public class DataManager : MonoBehaviour
     
     public void AddData(Data data, int value)
     {
-        if(!TestInit()) return;
         switch (data)
         {
             case Data.Death:
@@ -186,14 +212,13 @@ public class DataManager : MonoBehaviour
         }
         
     }
-    int ckpPt = 0;
-    public void AddData(Data data, float value)
+    public void AddData(Data data, float value, int pos)
     {
-        if(!TestInit()) return;
         switch (data)
         {
             case Data.TimeStamp:
-                playerData.CheckPoints[ckpPt] = (int)(value*100)/100f;
+                if(pos >= ckpSize) return;
+                playerData.CheckPoints[pos] = (int)(value*100)/100f;
                 break;
             default:
                 break;
@@ -233,5 +258,10 @@ public class DataManager : MonoBehaviour
         PlayerPrefs.SetInt("TotalTester", user);
         PlayerPrefs.Save();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public List<Save> Get()
+    {
+        return playerData.LevelData;
     }
 }

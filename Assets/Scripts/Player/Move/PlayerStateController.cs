@@ -78,4 +78,14 @@ public class PlayerStateController : MonoBehaviour
                 break;
         }
     }
+
+    public void ActivatePastLayer()
+    {
+        playerMovement.PastCollision();
+    }
+
+    public void ActivateFutureLayer()
+    {
+        playerMovement.FutureCollision();
+    }
 }

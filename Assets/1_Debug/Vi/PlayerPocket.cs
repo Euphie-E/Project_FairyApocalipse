@@ -36,6 +36,8 @@ public class PlayerPocket : MonoBehaviour
             return null;
         }
 
+        FairyController.Instance.UseSeed();
+
         Seed saveSeed = seed;
         seed = null;
         return saveSeed; 

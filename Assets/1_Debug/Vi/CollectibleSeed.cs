@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CollectibleSeed : Collectible
@@ -14,7 +15,7 @@ public class CollectibleSeed : Collectible
 
     protected override void CollectEffect()
     {
-        base.CollectEffect();
+        FairyController.Instance.PickSeed(this);
     }
 
     protected override void CollectInfo()
@@ -29,4 +30,43 @@ public class CollectibleSeed : Collectible
             Collect();
         }
     }
+
+    public bool isHolding = false;
+    public void SaveState(bool holding)
+    {
+        isHolding = holding;
+    }
+
+    public override Save Save()
+    {
+        var temp = base.Save();
+        temp.Add(new KeyValue{key = "isHolding", value = isHolding?1:0});
+        return temp;
+    }
+    public override void Load(List<Save> save)
+    {
+        saveData = GetSave(save,Types.Collectible,id);
+        if(saveData == null) 
+            return;
+        int b = saveData.Get("Collected");
+        int h = saveData.Get("isHolding");
+        if(b == 1) {
+            if(h == 0)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                Collected = true;
+                CollectEffect();
+                Collect();
+            }
+        }
+    }
+    public void SaveMe()
+    {
+        LevelManager.Instance?.SaveMe(this);
+    }
+    
+
 }

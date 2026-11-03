@@ -6,7 +6,7 @@ public class PlayerSwingController : MonoBehaviour
     public bool isSwinging {  get; private set; }
 
     private Transform swingPivot;
-    private SwingBarController currentBar;
+    public SwingBarController currentBar {  get; private set; }
     private Transform cameraTransform;
     private GameObject originalFather;
 
