@@ -8,6 +8,7 @@ public class Checkpoint : Savable
     [SerializeField] private int index = 0;
     [SerializeField] private Animator animatorCheckpoint;
     [SerializeField] private VisualEffect vfxCheckpoint;
+    
     static int ct = 0;
 
     void Start()

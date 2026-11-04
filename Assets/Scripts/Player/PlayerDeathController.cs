@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Unity.Cinemachine;
+using UnityEngine.VFX;
 
 public class PlayerDeathController : MonoBehaviour
 {
@@ -15,6 +16,24 @@ public class PlayerDeathController : MonoBehaviour
     private float yfall;
     private float fallHeight = 0;
     private bool isDead = false;
+
+
+    [Header("Death VFX")]
+    [SerializeField] private VisualEffect deathVFX;
+
+    [Header("Death Dissolve")]
+    [SerializeField] private Renderer[] dissolveRenderers;
+    [SerializeField] private float dissolveDuration = 1f;
+    private Coroutine dissolveCoroutine;
+    private static readonly int DissolveCutID =
+        Shader.PropertyToID("_DissolveCut");
+    private MaterialPropertyBlock propertyBlock;
+
+    [Header("Death Sequence")]
+    [SerializeField] private float deathVFXDuration = 1.5f;
+
+    private Coroutine deathSequenceCoroutine;
+
 
     [Header("Boss Death")]
     [SerializeField] private Animator deathAnimator;
@@ -39,6 +58,13 @@ public class PlayerDeathController : MonoBehaviour
         playerInput = gameObject.GetComponent<PlayerInput>();
         playerCharacterController = gameObject.GetComponent<CharacterController>();
 
+        propertyBlock = new MaterialPropertyBlock();
+        if (dissolveRenderers == null || dissolveRenderers.Length == 0)
+        {
+            dissolveRenderers = GetComponentsInChildren<Renderer>(true);
+        }
+        SetDissolveValue(2f);
+
         checkpoints = new GameObject[GameObject.FindGameObjectsWithTag("Checkpoint").Length + 1];
 
         checkpoints[0] = transform.parent.gameObject; // colocar o spawn como inicio, meio gambiarra aproveitando que o player pai não se mexe;
@@ -55,16 +81,6 @@ public class PlayerDeathController : MonoBehaviour
         if (isDead)
         {
             playerInput.OnDeath();
-
-            if (playerMovement.isGrounded || fallHeight > maxHeight * 2.5f)
-            {
-                toReviveTimer += Time.deltaTime;
-
-                if (toReviveTimer >= toReviveTime)
-                {
-                    Revive();
-                }
-            }
         }
     }
 
@@ -99,6 +115,9 @@ public class PlayerDeathController : MonoBehaviour
         if (!isDead && isFalling && fallHeight > maxHeight)
         {
             isDead = true;
+            isFalling = false;
+
+            StartDeathSequence();
         }
     }
 
@@ -116,11 +135,47 @@ public class PlayerDeathController : MonoBehaviour
         }
     }
 
+    private void StartDeathSequence()
+    {
+        if (deathSequenceCoroutine != null)
+            StopCoroutine(deathSequenceCoroutine);
+
+        playerMovement.ResetMotionForDeath();
+        playerMovement.enabled = false;
+
+        PlayDeathDissolve();
+
+        if (deathVFX != null)
+        {
+            deathVFX.Stop();
+            deathVFX.Reinit();
+            deathVFX.Play();
+        }
+
+        deathSequenceCoroutine = StartCoroutine(DeathSequenceRoutine());
+    }
+
+    private IEnumerator DeathSequenceRoutine()
+    {
+        float totalDuration = Mathf.Max(
+            dissolveDuration,
+            deathVFXDuration
+        );
+
+        yield return new WaitForSeconds(totalDuration);
+
+        deathSequenceCoroutine = null;
+
+        Revive();
+    }
+
     private void Revive()
     {
         isFalling = false;
         fallHeight = 0f;
         toReviveTimer = 0f;
+
+        ResetDeathDissolve();
 
         playerCharacterController.enabled = false;
 
@@ -133,6 +188,9 @@ public class PlayerDeathController : MonoBehaviour
         transform.position = respawnPosition;
 
         playerCharacterController.enabled = true;
+
+        playerMovement.ResetMotionForDeath();
+        playerMovement.enabled = true;
 
         cinemachineCamera.OnTargetObjectWarped(
             cinemachineCamera.Target.TrackingTarget,
@@ -200,6 +258,8 @@ public class PlayerDeathController : MonoBehaviour
         toReviveTimer = 0f;
 
         isDead = true;
+
+        StartDeathSequence();
     }
 
     public void PushAwayFromBoss(Vector3 hitPosition)
@@ -255,5 +315,66 @@ public class PlayerDeathController : MonoBehaviour
         }
 
         bossPushCoroutine = null;
+    }
+
+    private void PlayDeathDissolve()
+    {
+        if (dissolveCoroutine != null)
+            StopCoroutine(dissolveCoroutine);
+
+        dissolveCoroutine = StartCoroutine(DeathDissolveRoutine());
+    }
+
+    private IEnumerator DeathDissolveRoutine()
+    {
+        float timer = 0f;
+
+        SetDissolveValue(1f);
+
+        while (timer < dissolveDuration)
+        {
+            timer += Time.deltaTime;
+
+            float progress = Mathf.Clamp01(timer / dissolveDuration);
+            float dissolveValue = Mathf.Lerp(1f, -2f, progress);
+
+            SetDissolveValue(dissolveValue);
+            yield return null;
+        }
+
+        SetDissolveValue(0f);
+        dissolveCoroutine = null;
+    }
+
+    private void SetDissolveValue(float value)
+    {
+        foreach (Renderer rend in dissolveRenderers)
+        {
+            if (rend == null)
+                continue;
+
+            Material[] materials = rend.sharedMaterials;
+
+            for (int i = 0; i < materials.Length; i++)
+            {
+                if (materials[i] == null)
+                    continue;
+
+                rend.GetPropertyBlock(propertyBlock, i);
+                propertyBlock.SetFloat(DissolveCutID, value);
+                rend.SetPropertyBlock(propertyBlock, i);
+            }
+        }
+    }
+
+    private void ResetDeathDissolve()
+    {
+        if (dissolveCoroutine != null)
+        {
+            StopCoroutine(dissolveCoroutine);
+            dissolveCoroutine = null;
+        }
+
+        SetDissolveValue(2f);
     }
 }

@@ -574,4 +574,16 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         groundLayerMask = groundLayerMaskFuture;
     }
 
+    public void ResetMotionForDeath()
+    {
+        horizontalVelocity = Vector3.zero;
+        verticalVelocity = 0f;
+
+        hasJumped = false;
+        mushroomBounceActive = false;
+
+        isGrounded = false;
+        isSliding = false;
+        isDashing = false;
+    }
 }
