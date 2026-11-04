@@ -567,6 +567,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   stepInterval: 0.4
   footstepsVfx: {fileID: 1800397635120640151}
+  landingVFX: {fileID: 0}
   cameraTransform: {fileID: 0}
   maxSpeed: 6
   acceleration: 25
@@ -575,6 +576,7 @@ MonoBehaviour:
   jumpHeight: 2
   gravity: -15
   maxGravityVelocity: -10
+  ledgePushSpeed: 2.5
   groundLayerMaskPast:
     serializedVersion: 2
     m_Bits: 129
@@ -601,6 +603,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfb2192dce62dc04a9ea45844371f358, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  vfxToActivate: {fileID: 6070511631656886448}
+  deactivateDelay: 1
   inputForce: 250
   gravityForce: 500
   angularDrag: 1
@@ -647,6 +651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aafafda944d07849925663c270e7dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  playerMovement: {fileID: 0}
   cinemachineCamera: {fileID: 1050670444268344066}
   checkpoints:
   - {fileID: 6099451806421071561}
@@ -1878,7 +1883,7 @@ GameObject:
   - component: {fileID: 2075826645071769106}
   - component: {fileID: 1800397635120640151}
   - component: {fileID: 6737256680578323778}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FootstepsVFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2003,7 +2008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1723320536648052342
 Transform:
   m_ObjectHideFlags: 0
