@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class MenuController : MonoBehaviour
 {
-    private MenuController instance;
+    private static MenuController instance;
     public TimeTravel timeTravel;
     
     public Image iconTimeTravel;
@@ -27,28 +28,51 @@ public class MenuController : MonoBehaviour
         timeTravel = FindFirstObjectByType<TimeTravel>();
         iconTimeTravel.sprite = iconTimeAvalible;
     }
+    void OnEnable()
+    {
+        PlayerInput.Instance?.AddAction(Pause, 6);
+    }
+    void OnDisable()
+    {
+        PlayerInput.Instance?.RemoveAction(Pause, 6);
+    }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (pausePanel.activeSelf)
-            {
-                pausePanel.SetActive(false);
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-            else
-            {
-                pausePanel.SetActive(true);
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.Confined;
-            }
-            
-        }
+        //if(Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    if (pausePanel.activeSelf)
+        //    {
+        //        pausePanel.SetActive(false);
+        //        Cursor.visible = false;
+        //        Cursor.lockState = CursorLockMode.Locked;
+        //    }
+        //    else
+        //    {
+        //        pausePanel.SetActive(true);
+        //        Cursor.visible = true;
+        //        Cursor.lockState = CursorLockMode.Confined;
+        //    }
+        //    
+        //}
 
         TimeTravelIcon();
         
+    }
+    void Pause(InputAction.CallbackContext ctx)
+    {
+        if (pausePanel.activeSelf)
+        {
+            pausePanel.SetActive(false);
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            pausePanel.SetActive(true);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
     }
 
     void TimeTravelIcon()
