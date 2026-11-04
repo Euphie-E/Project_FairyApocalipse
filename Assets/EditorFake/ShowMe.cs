@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 //Code based of crekri1's from https://discussions.unity.com/t/custom-editor-open-new-inspector-window-and-show-asset/854882
 //Made by Euphie_E https://github.com/Euphie-E
 
@@ -103,3 +105,5 @@ public class Dock : EditorWindow
         Close();
     }
 }
+
+#endif

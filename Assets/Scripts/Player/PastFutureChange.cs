@@ -1,6 +1,5 @@
-using NUnit.Framework;
-using Unity.VisualScripting;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PastFutureChange : Interactable
@@ -15,6 +14,7 @@ public class PastFutureChange : Interactable
     [SerializeField] private bool isReversible = false;
     [SerializeField] private List<Seed> seeds;
     [SerializeField] private Seed plantedSeed = null;
+    [SerializeField] private int id = -1;
 
     void Start()
     {
@@ -22,6 +22,8 @@ public class PastFutureChange : Interactable
         DisableAll(futureChangedObject);
         ActiveAll(pastObject);
         ActiveAll(futureObject);
+        saveData = new Save(Types.PastFutureChange,id);
+        LevelManager.Instance?.Add(this);
     }
 
     protected override void Interact(InteractController player, GameObject attach)
@@ -87,6 +89,28 @@ public class PastFutureChange : Interactable
             {
                 objects[i].SetActive(false);
             }
+        }
+    }
+    public override Save Save()
+    {
+        if(saveData == null) return null;
+        saveData.Add(new KeyValue{key = "isChanged",value = isChanged?1:0});
+        saveData.Add(new KeyValue{key = "seedID",value = plantedSeed != null ? plantedSeed.seedIndex: -1});
+        return saveData;
+    }
+    public override void Load(List<Save> save)
+    {
+        saveData = GetSave(save,Types.PastFutureChange,id);
+        if(saveData == null) 
+            return;
+        int b = saveData.Get("isChanged");
+        if(b == 1) {
+            isChanged = true;
+            plantedSeed = LevelManager.Instance?.GetSeed(saveData.Get("seedID"));
+            DisableAll(pastObject);
+            DisableAll(futureObject);
+            ActiveAll(pastChangedObject);
+            ActiveAll(futureChangedObject);
         }
     }
 }
