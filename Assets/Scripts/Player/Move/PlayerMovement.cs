@@ -40,6 +40,9 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     private bool mushroomBounceActive;
 
     [Header("Ground Check")]
+    private bool onLedge;
+    private Vector3 ledgePushDir;
+    [SerializeField] private float ledgePushSpeed = 2.5f;
     private LayerMask groundLayerMask;
     [SerializeField] LayerMask groundLayerMaskPast;
     [SerializeField] LayerMask groundLayerMaskFuture;
@@ -133,7 +136,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 
     private Vector3 CalculateFinalVelocity()
     {
-        if (isGrounded && verticalVelocity <= 0f)
+        if (isGrounded && !onLedge && verticalVelocity <= 0f)
         {
             Vector3 v = Vector3.ProjectOnPlane(horizontalVelocity, groundNormal);
             if (v.sqrMagnitude > 0.0001f)
@@ -152,6 +155,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 
         Vector3 air = horizontalVelocity;
         air.y = verticalVelocity;
+        if (onLedge) air += ledgePushDir * ledgePushSpeed;
         return air;
     }
 
@@ -159,11 +163,13 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     {
         if (hasJumped || verticalVelocity > 0f) return;
 
-        if (ProbeGround(snapDistance, true, out RaycastHit hit, out Vector3 normal) && 
-            Vector3.Angle(normal, Vector3.up) <= characterController.slopeLimit)
+        if (ProbeGround(snapDistance, true, out RaycastHit hit, out Vector3 normal, out bool axisSuported) && axisSuported)
         {
+            float angle = Vector3.Angle(normal, Vector3.up);
             float drop = hit.distance - 0.1f - groundRadiusShrink;
-            if (drop > 0.001f)
+            bool isSlope = angle > 1f;
+
+            if (angle <= characterController.slopeLimit && drop > 0.001f && (isSlope || drop <= characterController.stepOffset))
                 characterController.Move(Vector3.down * drop);
         }
     }
@@ -282,7 +288,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 
     private void ApplyGravity()
     {
-        if(isGrounded && verticalVelocity <= 0f)
+        if(isGrounded && !onLedge && verticalVelocity <= 0f)
         {
             verticalVelocity = -2f;
             return;
@@ -303,6 +309,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 
     private void CheckGrounded()
     {
+        onLedge = false;
         isGrounded = false;
         isSliding = false;
         groundNormal = Vector3.up;
@@ -311,7 +318,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         if (verticalVelocity > 0.01f || Time.time < lastJumpTime + ignoreGroundAfterJump)
             return;
 
-        if (!ProbeGround(groundCheckDistance, false, out RaycastHit hit, out Vector3 normal))
+        if (!ProbeGround(groundCheckDistance, false, out RaycastHit hit, out Vector3 normal, out bool axisSuported))
             return;
 
         groundNormal = normal;
@@ -324,6 +331,13 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
             hasJumped = false;
             mushroomBounceActive = false;
             lastGroundedTime = Time.time;
+
+            if (!axisSuported)
+            {
+                onLedge = true;
+
+                ledgePushDir = Vector3.ProjectOnPlane(transform.TransformPoint(characterController.center) - hit.point, Vector3.up).normalized;
+            }
         }
         else
         {
@@ -389,7 +403,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         verticalVelocity = 0f;
     }
 
-    private bool ProbeGround(float extraDistance, bool isSnapProbe, out RaycastHit hit, out Vector3 normal)
+    private bool ProbeGround(float extraDistance, bool isSnapProbe, out RaycastHit hit, out Vector3 normal, out bool axisSuported)
     {
         const float lift = 0.1f;
         float radius = characterController.radius - groundRadiusShrink;
@@ -402,13 +416,24 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         float distance = lift + groundRadiusShrink + extraDistance;
 
         normal = Vector3.up;
-        bool found  = Physics.SphereCast(origin, radius, Vector3.down, out hit, distance, groundLayerMask, QueryTriggerInteraction.Ignore);
+        axisSuported = false;
+        bool found = Physics.SphereCast(origin, radius, Vector3.down, out hit, distance, groundLayerMask, QueryTriggerInteraction.Ignore);
 
         if (found)
         {
             normal = hit.normal;
-            if (Physics.Raycast(origin, Vector3.down, out RaycastHit rayHit, distance + radius, groundLayerMask, QueryTriggerInteraction.Ignore))
+            if(Physics.Raycast(origin, Vector3.down, out RaycastHit rayHit, distance + radius, groundLayerMask, QueryTriggerInteraction.Ignore))
+            {
                 normal = rayHit.normal;
+                axisSuported = true;
+            }
+            else
+            {
+                Vector3 toPlataform = Vector3.ProjectOnPlane(hit.point - origin, Vector3.up).normalized;
+                Vector3 start = hit.point + toPlataform * 0.02f + Vector3.up * 0.1f;
+                if (Physics.Raycast(start, Vector3.down, out RaycastHit faceHit, 0.3f, groundLayerMask, QueryTriggerInteraction.Ignore))
+                    normal = faceHit.normal;
+            }
         }
 
 #if UNITY_EDITOR

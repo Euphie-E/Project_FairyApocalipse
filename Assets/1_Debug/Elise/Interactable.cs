@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactable : MonoBehaviour
+public class Interactable : Savable
 {
     [SerializeField] 
     protected List<GameObject> attachPoints = new List<GameObject>();
@@ -42,5 +42,15 @@ public class Interactable : MonoBehaviour
     virtual protected void Interact(InteractController player,GameObject attach)
     {
         Debug.Log("interact");
+    }
+
+    public override Save Save()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Load(List<Save> save)
+    {
+        throw new System.NotImplementedException();
     }
 }

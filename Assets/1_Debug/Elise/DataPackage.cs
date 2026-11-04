@@ -5,6 +5,7 @@ using System;
 using UnityEngine.UnityConsent;
 using Unity.Services.Core.Environments;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public class DataEvents
@@ -110,5 +111,104 @@ public class PlayerData
     public int Death;
     public double Duration;
     public double[] CheckPoints = new double[4];
-    public Seed seed;
+    public List<Save> LevelData = new();
+
+    public Save Load(Savable.Types ClassName)
+    {
+        return LevelData.Find(item => item.Key == ClassName);
+    }
+
+
 }
+
+[Serializable]
+public class Save
+{
+    public Savable.Types Key;
+    public int ID = -1;
+    public List<KeyValue> Values = new();
+    public Save(Savable.Types Name, int ID)
+    {
+        Key = Name;
+        this.ID = ID;
+    }
+    public void Add(KeyValue value)
+    {
+        if(value == null || Values == null) return;
+        KeyValue temp = Values.FirstOrDefault(k => k/value);
+        if(temp == null)
+        {
+            Values.Add(value);  
+        }
+        else
+        {
+            temp.value = value.value;
+        }
+    }
+    public void Sort()
+    {
+        Values.Sort((p1, p2) => p1*p2);
+    }
+    public int Get(string key)
+    {
+        KeyValue a = Values.FirstOrDefault(k => k.key == key);
+        return a != null ? a.value : -1;
+    }
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+        Save temp = (Save)obj;
+        return this.Key == temp.Key && this.ID == temp.ID;
+    }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Key, ID);
+    }
+}
+
+[Serializable]
+public class KeyValue
+{
+    public string key;
+    public int value;
+    public static bool operator /(KeyValue p1,KeyValue p2)
+    {
+        if(p1 == null || p2 == null) return false;
+        return p1.key == p2.key;
+    }
+    public static int operator *(KeyValue p1,KeyValue p2)
+    {
+        return p1.key.CompareTo(p2.key);
+    }
+    public override string ToString()
+    {
+        return "Key: "+key+" | Value: "+value;
+    }
+}
+
+[Serializable]
+public abstract class Savable: MonoBehaviour
+{
+    public enum Types
+    {
+        Checkpoint,
+        PastFutureChange,
+        Collectible,
+        test
+    }
+    public abstract Save Save();
+    public abstract void Load(List<Save> save);
+    public Save saveData;
+    public static Save GetSave(List<Save> save,Types types, int id)
+    {
+        return save.FirstOrDefault(x => x.Key == types && x.ID == id);
+    }
+}
+
+
+
+
+

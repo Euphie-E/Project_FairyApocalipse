@@ -1,14 +1,10 @@
-using System;
-using NUnit.Framework;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 using System.Collections;
 using Unity.Cinemachine;
 
 public class PlayerDeathController : MonoBehaviour
 {
-    private PlayerMovement playerMovement;
+    public PlayerMovement playerMovement;
     private PlayerInput playerInput;
     private CharacterController playerCharacterController;
     [SerializeField] private CinemachineCamera cinemachineCamera;
@@ -47,6 +43,7 @@ public class PlayerDeathController : MonoBehaviour
 
         checkpoints[0] = transform.parent.gameObject; // colocar o spawn como inicio, meio gambiarra aproveitando que o player pai não se mexe;
         DataManager.Instance?.SetTotalCheckpoints(checkpoints.Length);
+        if(LevelManager.Instance != null)LevelManager.Instance.Player = this.gameObject;
     }
 
     

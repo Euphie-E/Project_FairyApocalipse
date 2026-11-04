@@ -1,16 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class Checkpoint : MonoBehaviour
+public class Checkpoint : Savable
 {
     [Header("VFX")]
     [SerializeField] private int index = 0;
     [SerializeField] private Animator animatorCheckpoint;
     [SerializeField] private VisualEffect vfxCheckpoint;
+    static int ct = 0;
 
     void Start()
     {
         PlayerInput.Instance?.AddCheckpoint(gameObject, index);
+        saveData = new Save(Types.Checkpoint,index);
+        LevelManager.Instance?.Add(this);
     }
 
     void OnTriggerEnter(Collider other)
@@ -23,6 +27,7 @@ public class Checkpoint : MonoBehaviour
             {
                 playerDeath.NewCheckpoint(index, gameObject);
             }
+            saveData.Add(new KeyValue{key = "Count",value =ct++});
         }
     }
 
@@ -40,4 +45,15 @@ public class Checkpoint : MonoBehaviour
             vfxCheckpoint.Play();
         }
     }
+
+    public override Save Save()
+    {
+        return saveData;
+    }
+
+    public override void Load(List<Save> save)
+    {
+        
+    }
+
 }
