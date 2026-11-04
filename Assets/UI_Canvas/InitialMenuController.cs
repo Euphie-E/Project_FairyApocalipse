@@ -6,7 +6,7 @@ public class InitialMenuController : MonoBehaviour
     public void Play()
     {
         Debug.Log("Jogar");
-        SceneManager.LoadScene(1);
+        
     }
 
     public void Quit()
