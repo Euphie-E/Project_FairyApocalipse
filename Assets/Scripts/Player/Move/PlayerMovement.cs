@@ -1,11 +1,20 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 {
     [Header("Footsteps Audio")]
     [SerializeField] private float stepInterval = 0.4f;
+
+    [Header("Footsteps VFX")]
+    public VisualEffect footstepsVfx;
+
+    [Header("Landing VFX")]
+    [SerializeField] private VisualEffect landingVFX;
+    private bool wasGrounded;
+
     private float stepTimer;
     [Header("References")]
     public Transform cameraTransform;
@@ -77,6 +86,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 
     private void Start()
     {
+        wasGrounded = true;
         cameraTransform = Camera.main.transform;
         FutureCollision();
     }
@@ -92,6 +102,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         }
 
         CheckGrounded();
+        HandleLandingVFX();
 
         if (StartDash())
         {
@@ -209,6 +220,17 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         {
             horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, targetVelocity, acceleration * Time.deltaTime);
         }
+    }
+
+    private void HandleLandingVFX()
+    {
+        if (isGrounded && !wasGrounded)
+        {
+            if (landingVFX != null)
+                landingVFX.Play();
+        }
+
+        wasGrounded = isGrounded;
     }
 
     private void HandleJump()
@@ -422,12 +444,12 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         public float distance;
         public bool hit;
         public Vector3 hitPoint;
-        public Vector3 hitNormal;     // normal do raio central (a usada na lógica)
-        public Vector3 sphereCenter;  // onde a esfera parou (ou fim do cast se não acertou)
+        public Vector3 hitNormal;     // normal do raio central (a usada na lï¿½gica)
+        public Vector3 sphereCenter;  // onde a esfera parou (ou fim do cast se nï¿½o acertou)
     }
 
     private ProbeDebug debugGround;   // sonda do CheckGrounded
-    private ProbeDebug debugSnap;     // sonda do SnapToGround (só preenchida quando snap roda)
+    private ProbeDebug debugSnap;     // sonda do SnapToGround (sï¿½ preenchida quando snap roda)
     private Vector3 debugFinalVelocity;
 
     private void OnDrawGizmos()
@@ -438,7 +460,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         DrawProbe(debugGround, Color.cyan);
         DrawProbe(debugSnap, Color.magenta);
 
-        // Estado do chão logo acima da cabeça
+        // Estado do chï¿½o logo acima da cabeï¿½a
         Vector3 top = transform.position + Vector3.up * (characterController.height + 0.3f);
         Gizmos.color = isGrounded ? Color.green : (isSliding ? Color.yellow : Color.red);
         Gizmos.DrawSphere(top, 0.08f);
@@ -457,13 +479,13 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         Vector3 end = p.origin + Vector3.down * p.distance;
 
         Gizmos.color = color;
-        Gizmos.DrawWireSphere(p.origin, p.radius);   // início do cast
+        Gizmos.DrawWireSphere(p.origin, p.radius);   // inï¿½cio do cast
         Gizmos.DrawLine(p.origin, end);              // trajeto
-        Gizmos.DrawWireSphere(end, p.radius);        // fim máximo do cast
+        Gizmos.DrawWireSphere(end, p.radius);        // fim mï¿½ximo do cast
 
         if (!p.hit) return;
 
-        // Esfera na posição em que realmente parou
+        // Esfera na posiï¿½ï¿½o em que realmente parou
         Gizmos.color = new Color(color.r, color.g, color.b, 0.5f);
         Gizmos.DrawWireSphere(p.sphereCenter, p.radius);
 
@@ -498,15 +520,22 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         if (isGrounded && horizontalVelocity.sqrMagnitude > 0.1f)
         {
             stepTimer -= Time.deltaTime;
+
             if (stepTimer <= 0f)
             {
                 GCamarada.AudioManager.I?.PlaySequentialClip("GrassFootstep");
+
+                if (footstepsVfx != null)
+                {
+                    footstepsVfx.Play();
+                }
+
                 stepTimer = stepInterval;
             }
         }
         else
         {
-            stepTimer = 0f; 
+            stepTimer = 0f;
         }
     }
 

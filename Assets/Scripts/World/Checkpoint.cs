@@ -3,6 +3,7 @@ using UnityEngine.VFX;
 
 public class Checkpoint : MonoBehaviour
 {
+    [Header("VFX")]
     [SerializeField] private int index = 0;
     [SerializeField] private Animator animatorCheckpoint;
     [SerializeField] private VisualEffect vfxCheckpoint;

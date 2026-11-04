@@ -1595,7 +1595,6 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
   m_Direction: 1
   m_LinkedSlots:
-  - {fileID: 8926484042661614691}
   - {fileID: 8926484042661614801}
   - {fileID: 8926484042661614991}
 --- !u!114 &8926484042661614690
@@ -1666,8 +1665,7 @@ MonoBehaviour:
       m_SerializableType: UnityEngine.Mesh, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
   m_Direction: 0
-  m_LinkedSlots:
-  - {fileID: 8926484042661614673}
+  m_LinkedSlots: []
 --- !u!114 &8926484042661614692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4443,7 +4441,7 @@ MonoBehaviour:
   m_Children:
   - {fileID: 8926484042661614845}
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 0
+  m_UICollapsed: 1
   m_UISuperCollapsed: 0
   m_MasterSlot: {fileID: 8926484042661614844}
   m_MasterData:
@@ -4452,7 +4450,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":2.0,"y":4.0,"z":3.0}}'
+      m_SerializableObject: '{"vector":{"x":2.0,"y":4.0,"z":2.0}}'
     m_Space: 0
   m_Property:
     name: A
@@ -4480,7 +4478,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614847}
   - {fileID: 8926484042661614848}
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 0
+  m_UICollapsed: 1
   m_UISuperCollapsed: 0
   m_MasterSlot: {fileID: 8926484042661614844}
   m_MasterData:
@@ -4883,7 +4881,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":0.0,"y":-1.5,"z":0.0}}'
+      m_SerializableObject: '{"vector":{"x":0.0,"y":2.0,"z":0.0}}'
     m_Space: 0
   m_Property:
     name: Force
