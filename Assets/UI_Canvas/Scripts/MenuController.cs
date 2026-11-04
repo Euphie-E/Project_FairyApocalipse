@@ -39,28 +39,29 @@ public class MenuController : MonoBehaviour
 
     void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    if (pausePanel.activeSelf)
-        //    {
-        //        pausePanel.SetActive(false);
-        //        Cursor.visible = false;
-        //        Cursor.lockState = CursorLockMode.Locked;
-        //    }
-        //    else
-        //    {
-        //        pausePanel.SetActive(true);
-        //        Cursor.visible = true;
-        //        Cursor.lockState = CursorLockMode.Confined;
-        //    }
-        //    
-        //}
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (pausePanel.activeSelf)
+            {
+                pausePanel.SetActive(false);
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                pausePanel.SetActive(true);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            
+        }
 
         TimeTravelIcon();
         
     }
     void Pause(InputAction.CallbackContext ctx)
     {
+        return;
         if (pausePanel.activeSelf)
         {
             pausePanel.SetActive(false);
