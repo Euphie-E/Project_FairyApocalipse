@@ -1,8 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class PlayerSwingController : MonoBehaviour
 {
+
+    [Header("VFX Activation")]
+    [SerializeField] private GameObject vfxToActivate;
+    [SerializeField] private float deactivateDelay = 1f;
+    private Coroutine deactivateCoroutine;
+
     public bool isSwinging {  get; private set; }
 
     private Transform swingPivot;
@@ -68,11 +75,20 @@ public class PlayerSwingController : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerInput.Instance.AddAction(Jump,2);
+        PlayerInput.Instance.AddAction(Jump, 2);
         isSwinging = true;
         angularVelocity = -initialForwardSpeed * initialMultiplier;
+
         if (swingPivot != null)
             angle = 0f;
+
+        if (deactivateCoroutine != null)
+        {
+            StopCoroutine(deactivateCoroutine);
+            deactivateCoroutine = null;
+        }
+
+        vfxToActivate.SetActive(true);
     }
 
     private void OnDisable()
@@ -120,7 +136,21 @@ public class PlayerSwingController : MonoBehaviour
             currentBar.ResetSwingBar();
 
             PlayerStateController.Instance.EndSwing();
+
+            if (deactivateCoroutine != null)
+        StopCoroutine(deactivateCoroutine);
+
+        deactivateCoroutine = StartCoroutine(DeactivateObject());
         //}
+    }
+
+    private IEnumerator DeactivateObject()
+    {
+        yield return new WaitForSeconds(deactivateDelay);
+
+        vfxToActivate.SetActive(false);
+
+        deactivateCoroutine = null;
     }
 
     private float GetCameraDirection()

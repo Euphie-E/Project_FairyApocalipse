@@ -63,8 +63,11 @@ public class BossController : MonoBehaviour
     private Coroutine attackRoutine;
     private float attackStartTime;
 
-    [Header("Impacto da Pisada")]
-    [Range(0f, 1f)] public float ImpactNormalized = 0.917f;
+    [Header("Tempo da Pisada Fraca")]
+    [Range(0f, 1f)] public float ImpactWeak = 0.2f;
+
+    [Header("Tempo da Pisada Forte")]
+    [Range(0f, 1f)] public float ImpactStrong = 0.917f;
 
 
     [Header("Shake do Terremoto Fraco")]
@@ -262,7 +265,7 @@ public class BossController : MonoBehaviour
 
         if (type == BossAttackType.PisadaForte)
         {
-            yield return WaitForNormalizedTime(state, ImpactNormalized, 5f);
+            yield return WaitForNormalizedTime(state, ImpactStrong, 5f);
             DoStrongImpact();
 
             yield return WaitForNormalizedTime(state, 1f, 5f);
@@ -273,7 +276,7 @@ public class BossController : MonoBehaviour
         }
         else if (type == BossAttackType.TerremotoFraco)
         {
-            yield return WaitForNormalizedTime(state, ImpactNormalized, 5f);
+            yield return WaitForNormalizedTime(state, ImpactWeak, 5f);
             DoWeakImpact();
 
             yield return WaitForNormalizedTime(state, 1f, 5f);
