@@ -42,6 +42,9 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     private bool mushroomBounceActive;
 
     [Header("Ground Check")]
+    public bool animatorGrounded;
+    public float groundedDelay = 0.15f;
+    private float airborneTimer;
     private Vector3 steepNormal = Vector3.up;
     private float lastSteepContactTime = -10f;
     private const float steepContactMemory = 0.1f;
@@ -113,6 +116,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 
         UpdateDashStatus();
         CheckGrounded();
+        UpdateAnimatorGrounded();
         HandleLandingVFX();
 
         if (StartDash())
@@ -322,6 +326,9 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
         hasJumped = true;
         lastJumpTime = Time.time;
+
+        animatorGrounded = false;
+        airborneTimer = groundedDelay;
     }
 
     public void Launch() => StartJump();
@@ -343,6 +350,9 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 
         isGrounded = false;
         isSliding = false;
+
+        animatorGrounded = false;
+        airborneTimer = groundedDelay;
     }
 
     private void ApplyGravity()
@@ -397,6 +407,23 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         else
         {
             isSliding = true;
+        }
+    }
+
+    void UpdateAnimatorGrounded()
+    {
+
+        if (isGrounded)
+        {
+            airborneTimer = 0f;
+            animatorGrounded = true;
+        }
+        else
+        {
+            airborneTimer += Time.deltaTime;
+
+            if (airborneTimer >= groundedDelay)
+                animatorGrounded = false;
         }
     }
 
@@ -654,7 +681,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     }
     private void HandleFootsteps()
     {
-        if (isGrounded && horizontalVelocity.sqrMagnitude > 0.1f)
+        if (animatorGrounded && horizontalVelocity.sqrMagnitude > 0.1f)
         {
             stepTimer -= Time.deltaTime;
 
