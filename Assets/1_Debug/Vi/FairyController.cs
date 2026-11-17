@@ -73,7 +73,7 @@ public class FairyController : MonoBehaviour
             holdingRef.SaveMe();
             holdingRef = null;
         }
-        Destroy(seedTarget.gameObject);
+        if (seedTarget.gameObject != null) Destroy(seedTarget.gameObject);
         seedTarget = null;
         carringSeed = false;
         animator.SetBool("isHolding", false);
