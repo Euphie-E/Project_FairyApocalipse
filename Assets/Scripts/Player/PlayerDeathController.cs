@@ -386,5 +386,7 @@ public class PlayerDeathController : MonoBehaviour
     {
         isDrowning = true;
         isDead = true;
+
+        StartDeathSequence();
     }
 }
