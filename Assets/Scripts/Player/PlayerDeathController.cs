@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine.VFX;
+using NUnit.Framework;
 
 public class PlayerDeathController : MonoBehaviour
 {
@@ -45,6 +46,9 @@ public class PlayerDeathController : MonoBehaviour
     [Header("Boss Knockback")]
     [SerializeField] private float bossPushDistance = 1.5f;
     [SerializeField] private float bossPushDuration = 0.2f;
+
+    [Header("Drown")]
+    private bool isDrowning = false;
 
     private Coroutine bossPushCoroutine;
 
@@ -123,7 +127,7 @@ public class PlayerDeathController : MonoBehaviour
 
     private void CheckDeath()
     {
-        if (isDead && (playerMovement.isGrounded || fallHeight > maxHeight*2.5f))
+        if (isDead && (playerMovement.isGrounded || fallHeight > maxHeight*2.5f || isDrowning))
         {
             playerInput.OnDeath();
             toReviveTimer += Time.deltaTime;
@@ -376,5 +380,11 @@ public class PlayerDeathController : MonoBehaviour
         }
 
         SetDissolveValue(2f);
+    }
+
+    public void Drown()
+    {
+        isDrowning = true;
+        isDead = true;
     }
 }

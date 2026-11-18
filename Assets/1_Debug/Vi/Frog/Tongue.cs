@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Tongue : MonoBehaviour
 {
-    public Tongue tongue;
+    [SerializeField] Tongue tongueNext;
     [SerializeField] bool anchor;
     [Tooltip("Apenas o ultimo antes da ancora vai usar isso")] 
     [SerializeField] Transform mouthPoint;
