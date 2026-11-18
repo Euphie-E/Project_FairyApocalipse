@@ -5,20 +5,18 @@ public class Frog : MonoBehaviour
 {
     private IFrogState currentState;
 
-    private Transform player;
+    public Transform player;
     private Vector3 target;
 
-    [Header("Tongue Attack")]
-    public Tongue tongueBase;
-    public float attackTime;
-    public float returnTime;
-    public float intervalAttack;
+    //[Header("Tongue Attack")]
+    public TongueController tongue;
 
     //[Header("Cry Attack")]
 
     void Start()
     {
         player = PlayerInput.Instance.transform;
+        tongue = GetComponent<TongueController>();
         ChangeState(new FrogIdle(this));
     }
 
