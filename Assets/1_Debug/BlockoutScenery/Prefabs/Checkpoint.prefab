@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 2961469833419325948}
   m_Layer: 0
   m_Name: Checkpoint
-  m_TagString: Untagged
+  m_TagString: Checkpoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -277,7 +277,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4665155e5383e9e4d975a3da7ebe9e7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  saveData:
+    Key: 0
+    ID: 0
+    Values: []
   index: 0
+  animatorCheckpoint: {fileID: 1481900841091360968}
+  vfxCheckpoint: {fileID: 3161096759254840751}
 --- !u!1001 &185975599561624526
 PrefabInstance:
   m_ObjectHideFlags: 0

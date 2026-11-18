@@ -155,7 +155,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 2500
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -573,9 +573,12 @@ MonoBehaviour:
   acceleration: 25
   deceleration: 30
   rotationSpeed: 360
+  uprightSpeed: 360
   jumpHeight: 2
   gravity: -15
   maxGravityVelocity: -10
+  animatorGrounded: 0
+  groundedDelay: 0.15
   ledgePushSpeed: 2.5
   groundLayerMaskPast:
     serializedVersion: 2
@@ -586,9 +589,11 @@ MonoBehaviour:
   groundCheckDistance: 0.15
   snapDistance: 0.4
   groundRadiusShrink: 0
+  normalSmoothing: 20
   coyoteTime: 0.12
   dashDistance: 3
   dashDuration: 0.18
+  dashCooldown: 1
   drawGizmos: 1
   vectorGizmoScale: 0.2
 --- !u!114 &8697555056014407891
@@ -657,6 +662,10 @@ MonoBehaviour:
   - {fileID: 6099451806421071561}
   maxHeight: 25
   isFalling: 0
+  deathVFX: {fileID: 2254024833716855548}
+  dissolveRenderers: []
+  dissolveDuration: 2
+  deathVFXDuration: 2
   deathAnimator: {fileID: 4566249271883874012}
   respawnAnimatorStates: Base Layer.Ground Movement
   bossPushDistance: 1.5
@@ -812,8 +821,8 @@ GameObject:
   - component: {fileID: 1050670444268344066}
   - component: {fileID: 2781567986470269702}
   - component: {fileID: 274376611848720043}
-  - component: {fileID: 5605670085901325946}
   - component: {fileID: 5473680821810858504}
+  - component: {fileID: 5605670085901325946}
   - component: {fileID: 831393238751793046}
   - component: {fileID: 8132431408727249258}
   - component: {fileID: 4851993045924225288}
@@ -866,7 +875,7 @@ MonoBehaviour:
     FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.3
-    FarClipPlane: 1000
+    FarClipPlane: 2500
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -974,6 +983,45 @@ MonoBehaviour:
     Time: 0
     Smoothing: 5.9
     IgnoreY: 0
+--- !u!114 &5473680821810858504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2911940494488221763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbe43d662878a7c43bcd44d43c9e2094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
+  CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 65
+  IgnoreTag: 
+  TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  MinimumDistanceFromTarget: 0.3
+  AvoidObstacles:
+    Enabled: 1
+    DistanceLimit: 0
+    MinimumOcclusionTime: 0
+    CameraRadius: 0.4
+    UseFollowTarget:
+      Enabled: 0
+      YOffset: 0
+    Strategy: 0
+    MaximumEffort: 4
+    SmoothingTime: 0
+    Damping: 0.4
+    DampingWhenOccluded: 0.2
+  ShotQualityEvaluation:
+    Enabled: 0
+    OptimalDistance: 10
+    NearLimit: 5
+    FarLimit: 30
+    MaxQualityBoost: 0.2
 --- !u!114 &5605670085901325946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1032,45 +1080,6 @@ MonoBehaviour:
         DecelTime: 0
   PlayerIndex: -1
   AutoEnableInputs: 1
---- !u!114 &5473680821810858504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2911940494488221763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbe43d662878a7c43bcd44d43c9e2094, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
-  CollideAgainst:
-    serializedVersion: 2
-    m_Bits: 65
-  IgnoreTag: 
-  TransparentLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  MinimumDistanceFromTarget: 0.3
-  AvoidObstacles:
-    Enabled: 1
-    DistanceLimit: 0
-    MinimumOcclusionTime: 0
-    CameraRadius: 0.4
-    UseFollowTarget:
-      Enabled: 0
-      YOffset: 0
-    Strategy: 0
-    MaximumEffort: 4
-    SmoothingTime: 0
-    Damping: 0.4
-    DampingWhenOccluded: 0.2
-  ShotQualityEvaluation:
-    Enabled: 0
-    OptimalDistance: 10
-    NearLimit: 5
-    FarLimit: 30
-    MaxQualityBoost: 0.2
 --- !u!114 &831393238751793046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12095,7 +12104,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 2500
   field of view: 60
   orthographic: 0
   orthographic size: 5

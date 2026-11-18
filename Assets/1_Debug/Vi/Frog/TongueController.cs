@@ -13,6 +13,7 @@ public class TongueController : MonoBehaviour
     public bool isLicking = false;
 
     private Transform[] originalTransforms;
+    private Vector3 end;
 
     void Start()
     {
@@ -46,15 +47,9 @@ public class TongueController : MonoBehaviour
 
     void Lick()
     {
-        /* Vector3 direction =
-            (frog.player.position - tongueBase.position).normalized;
+        /* Vector3 direction = (frog.player.position - tongueBase.position).normalized;
 
-        float distance = Mathf.Min(
-            Vector3.Distance(frog.player.position, tongueBase.position),
-            maxDistance
-        );
-
-        Vector3 end = tongueBase.position + direction * distance;
+        end = tongueBase.position + direction * maxDistance;
 
         Vector3[] targets = new Vector3[bones.Length];
 
