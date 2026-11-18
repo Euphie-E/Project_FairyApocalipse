@@ -21,12 +21,14 @@ public class FrogLick : IFrogState
 
     public void Process()
     {
+        if (!frog.tongue.isLicking) return;
+
         if (waitTime > 0 && !tongue.isLicking)
         {
             waitTime -= Time.deltaTime;
         }
 
-        else
+        else 
         {
             Lick();
         }

@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 public class TongueController : MonoBehaviour
@@ -11,14 +12,26 @@ public class TongueController : MonoBehaviour
     [SerializeField] float returnDuration;
     private Vector3 direction;
     public bool isLicking = false;
+    private bool isGoing = false;
 
-    private Transform[] originalTransforms;
+    float progress = 0;
+
+    Vector3[] startPositions;
+    
+    private Vector3[] returnStartPositions;
+    private Vector3[] targetPositions;
+    private Vector3[] originalPositions;
     private Vector3 end;
 
     void Start()
     {
         frog = GetComponent<Frog>();
-        originalTransforms = bones;
+        originalPositions = new Vector3[bones.Length];
+
+        for (int i = 0; i < bones.Length; i++)
+        {
+            originalPositions[i] = bones[i].position;
+        }
     }
 
     public void StartLick()
@@ -26,55 +39,92 @@ public class TongueController : MonoBehaviour
         if (isLicking) return;
         direction = (frog.player.position - tongueBase.position).normalized;
         transform.rotation = Quaternion.LookRotation(direction);
-        Vector3 target = tongueBase.position + direction * maxDistance;
+
+        //CalculateTargetPositions(frog.player);
+        
         for (int i = 0; i < bones.Length; i++)
         {
             float t = (float)i / (bones.Length - 1);
 
-            Vector3 targetPosition = Vector3.Lerp(
-                tongueBase.position,
-                target,
-                t
-            );
+            targetPositions[i] = tongueBase.position + direction * maxDistance * t;
         }
+
+        progress = 0f;
+
+        isGoing = true;
         isLicking = true;
     }
 
-    void Update()
+    /* private void CalculateTargetPositions(Transform player)
     {
-        if (isLicking) Lick();
-    }
+        targetPositions = new Vector3[bones.Length];
 
-    void Lick()
-    {
-        /* Vector3 direction = (frog.player.position - tongueBase.position).normalized;
+        Vector3 direction = (player.position - tongueBase.position).normalized;
 
-        end = tongueBase.position + direction * maxDistance;
+        transform.rotation = Quaternion.LookRotation(direction);
 
-        Vector3[] targets = new Vector3[bones.Length];
-
-        // Bone 2 vai para a saída da boca
-        targets[0] = tongueBase.position;
-
-        // Bones 3 até 10 são distribuídos em linha reta
-        for (int i = 1; i < bones.Length; i++)
+        for (int i = 0; i < bones.Length; i++)
         {
             float t = (float)i / (bones.Length - 1);
 
-            targets[i] = Vector3.Lerp(tongueBase.position, end, t);
+            targetPositions[i] = tongueBase.position + direction * maxDistance * t;
         }
+    } */
 
-        yield return MoveToPositions(targets, extendDuration, true);
 
-        // Sempre retrai, independentemente do motivo
-        yield return Retract();
+    void Update()
+    {
+        if (isLicking) 
+        {
+            if (isGoing)
+            {
+                progress += Time.deltaTime / lickDuration;
+                progress = Mathf.Clamp01(progress);
 
-        isAttacking = false; */
+                for (int i = 0; i < bones.Length; i++)
+                {
+                    bones[i].position = Vector3.Lerp(originalPositions[i], targetPositions[i], progress);
+                }
+
+                if (progress >= 1f)
+                    for (int i = 0; i < bones.Length; i++)
+                    {
+                        returnStartPositions[i] = bones[i].position;
+                    }
+                    isGoing = false;
+            }
+
+            else
+            {
+                progress += Time.deltaTime / returnDuration;
+                progress = Mathf.Clamp01(progress);
+
+                for (int i = 0; i < bones.Length; i++)
+                {
+                    bones[i].position = Vector3.Lerp(returnStartPositions[i], originalPositions[i], progress);
+                }
+
+                if (progress >= 1f)
+                    isLicking = false;
+            }
+        }
     }
 
+    /* private void MoveBones(Vector3[] positions, float progress)
+    {
+        for (int i = 0; i < bones.Length; i++)
+        {
+            bones[i].position = Vector3.Lerp(originalPositions[i], positions[i], progress);
+        }
+    } */
 
     public void EndLick()
     {
         isLicking = false;
+    }
+
+    public void OnCollision()
+    {
+        if (isGoing == true) isGoing = false;
     }
 }
