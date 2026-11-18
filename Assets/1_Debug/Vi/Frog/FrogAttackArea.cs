@@ -7,4 +7,9 @@ public class FrogAttackArea : MonoBehaviour
     {
         frog.ChangeState(new FrogLick(frog));
     }
+
+    void OnTriggerExit(Collider other)
+    {
+        frog.ChangeState(new FrogIdle(frog));
+    }
 }

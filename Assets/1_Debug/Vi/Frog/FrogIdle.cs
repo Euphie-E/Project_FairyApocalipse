@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class FrogIdle : MonoBehaviour, IFrogState
+public class FrogIdle : IFrogState
 {
     Frog frog;
 

@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class FrogLick : MonoBehaviour, IFrogState
+public class FrogLick : IFrogState
 {
     Frog frog;
     TongueController tongue;
