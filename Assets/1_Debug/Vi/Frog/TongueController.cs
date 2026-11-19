@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using UnityEngine;
 
 public class TongueController : MonoBehaviour
@@ -27,6 +26,8 @@ public class TongueController : MonoBehaviour
     {
         frog = GetComponent<Frog>();
         originalPositions = new Vector3[bones.Length];
+        targetPositions = new Vector3[bones.Length];
+        returnStartPositions = new Vector3[bones.Length];
 
         for (int i = 0; i < bones.Length; i++)
         {
@@ -37,8 +38,11 @@ public class TongueController : MonoBehaviour
     public void StartLick()
     {
         if (isLicking) return;
+        transform.rotation = Quaternion.LookRotation(frog.player.position - transform.position);
         direction = (frog.player.position - tongueBase.position).normalized;
-        transform.rotation = Quaternion.LookRotation(direction);
+        
+        Debug.Log("player position: " + frog.player.position);
+        Debug.Log("Direction: " + direction);
 
         //CalculateTargetPositions(frog.player);
         
@@ -87,11 +91,15 @@ public class TongueController : MonoBehaviour
                 }
 
                 if (progress >= 1f)
+                {
                     for (int i = 0; i < bones.Length; i++)
                     {
                         returnStartPositions[i] = bones[i].position;
                     }
                     isGoing = false;
+                }
+
+                Debug.Log("progress: " + progress);
             }
 
             else
@@ -105,7 +113,9 @@ public class TongueController : MonoBehaviour
                 }
 
                 if (progress >= 1f)
+                {
                     isLicking = false;
+                }
             }
         }
     }
