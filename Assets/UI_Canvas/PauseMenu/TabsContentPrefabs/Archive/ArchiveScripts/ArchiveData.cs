@@ -4,6 +4,6 @@ using UnityEngine;
 public class ArchiveData : ScriptableObject
 {
     public string tName;
-    public string description;
+    [TextArea] public string description;
     public Sprite icon;
 }
