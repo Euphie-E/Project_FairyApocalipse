@@ -1756,7 +1756,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "MISS\xD5ES"
+  m_text: BOLSA
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aee5eae1f34a5bd4aa74e30ec02b3d77, type: 2}
   m_sharedMaterial: {fileID: -977653336124220954, guid: aee5eae1f34a5bd4aa74e30ec02b3d77, type: 2}
@@ -4488,6 +4488,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3278142997115108868, guid: 81d452969c9a45c45ba20f4658022d2f, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 7338917198313521932}
     - target: {fileID: 3337676276199398701, guid: 81d452969c9a45c45ba20f4658022d2f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5972,6 +5976,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6759559873966386198, guid: 81d452969c9a45c45ba20f4658022d2f, type: 3}
   m_PrefabInstance: {fileID: 4782729323326215062}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7338917198313521932 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2848166905188946074, guid: 81d452969c9a45c45ba20f4658022d2f, type: 3}
+  m_PrefabInstance: {fileID: 4782729323326215062}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!225 &7894508360459370559 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 3445613788357481385, guid: 81d452969c9a45c45ba20f4658022d2f, type: 3}
