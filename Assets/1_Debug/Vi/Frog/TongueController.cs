@@ -3,6 +3,7 @@ using UnityEngine;
 public class TongueController : MonoBehaviour
 {
     public Frog frog;
+    [SerializeField] Animator animator;
     [SerializeField] Transform tongueBase;
     [SerializeField] Transform[] bones;
     [SerializeField] float maxRange;
@@ -55,8 +56,15 @@ public class TongueController : MonoBehaviour
 
         progress = 0f;
 
-        isGoing = true;
+        animator.SetTrigger("Lick");
         isLicking = true;
+        //isGoing = true;
+    }
+
+    public void Go()
+    {
+        animator.speed = 0f;
+        isGoing = true;
     }
 
     /* private void CalculateTargetPositions(Transform player)
@@ -108,9 +116,9 @@ public class TongueController : MonoBehaviour
                     bones[i].position = Vector3.Lerp(originalPositions[i], targetPositions[i], progress);
                 }
 
-                if (progress <= 0f)
+                if (progress <= 0.05f)
                 {
-                    isLicking = false;
+                    animator.speed = 1f;
                 }
             }
         }
@@ -140,5 +148,7 @@ public class TongueController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, maxRange);
         #endif
+
+        //if (targetPositions.Length > 1) Gizmos.DrawLine(targetPositions[0], targetPositions[targetPositions.Length-1]);
     }
 }
