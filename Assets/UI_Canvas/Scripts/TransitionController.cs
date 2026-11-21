@@ -42,6 +42,19 @@ public class TransitionController : MonoBehaviour
         //transition.SetTrigger("Start");
     }
 
+    public int scene;
+    public void Epside(int scene)
+    {
+        StartCoroutine(LoadEpsiode(scene));
+    }
+
+    IEnumerator LoadEpsiode(int index)
+    {
+        transition.SetTrigger("End");
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadSceneAsync(index);
+    }
+
     public void Quit()
     {
         Debug.Log("Fechou");

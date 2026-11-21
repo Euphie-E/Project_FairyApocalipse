@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8274034586611807817}
   - component: {fileID: 4395862384599463668}
   - component: {fileID: 8092390598337698435}
+  - component: {fileID: 2216124605654392399}
   m_Layer: 7
   m_Name: BigSeed
   m_TagString: Untagged
@@ -67,11 +68,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1badf16e8c27fb44b584fe907f4c505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollectibleSeed
+  saveData:
+    Key: 0
+    ID: 0
+    Values: []
   Collected: 0
   rotationSpeed: 15
   verticalAmplitude: 10
   verticalSpeed: 5
+  id: -1
   seed: {fileID: 11400000, guid: 59af03fb34237c447a4be048ab5a40be, type: 2}
+  isHolding: 0
+--- !u!114 &2216124605654392399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437794176013776802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7cc3622bf817b408991b9d47c385a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotificationTrigger
+  data: {fileID: 11400000, guid: 1ae19650957ec594c8c0f5366905256f, type: 2}
 --- !u!1001 &5385285428483205945
 PrefabInstance:
   m_ObjectHideFlags: 0

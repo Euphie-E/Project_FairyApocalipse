@@ -5,13 +5,15 @@ using UnityEngine.InputSystem;
 
 public class MenuController : MonoBehaviour
 {
-    private static MenuController instance;
+    public static MenuController instance;
     public TimeTravel timeTravel;
     
     public Image iconTimeTravel;
     public Sprite iconTimeAvalible, iconTimeUnavalible;
     public GameObject blockTimeTravel;
     public GameObject pausePanel;
+
+    public int indexArchive, indexMechanic;
 
     void Start()
     {
@@ -59,21 +61,10 @@ public class MenuController : MonoBehaviour
         TimeTravelIcon();
         
     }
+    
     void Pause(InputAction.CallbackContext ctx)
     {
         return;
-        if (pausePanel.activeSelf)
-        {
-            pausePanel.SetActive(false);
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        else
-        {
-            pausePanel.SetActive(true);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.Confined;
-        }
     }
 
     void TimeTravelIcon()
@@ -106,5 +97,15 @@ public class MenuController : MonoBehaviour
     public void InitialMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void EntryArchive(int i)
+    {
+        indexArchive = i;
+    }
+
+    public void EntryMechanic(int i)
+    {
+        indexMechanic = i;
     }
 }

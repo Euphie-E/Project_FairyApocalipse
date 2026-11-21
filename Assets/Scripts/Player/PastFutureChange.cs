@@ -9,6 +9,7 @@ public class PastFutureChange : Interactable
     [SerializeField] GameObject[] futureObject;
     [SerializeField] GameObject[] futureChangedObject;
     [SerializeField] private bool isChanged = false;
+    public bool planted;
 
     [SerializeField] private bool interactInFuture = false;
     [SerializeField] private bool isReversible = false;
@@ -24,6 +25,7 @@ public class PastFutureChange : Interactable
         ActiveAll(futureObject);
         saveData = new Save(Types.PastFutureChange,id);
         LevelManager.Instance?.Add(this);
+        planted = false;
     }
 
     protected override void Interact(InteractController player, GameObject attach)
@@ -37,7 +39,7 @@ public class PastFutureChange : Interactable
         }
     }
 
-    private bool CheckSeed()
+    public bool CheckSeed()
     {
         if (seeds.Contains(PlayerPocket.Instance.seed))
         {
@@ -61,6 +63,8 @@ public class PastFutureChange : Interactable
                 plantedSeed = PlayerPocket.Instance.UseSeed();
             }
 
+            planted = true;
+            Debug.Log(planted);
             isChanged = !isChanged;
 
             DisableAll(pastObject);
