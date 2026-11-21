@@ -13,6 +13,7 @@ public class NotificationTrigger : MonoBehaviour
                 NotificationManager.instance.ShowNotif(data);
             }
             enabled = false;
+            Destroy(this);
         }
     }
 }
