@@ -51,13 +51,13 @@ public class PlayerDeathController : MonoBehaviour
     [SerializeField] private float bossPullDistance = 1.5f;
     [SerializeField] private float bossPullDuration = 0.2f;
 
-    [Header("Drown")]
     private bool isDrowning = false;
 
     private Coroutine bossPushCoroutine;
     private Coroutine bossPullCoroutine;
 
 
+    [Header("Revive")]
     [SerializeField] private float toReviveTime = 3f;
     private float toReviveTimer = 0f;
 
@@ -300,8 +300,9 @@ public class PlayerDeathController : MonoBehaviour
             return;
         }
 
+        //hitPosition.y = transform.position.y;
         Vector3 direction = hitPosition - transform.position;
-        direction.y = 0f;
+        //direction.y = 0;
 
         if (direction.sqrMagnitude < 0.001f)
         {
@@ -313,9 +314,9 @@ public class PlayerDeathController : MonoBehaviour
         if (bossPullCoroutine != null)
         {
             StopCoroutine(bossPullCoroutine);
-
-            bossPullCoroutine = StartCoroutine(BossPullRoutine(direction));
         }
+
+        bossPullCoroutine = StartCoroutine(BossPullRoutine(direction));
     }
 
     private IEnumerator BossPullRoutine(Vector3 direction)
@@ -324,7 +325,7 @@ public class PlayerDeathController : MonoBehaviour
         float previousProgress = 0f;
         float duration = Mathf.Max(0.01f, bossPullDuration);
 
-        while (timer < duration && isDead)
+        while (timer < duration)
         {
             if (!playerCharacterController.enabled) break;
 
@@ -332,7 +333,6 @@ public class PlayerDeathController : MonoBehaviour
 
             float t = Mathf.Clamp01(timer / duration);
 
-       
             float progress = 1f - Mathf.Pow(1f - t, 2f);
 
             float distanceStep = (progress - previousProgress) * bossPullDistance;

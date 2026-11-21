@@ -5,7 +5,7 @@ public class TongueController : MonoBehaviour
     public Frog frog;
     [SerializeField] Transform tongueBase;
     [SerializeField] Transform[] bones;
-    [SerializeField] float maxDistance;
+    [SerializeField] float maxRange;
     public float lickInterval;
     [SerializeField] float lickDuration;
     [SerializeField] float returnDuration;
@@ -14,20 +14,15 @@ public class TongueController : MonoBehaviour
     private bool isGoing = false;
 
     float progress = 0;
-
-    Vector3[] startPositions;
     
-    private Vector3[] returnStartPositions;
     private Vector3[] targetPositions;
     private Vector3[] originalPositions;
-    private Vector3 end;
 
     void Start()
     {
         frog = GetComponent<Frog>();
         originalPositions = new Vector3[bones.Length];
         targetPositions = new Vector3[bones.Length];
-        returnStartPositions = new Vector3[bones.Length];
 
         for (int i = 0; i < bones.Length; i++)
         {
@@ -41,16 +36,21 @@ public class TongueController : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(frog.player.position - transform.position);
         direction = (frog.player.position - tongueBase.position).normalized;
         
-        Debug.Log("player position: " + frog.player.position);
-        Debug.Log("Direction: " + direction);
+        /* Debug.Log("player position: " + frog.player.position);
+        Debug.Log("Direction: " + direction); */
 
         //CalculateTargetPositions(frog.player);
+
+        for (int i = 0; i < bones.Length; i++)
+        {
+            originalPositions[i] = bones[i].position;
+        }
         
         for (int i = 0; i < bones.Length; i++)
         {
             float t = (float)i / (bones.Length - 1);
 
-            targetPositions[i] = tongueBase.position + direction * maxDistance * t;
+            targetPositions[i] = tongueBase.position + direction * maxRange * t;
         }
 
         progress = 0f;
@@ -71,7 +71,7 @@ public class TongueController : MonoBehaviour
         {
             float t = (float)i / (bones.Length - 1);
 
-            targetPositions[i] = tongueBase.position + direction * maxDistance * t;
+            targetPositions[i] = tongueBase.position + direction * maxRange * t;
         }
     } */
 
@@ -92,27 +92,23 @@ public class TongueController : MonoBehaviour
 
                 if (progress >= 1f)
                 {
-                    for (int i = 0; i < bones.Length; i++)
-                    {
-                        returnStartPositions[i] = bones[i].position;
-                    }
                     isGoing = false;
                 }
 
-                Debug.Log("progress: " + progress);
+                /* Debug.Log("progress: " + progress); */
             }
 
             else
             {
-                progress += Time.deltaTime / returnDuration;
+                progress -= Time.deltaTime / returnDuration;
                 progress = Mathf.Clamp01(progress);
 
                 for (int i = 0; i < bones.Length; i++)
                 {
-                    bones[i].position = Vector3.Lerp(returnStartPositions[i], originalPositions[i], progress);
+                    bones[i].position = Vector3.Lerp(originalPositions[i], targetPositions[i], progress);
                 }
 
-                if (progress >= 1f)
+                if (progress <= 0f)
                 {
                     isLicking = false;
                 }
@@ -136,5 +132,13 @@ public class TongueController : MonoBehaviour
     public void OnCollision()
     {
         if (isGoing == true) isGoing = false;
+    }
+
+    void OnDrawGizmos()
+    {
+        #if UNITY_EDITOR
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, maxRange);
+        #endif
     }
 }

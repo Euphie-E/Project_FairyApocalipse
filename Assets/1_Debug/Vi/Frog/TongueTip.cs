@@ -8,12 +8,14 @@ public class TongueTip : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerDeathController>().Pull(transform.position);
+            other.GetComponent<PlayerDeathController>().Pull(tongue.transform.position);
         }
 
         /* else if (other.CompareTag("Trash"))
         {
             other.GetComponent<Trash>().BringDown();
         } */
+
+        tongue.OnCollision();
     }
 }

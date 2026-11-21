@@ -16,7 +16,7 @@ public class FrogLick : IFrogState
 
     public void Enter()
     {
-        
+        waitTime = tongue.lickInterval;
     }
 
     public void Process()
