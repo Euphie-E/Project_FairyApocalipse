@@ -24,15 +24,18 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: a5e40f2443b92374a9fe85b00a03593a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: Transparent
   disabledShaderPasses:
   - MOTIONVECTORS
+  - DepthOnly
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -101,34 +104,36 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
+    - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DstBlend: 0
-    - _DstBlendAlpha: 0
+    - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _EnvironmentReflections: 1
-    - _FlowDirection: 1.44
-    - _FlowNoiseScale: 1.34
-    - _FlowSpeed: 0.43
-    - _FoamAmount: 4.1
-    - _FoamCutoff: 1.09
+    - _FlowDirection: 1
+    - _FlowNoiseScale: 800
+    - _FlowSpeed: 0.1
+    - _FoamAmount: 1
+    - _FoamCutoff: 1
     - _FoamScale: 5.71
     - _FoamSpeed: 0.02
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
+    - _ObjectColorValue: 5
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _Pixelization: 2048
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RefractionSpeed: 0.01
-    - _RefractionStrength: 0.05
+    - _RefractionSpeed: 0.05
+    - _RefractionStrength: 0.01
     - _RefractionXYScale: 0.37
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
@@ -136,27 +141,29 @@ Material:
     - _SpecularHighlights: 1
     - _SpecularSpeed: 0.96
     - _SpecularThickness: 2.65
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SrcBlendAlpha: 1
-    - _Surface: 0
-    - _WaterAmplitude: 0.02
-    - _WaterDepth: 5.76
-    - _WaterSpeed: 0.05
-    - _WaterStrength: 0
+    - _Surface: 1
+    - _WaterAmplitude: 0.005
+    - _WaterDepth: 1.37
+    - _WaterSpeed: 2
+    - _WaterStrength: 2
     - _WaveAmplitude: 0.01
     - _WaveFrequency: 0.11
     - _WaveSpeed: 1.13
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
-    - _ZWrite: 1
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DeepColor: {r: 0.014462439, g: 0.122641504, b: 0.10422805, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FoamColor: {r: 0.6121396, g: 0.7169812, b: 0.6226319, a: 1}
-    - _FoamScale: {r: 12.57, g: 70, b: 0, a: 0}
-    - _RefractionXYScale: {r: 0.4, g: 0.1, b: 0, a: 0}
+    - _FoamScale: {r: 100, g: 100, b: 0, a: 0}
+    - _RefractionXYScale: {r: 0.05, g: 0.05, b: 0, a: 0}
     - _ShallowColor: {r: 0.2985048, g: 0.49056602, b: 0.37901258, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SpecularColor: {r: 0.42924526, g: 0.8700276, b: 1, a: 1}
