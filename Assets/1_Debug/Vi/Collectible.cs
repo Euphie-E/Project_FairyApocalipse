@@ -61,7 +61,7 @@ public class Collectible : Savable
     {
         //Debug.Log(saveData);
         if(saveData == null) new Save(Types.Collectible,id);
-        saveData.Add(new KeyValue{key = "Collected",value = Collected?1:0});
+        //saveData.Add(new KeyValue{key = "Collected",value = Collected?1:0});
         return saveData;
     }
 
@@ -78,6 +78,6 @@ public class Collectible : Savable
     }
     public void OnDestroy()
     {
-        LevelManager.Instance?.Remove(this);
+        //LevelManager.Instance?.Remove(this);
     }
 }

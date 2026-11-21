@@ -37,7 +37,7 @@ public class CollectibleSeed : Collectible
         isHolding = holding;
     }
 
-    public override Save Save()
+/*     public override Save Save()
     {
         var temp = base.Save();
         temp.Add(new KeyValue{key = "isHolding", value = isHolding?1:0});
@@ -66,7 +66,7 @@ public class CollectibleSeed : Collectible
     public void SaveMe()
     {
         LevelManager.Instance?.SaveMe(this);
-    }
+    } */
     
 
 }
