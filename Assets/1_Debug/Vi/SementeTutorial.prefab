@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 4731674645433795342}
   - component: {fileID: 841268204268312110}
   - component: {fileID: 8020870038606422425}
+  - component: {fileID: 6889658185227725755}
+  - component: {fileID: 6959177738450932673}
   m_Layer: 7
   m_Name: PastObjects
   m_TagString: Untagged
@@ -111,8 +113,45 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2.5641105, y: 1, z: 2.4337764}
+  m_Center: {x: -0.4238773, y: 0.0000011466675, z: -0.24067582}
+--- !u!65 &6889658185227725755
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618229858636213579}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.1035075, y: 1, z: 4.2014985}
+  m_Center: {x: -0.4887736, y: 0.0000016955252, z: 0.100908354}
+--- !u!114 &6959177738450932673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618229858636213579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87aeb4ae1ef575348a3412680d9c66d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SeedNotificationTrigger
+  data:
+  - {fileID: 11400000, guid: 544774fdc93cd26489a9efa113d16f57, type: 2}
+  - {fileID: 11400000, guid: b9883aef00797194097016b77cf5575e, type: 2}
+  past: {fileID: 3338763215885422782}
 --- !u!1 &3257037622869159640
 GameObject:
   m_ObjectHideFlags: 0
