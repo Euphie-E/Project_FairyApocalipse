@@ -3,78 +3,152 @@ using UnityEngine;
 public class TongueController : MonoBehaviour
 {
     public Frog frog;
+    [SerializeField] Animator animator;
     [SerializeField] Transform tongueBase;
     [SerializeField] Transform[] bones;
-    [SerializeField] float maxDistance;
+    [SerializeField] float maxRange;
     public float lickInterval;
     [SerializeField] float lickDuration;
     [SerializeField] float returnDuration;
     private Vector3 direction;
     public bool isLicking = false;
+    private bool isGoing = false;
 
-    private Transform[] originalTransforms;
-    private Vector3 end;
+    float progress = 0;
+    
+    private Vector3[] targetPositions;
+    private Vector3[] originalPositions;
 
     void Start()
     {
         frog = GetComponent<Frog>();
-        originalTransforms = bones;
+        originalPositions = new Vector3[bones.Length];
+        targetPositions = new Vector3[bones.Length];
+
+        for (int i = 0; i < bones.Length; i++)
+        {
+            originalPositions[i] = bones[i].position;
+        }
     }
 
     public void StartLick()
     {
         if (isLicking) return;
+        transform.rotation = Quaternion.LookRotation(frog.player.position - transform.position);
         direction = (frog.player.position - tongueBase.position).normalized;
-        transform.rotation = Quaternion.LookRotation(direction);
-        Vector3 target = tongueBase.position + direction * maxDistance;
+        
+        /* Debug.Log("player position: " + frog.player.position);
+        Debug.Log("Direction: " + direction); */
+
+        //CalculateTargetPositions(frog.player);
+
+        for (int i = 0; i < bones.Length; i++)
+        {
+            originalPositions[i] = bones[i].position;
+        }
+        
         for (int i = 0; i < bones.Length; i++)
         {
             float t = (float)i / (bones.Length - 1);
 
-            Vector3 targetPosition = Vector3.Lerp(
-                tongueBase.position,
-                target,
-                t
-            );
+            targetPositions[i] = tongueBase.position + direction * maxRange * t;
         }
+
+        progress = 0f;
+
+        animator.SetTrigger("Lick");
         isLicking = true;
+        //isGoing = true;
     }
 
-    void Update()
+    public void Go()
     {
-        if (isLicking) Lick();
+        animator.speed = 0f;
+        isGoing = true;
     }
 
-    void Lick()
+    /* private void CalculateTargetPositions(Transform player)
     {
-        /* Vector3 direction = (frog.player.position - tongueBase.position).normalized;
+        targetPositions = new Vector3[bones.Length];
 
-        end = tongueBase.position + direction * maxDistance;
+        Vector3 direction = (player.position - tongueBase.position).normalized;
 
-        Vector3[] targets = new Vector3[bones.Length];
+        transform.rotation = Quaternion.LookRotation(direction);
 
-        // Bone 2 vai para a saída da boca
-        targets[0] = tongueBase.position;
-
-        // Bones 3 até 10 são distribuídos em linha reta
-        for (int i = 1; i < bones.Length; i++)
+        for (int i = 0; i < bones.Length; i++)
         {
             float t = (float)i / (bones.Length - 1);
 
-            targets[i] = Vector3.Lerp(tongueBase.position, end, t);
+            targetPositions[i] = tongueBase.position + direction * maxRange * t;
         }
+    } */
 
-        yield return MoveToPositions(targets, extendDuration, true);
 
-        // Sempre retrai, independentemente do motivo
-        yield return Retract();
+    void Update()
+    {
+        if (isLicking) 
+        {
+            if (isGoing)
+            {
+                progress += Time.deltaTime / lickDuration;
+                progress = Mathf.Clamp01(progress);
 
-        isAttacking = false; */
+                for (int i = 0; i < bones.Length; i++)
+                {
+                    bones[i].position = Vector3.Lerp(originalPositions[i], targetPositions[i], progress);
+                }
+
+                if (progress >= 1f)
+                {
+                    isGoing = false;
+                }
+
+                /* Debug.Log("progress: " + progress); */
+            }
+
+            else
+            {
+                progress -= Time.deltaTime / returnDuration;
+                progress = Mathf.Clamp01(progress);
+
+                for (int i = 0; i < bones.Length; i++)
+                {
+                    bones[i].position = Vector3.Lerp(originalPositions[i], targetPositions[i], progress);
+                }
+
+                if (progress <= 0.05f)
+                {
+                    animator.speed = 1f;
+                }
+            }
+        }
     }
 
+    /* private void MoveBones(Vector3[] positions, float progress)
+    {
+        for (int i = 0; i < bones.Length; i++)
+        {
+            bones[i].position = Vector3.Lerp(originalPositions[i], positions[i], progress);
+        }
+    } */
 
     public void EndLick()
     {
         isLicking = false;
+    }
+
+    public void OnCollision()
+    {
+        if (isGoing == true) isGoing = false;
+    }
+
+    void OnDrawGizmos()
+    {
+        #if UNITY_EDITOR
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, maxRange);
+        #endif
+
+        //if (targetPositions.Length > 1) Gizmos.DrawLine(targetPositions[0], targetPositions[targetPositions.Length-1]);
     }
 }
