@@ -11,9 +11,9 @@ public class TongueTip : MonoBehaviour
             other.GetComponent<PlayerDeathController>().Pull(tongue.transform.position);
         }
 
-        /* else if (other.CompareTag("Trash"))
+        /* else if (other.CompareTag("Weak Point"))
         {
-            other.GetComponent<Trash>().BringDown();
+            other.GetComponent<WeakPoint>().BringDown();
         } */
 
         tongue.OnCollision();

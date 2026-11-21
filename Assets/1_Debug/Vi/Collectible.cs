@@ -39,7 +39,7 @@ public class Collectible : Savable
     protected virtual void Collect()
     {
         Collected = true;
-        LevelManager.Instance?.SaveMe(this);
+        //LevelManager.Instance?.SaveMe(this);
         CollectEffect();
         CollectInfo();
     }
