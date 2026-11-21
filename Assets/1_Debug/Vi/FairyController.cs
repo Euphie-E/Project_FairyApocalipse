@@ -42,7 +42,7 @@ public class FairyController : MonoBehaviour
         {
             holdingRef = seed;
             holdingRef.SaveState(true);
-            holdingRef.SaveMe();
+            //holdingRef.SaveMe();
             holdingRef.enabled = false;
             seedTarget = seed.transform;
             state = 1;
@@ -70,7 +70,7 @@ public class FairyController : MonoBehaviour
         {
             holdingRef.enabled = true;
             holdingRef.SaveState(false);
-            holdingRef.SaveMe();
+            //holdingRef.SaveMe();
             holdingRef = null;
         }
         if (seedTarget.gameObject != null) Destroy(seedTarget.gameObject);
