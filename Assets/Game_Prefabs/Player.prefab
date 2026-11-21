@@ -453,6 +453,7 @@ GameObject:
   - component: {fileID: 5671333806328644038}
   - component: {fileID: 6235956394809265416}
   - component: {fileID: 4285460171558593203}
+  - component: {fileID: 8027636267350658750}
   m_Layer: 3
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -811,6 +812,34 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8027636267350658750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2664642316351876537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b90a0887230ae4b49b54127c611be6c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnerGaivotas
+  player: {fileID: 6930695564496406604}
+  cameraReferencia: {fileID: 2733461619586243613}
+  prefabsGaivota:
+  - {fileID: 3878816551438407380, guid: 799c9fcb60657b843891396bc6df6cc8, type: 3}
+  maximoBandos: 20
+  minimoPorBando: 3
+  maximoPorBando: 1
+  raioMinimoSpawn: 20
+  raioMaximoSpawn: 200
+  raioDespawn: 400
+  alturaMinima: 50
+  alturaMaxima: 60
+  dispersaoBando: 7
+  intervaloAtualizacao: 2
+  evitarSpawnNaCamera: 1
+  margemTela: 0.119
 --- !u!1 &2911940494488221763
 GameObject:
   m_ObjectHideFlags: 0
