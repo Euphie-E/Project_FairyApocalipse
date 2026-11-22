@@ -13,6 +13,7 @@ public class PastFutureChange : Interactable
 
     [SerializeField] private bool interactInFuture = false;
     [SerializeField] private bool isReversible = false;
+    [SerializeField] private bool isFinal = false;
     [SerializeField] private List<Seed> seeds;
     [SerializeField] private Seed plantedSeed = null;
     [SerializeField] private int id = -1;
@@ -66,6 +67,11 @@ public class PastFutureChange : Interactable
             planted = true;
             Debug.Log(planted);
             isChanged = !isChanged;
+
+            if (isFinal)
+            {
+                TransitionController.instance.Epside(0);
+            }
 
             DisableAll(pastObject);
             DisableAll(futureObject);
