@@ -19,7 +19,7 @@ public class Collectible : Savable
         collectible = transform.GetChild(0).gameObject;
         originalPos = transform.position;
         saveData = new Save(Types.Collectible,id);
-        LevelManager.Instance?.Add(this);
+        LevelManager.Get()?.Add(this);
     }
 
     void Update()
@@ -39,7 +39,7 @@ public class Collectible : Savable
     protected virtual void Collect()
     {
         Collected = true;
-        //LevelManager.Instance?.SaveMe(this);
+        //LevelManager.Get()?.SaveMe(this);
         CollectEffect();
         CollectInfo();
     }
@@ -78,6 +78,6 @@ public class Collectible : Savable
     }
     public void OnDestroy()
     {
-        //LevelManager.Instance?.Remove(this);
+        //LevelManager.Get()?.Remove(this);
     }
 }

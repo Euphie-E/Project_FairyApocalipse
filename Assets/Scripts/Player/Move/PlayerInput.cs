@@ -13,6 +13,7 @@ public class PlayerInput : MonoBehaviour
     [Header("Input")]
     [SerializeField] private InputActionAsset inputActions;
     InputSystem_Actions inputSystemActions;
+    PlayerMovement playerMovement;
 
     public InputActionMap playerMap { get; private set; }
     public InputAction moveAction { get; private set; }
@@ -73,10 +74,23 @@ public class PlayerInput : MonoBehaviour
     // gambiarra
     void Start()
     {
-        um.performed += ctx => TeleportToCheckpoint(0);
-        dois.performed += ctx => TeleportToCheckpoint(1);
-        tres.performed += ctx => TeleportToCheckpoint(2);
-        quatro.performed += ctx => TeleportToCheckpoint(3);
+        playerMovement = transform.GetComponent<PlayerMovement>();
+        um.performed += ctx => {
+            if(playerMovement != null)
+                playerMovement.TeleportToCheckpoint(1);
+            };
+        dois.performed += ctx => {
+            if(playerMovement != null)
+                playerMovement.TeleportToCheckpoint(2);
+            };
+        tres.performed += ctx => {
+            if(playerMovement != null)
+                playerMovement.TeleportToCheckpoint(3);
+            };
+        quatro.performed += ctx => {
+            if(playerMovement != null)
+                playerMovement.TeleportToCheckpoint(4);
+            };
 
         cinco.performed += ctx =>
         {
@@ -365,39 +379,4 @@ public class PlayerInput : MonoBehaviour
         }
         Debug.Log(resp.ToString());
     }
-
-
-    private void TeleportToCheckpoint(int index)
-    {
-        if (index < 0 || index >= tpPositions.Length)
-            return;
-
-        CharacterController characterController =
-            GetComponent<CharacterController>();
-
-        characterController.enabled = false;
-        transform.position = tpPositions[index];
-        characterController.enabled = true;
-
-        PlayerDeathController deathController =
-            GetComponent<PlayerDeathController>();
-
-        if (deathController != null)
-            deathController.ResetFallAfterTeleport();
-
-        Checkpoint[] checkpoints =
-            FindObjectsByType<Checkpoint>(FindObjectsSortMode.None);
-
-        foreach (Checkpoint checkpoint in checkpoints)
-        {
-            if (checkpoint != null &&
-                Vector3.Distance(
-                    checkpoint.transform.position + Vector3.up * 1.5f,
-                    tpPositions[index]) < 0.1f)
-            {
-                checkpoint.PlayRespawnEffect();
-                break;
-            }
-        }
-    }
-    }
+}

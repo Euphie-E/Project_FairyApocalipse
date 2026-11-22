@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     private PlayerAnimatorController playerAnimatorController;
     public CharacterController characterController { get; private set; }
     private TimeTravel timeTravel;
+    PlayerDeathController deathController;
 
     [Header("Movement")]
     [SerializeField] private float maxSpeed = 6f;
@@ -79,6 +81,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     private Vector3 dashDirection;
     private float dashTraveled;
     private float DashSpeed => dashDistance / dashDuration;
+    [SerializeField] private CinemachineCamera cinemachineCamera;
 
     private void OnEnable()
     {
@@ -95,6 +98,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         playerAnimatorController = GetComponent<PlayerAnimatorController>();
         characterController = GetComponent<CharacterController>();
         timeTravel = GetComponent<TimeTravel>();
+        deathController = GetComponent<PlayerDeathController>();
     }
 
     private void Start()
@@ -672,12 +676,39 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         verticalVelocity = 0f;
         mushroomBounceActive = false;
 
+        Vector3 difference = teleportPoint.position - transform.position;
+
         // Teleporta exatamente o PlayerCharacter
-        transform.position = teleportPoint.position;
-        transform.rotation = teleportPoint.rotation;
+        transform.SetPositionAndRotation(teleportPoint.position, teleportPoint.rotation);
 
         // Liga novamente
         characterController.enabled = true;
+        
+        cinemachineCamera.OnTargetObjectWarped(
+            cinemachineCamera.Target.TrackingTarget,
+            difference
+        );
+        ResetMotionForDeath();
+        deathController.ResetFallAfterTeleport();
+    }
+    public void TeleportToCheckpoint(int index)
+    {
+        Checkpoint checkpoint = LevelManager.Get()?.GetCheckpoint(index);
+        if(checkpoint == null)
+        {
+            Debug.Log("Checkpoint nao encontrado");
+            return;
+        }
+        TeleportTo(checkpoint.transform);
+        if (checkpoint != null)
+        {
+            checkpoint.PlayRespawnEffect();
+        }
+    }
+    public void TeleportLastCheckpoint()
+    {
+        if(LevelManager.Get() == null) return;
+        TeleportToCheckpoint(LevelManager.Get().GetLastCheckpoint().index);
     }
     private void HandleFootsteps()
     {
