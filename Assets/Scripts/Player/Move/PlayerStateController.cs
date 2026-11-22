@@ -10,6 +10,9 @@ public class PlayerStateController : MonoBehaviour
 
     public PlayerMovement playerMovement { get; private set; }
     public PlayerSwingController playerSwingController { get; private set; }
+    public PlayerCutsceneMovement playerCutsceneMovement { get; private set; }
+    public PlayerAnimatorController playerAnimatorController { get; private set; }
+
     [Header("Camera")]
     public CinemachineCamera playerCamera;
     public Transform playerSwingTarget;
@@ -29,14 +32,19 @@ public class PlayerStateController : MonoBehaviour
             Instance = this;
         }
 
+        playerAnimatorController = GetComponent<PlayerAnimatorController>();
         playerMovement = GetComponent<PlayerMovement>();
         playerSwingController = GetComponent<PlayerSwingController>();
+        playerCutsceneMovement = GetComponent<PlayerCutsceneMovement>();
 
         playerCamera.Priority = 10;
+
+        StartMovement();
     }
 
     public void StartMovement()
     {
+        playerCutsceneMovement.enabled = false;
         playerMovement.enabled = true;
         playerSwingController.enabled = false;
     }
@@ -87,5 +95,11 @@ public class PlayerStateController : MonoBehaviour
     public void ActivateFutureLayer()
     {
         playerMovement.FutureCollision();
+    }
+
+    public void StartCutsceneState()
+    {
+        playerMovement.enabled = false;
+        playerCutsceneMovement.enabled = true;
     }
 }
