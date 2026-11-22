@@ -13,6 +13,7 @@ public class MenuController : MonoBehaviour
     public GameObject blockTimeTravel;
     public GameObject pausePanel;
 
+    public ArchiveEntries archiveEntries;
     public int indexArchive, indexMechanic;
 
     void Start()
@@ -45,23 +46,33 @@ public class MenuController : MonoBehaviour
         {
             if (pausePanel.activeSelf)
             {
-                Time.timeScale = 1;
-                pausePanel.SetActive(false);
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                UnPauseEffect();
             }
             else
             {
-                Time.timeScale = 0;
-                pausePanel.SetActive(true);
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.Confined;
+                PauseEffect();
             }
             
         }
 
         TimeTravelIcon();
         
+    }
+
+    public void PauseEffect()
+    {
+        Time.timeScale = 0;
+        pausePanel.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public void UnPauseEffect()
+    {
+        Time.timeScale = 1;
+        pausePanel.SetActive(false);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     
     void Pause(InputAction.CallbackContext ctx)
@@ -90,11 +101,11 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    public void CloseButton()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
+    // public void CloseButton()
+    // {
+    //     Cursor.lockState = CursorLockMode.Locked;
+    //     Cursor.visible = false;
+    // }
 
     public void InitialMenu()
     {
@@ -104,6 +115,7 @@ public class MenuController : MonoBehaviour
     public void EntryArchive(int i)
     {
         indexArchive = i;
+        archiveEntries.FillEntry(i);
     }
 
     public void EntryMechanic(int i)
