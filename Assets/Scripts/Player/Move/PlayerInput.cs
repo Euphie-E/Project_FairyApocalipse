@@ -39,7 +39,7 @@ public class PlayerInput : MonoBehaviour
     public InputAction quatro { get; private set; }
     public InputAction cinco { get; private set; }
     public InputAction test { get; private set; }
-    Vector3[] tpPositions = new Vector3[4];
+    Vector3[] tpPositions = new Vector3[5];
 
 
     private void Awake()
@@ -71,42 +71,52 @@ public class PlayerInput : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // gambiarra
+    // Cheats de desenvolvimento: segurar Enter + tecla.
     void Start()
     {
-        playerMovement = transform.GetComponent<PlayerMovement>();
-        um.performed += ctx => {
-            if(playerMovement != null)
-                playerMovement.TeleportToCheckpoint(1);
-            };
-        dois.performed += ctx => {
-            if(playerMovement != null)
-                playerMovement.TeleportToCheckpoint(2);
-            };
-        tres.performed += ctx => {
-            if(playerMovement != null)
-                playerMovement.TeleportToCheckpoint(3);
-            };
-        quatro.performed += ctx => {
-            if(playerMovement != null)
-                playerMovement.TeleportToCheckpoint(4);
-            };
-
-        cinco.performed += ctx =>
-        {
-            if (SceneManager.GetActiveScene().buildIndex == 1) SceneManager.LoadScene(2);
-            else if (SceneManager.GetActiveScene().buildIndex == 2) SceneManager.LoadScene(1);
-        };
-
-
+        playerMovement = GetComponent<PlayerMovement>();
         moveAction.performed += CheckControl;
     }
+
+    private void Update()
+    {
+        Keyboard teclado = Keyboard.current;
+        if (teclado == null || !(teclado.enterKey.isPressed || teclado.numpadEnterKey.isPressed))
+            return;
+
+        if (teclado.digit1Key.wasPressedThisFrame) TeleportarParaCheckpoint(1);
+        else if (teclado.digit2Key.wasPressedThisFrame) TeleportarParaCheckpoint(2);
+        else if (teclado.digit3Key.wasPressedThisFrame) TeleportarParaCheckpoint(3);
+        else if (teclado.digit4Key.wasPressedThisFrame) TeleportarParaCheckpoint(4);
+        else if (teclado.digit5Key.wasPressedThisFrame) TeleportarParaCheckpoint(5);
+        else if (teclado.digit0Key.wasPressedThisFrame) AlternarCena();
+        else if (teclado.rKey.wasPressedThisFrame) ReiniciarCena();
+    }
+
+    private void TeleportarParaCheckpoint(int checkpoint)
+    {
+        if (playerMovement != null)
+            playerMovement.TeleportToCheckpoint(checkpoint);
+    }
+
+    private void AlternarCena()
+    {
+        int cenaAtual = SceneManager.GetActiveScene().buildIndex;
+        if (cenaAtual == 1) SceneManager.LoadScene(2);
+        else if (cenaAtual == 2) SceneManager.LoadScene(1);
+    }
+
+    private void ReiniciarCena()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     //this should not be done but the idex starts at 1
-    Dictionary<Vector3,int> tpSort = new();
+    Dictionary<Vector3, int> tpSort = new();
     public void AddCheckpoint(GameObject position, int index)
     {
-        tpSort.Add(position.transform.position + Vector3.up * 1.5f,index);
-        List<KeyValuePair<Vector3,int>> valuePairs = new();
+        tpSort.Add(position.transform.position + Vector3.up * 1.5f, index);
+        List<KeyValuePair<Vector3, int>> valuePairs = new();
         foreach (var item in tpSort)
         {
             valuePairs.Add(item);
@@ -117,10 +127,10 @@ public class PlayerInput : MonoBehaviour
         {
             tpPositions[i] = item.Key;
             i++;
-            if(i>=tpPositions.Length) break;
+            if (i >= tpPositions.Length) break;
         }
     }
-    
+
     private void OnEnable()
     {
         playerMap.Enable();
@@ -186,7 +196,7 @@ public class PlayerInput : MonoBehaviour
         escapeAction.Enable();
         dashAction.Enable();
         if (DataManager.Instance != null)
-            DataManager.Instance.AddData(DataManager.Data.Death,1);
+            DataManager.Instance.AddData(DataManager.Data.Death, 1);
     }
     /// <summary>
     /// Type:<br />
@@ -199,37 +209,37 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void AddAction(Action<InputAction.CallbackContext> action,int type)
+    public void AddAction(Action<InputAction.CallbackContext> action, int type)
     {
-        if(type == 1)
+        if (type == 1)
         {
             moveAction.performed += action;
         }
-        if(type == 2)
+        if (type == 2)
         {
             jumpAction.performed += action;
         }
-        if(type == 3)
+        if (type == 3)
         {
             interactAction.performed += action;
         }
-        if(type == 4)
+        if (type == 4)
         {
             resetAction.performed += action;
         }
-        if(type == 5)
+        if (type == 5)
         {
             travelAction.performed += action;
         }
-        if(type == 6)
+        if (type == 6)
         {
             escapeAction.performed += action;
         }
-        if(type == 7)
+        if (type == 7)
         {
             test.performed += action;
         }
-        
+
     }
 
     /// <summary>
@@ -243,29 +253,29 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void AddCancelAction(Action<InputAction.CallbackContext> action,int type)
+    public void AddCancelAction(Action<InputAction.CallbackContext> action, int type)
     {
-        if(type == 1)
+        if (type == 1)
         {
             moveAction.canceled += action;
         }
-        if(type == 2)
+        if (type == 2)
         {
             jumpAction.canceled += action;
         }
-        if(type == 3)
+        if (type == 3)
         {
             interactAction.canceled += action;
         }
-        if(type == 4)
+        if (type == 4)
         {
             resetAction.canceled += action;
         }
-        if(type == 5)
+        if (type == 5)
         {
             travelAction.canceled += action;
         }
-        if(type == 6)
+        if (type == 6)
         {
             escapeAction.canceled += action;
         }
@@ -282,33 +292,33 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void RemoveAction(Action<InputAction.CallbackContext> action,int type)
+    public void RemoveAction(Action<InputAction.CallbackContext> action, int type)
     {
-        if(type == 1)
+        if (type == 1)
         {
             moveAction.performed -= action;
         }
-        if(type == 2)
+        if (type == 2)
         {
             jumpAction.performed -= action;
         }
-        if(type == 3)
+        if (type == 3)
         {
             interactAction.performed -= action;
         }
-        if(type == 4)
+        if (type == 4)
         {
             resetAction.performed -= action;
         }
-        if(type == 5)
+        if (type == 5)
         {
             travelAction.performed -= action;
         }
-        if(type == 6)
+        if (type == 6)
         {
             escapeAction.performed -= action;
         }
-        
+
     }
 
     /// <summary>
@@ -322,29 +332,29 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="type"></param>
-    public void RemoveCancelAction(Action<InputAction.CallbackContext> action,int type)
+    public void RemoveCancelAction(Action<InputAction.CallbackContext> action, int type)
     {
-        if(type == 1)
+        if (type == 1)
         {
             moveAction.canceled -= action;
         }
-        if(type == 2)
+        if (type == 2)
         {
             jumpAction.canceled -= action;
         }
-        if(type == 3)
+        if (type == 3)
         {
             interactAction.canceled -= action;
         }
-        if(type == 4)
+        if (type == 4)
         {
             resetAction.canceled -= action;
         }
-        if(type == 5)
+        if (type == 5)
         {
             travelAction.canceled -= action;
         }
-        if(type == 6)
+        if (type == 6)
         {
             escapeAction.canceled -= action;
         }
@@ -353,7 +363,7 @@ public class PlayerInput : MonoBehaviour
     List<Action<InputType>> KeyMappingList = new();
     public void KeyMapping(Action<InputType> action)
     {
-        if(!KeyMappingList.Contains(action)) KeyMappingList.Add(action);
+        if (!KeyMappingList.Contains(action)) KeyMappingList.Add(action);
     }
     public void RemoveKeyMapping(Action<InputType> action)
     {
@@ -362,17 +372,17 @@ public class PlayerInput : MonoBehaviour
     void CheckControl(InputAction.CallbackContext ctx)
     {
         InputType resp = InputType.Keyboard;
-        if(ctx.control.device is Gamepad && Gamepad.current != null)
+        if (ctx.control.device is Gamepad && Gamepad.current != null)
         {
-            if(Gamepad.current is XInputController || Gamepad.current.layout.Contains("Xbox"))
+            if (Gamepad.current is XInputController || Gamepad.current.layout.Contains("Xbox"))
             {
                 resp = InputType.Xbox;
             }
-            if(Gamepad.current is DualShockGamepad || Gamepad.current.layout.Contains("DualShock"))
+            if (Gamepad.current is DualShockGamepad || Gamepad.current.layout.Contains("DualShock"))
             {
                 resp = InputType.PlayStation;
             }
-        } 
+        }
         foreach (var item in KeyMappingList)
         {
             item(resp);

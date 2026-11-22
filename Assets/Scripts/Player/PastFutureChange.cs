@@ -8,11 +8,12 @@ public class PastFutureChange : Interactable
     [SerializeField] GameObject[] pastChangedObject;
     [SerializeField] GameObject[] futureObject;
     [SerializeField] GameObject[] futureChangedObject;
-    [SerializeField] private bool isChanged = false;
+    [SerializeField] public bool isChanged = false;
     public bool planted;
 
     [SerializeField] private bool interactInFuture = false;
     [SerializeField] private bool isReversible = false;
+    [SerializeField] private bool isFinal = false;
     [SerializeField] private List<Seed> seeds;
     [SerializeField] private Seed plantedSeed = null;
     [SerializeField] private int id = -1;
@@ -30,12 +31,17 @@ public class PastFutureChange : Interactable
 
     protected override void Interact(InteractController player, GameObject attach)
     {
-        Debug.Log("interagi");
-        Debug.Log("Check seed:" + CheckSeed());
-        Debug.Log("is changed:" + isChanged);
-        if (player.GetComponent<TimeTravel>().isTravelling ^ interactInFuture && (CheckSeed() ^ isChanged)) // se for pra funcionar no passado funciona no passado, se for pra funcionar no futuro funciona no futuro
+        TimeTravel timeTravel = player.GetComponent<TimeTravel>();
+
+        if (timeTravel.isTravelling ^ interactInFuture &&
+            (CheckSeed() ^ isChanged))
         {
             Change();
+
+            if (isChanged && timeTravel.isTravelling)
+            {
+                timeTravel.ForceReturnToFuture();
+            }
         }
     }
 
@@ -66,6 +72,11 @@ public class PastFutureChange : Interactable
             planted = true;
             Debug.Log(planted);
             isChanged = !isChanged;
+
+            if (isFinal)
+            {
+                TransitionController.instance.NextLevel();
+            }
 
             DisableAll(pastObject);
             DisableAll(futureObject);

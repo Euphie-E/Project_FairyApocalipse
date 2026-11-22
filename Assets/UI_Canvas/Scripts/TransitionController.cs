@@ -5,7 +5,7 @@ using static Unity.Collections.Unicode;
 
 public class TransitionController : MonoBehaviour
 {
-    private static TransitionController instance;
+    public static TransitionController instance;
     [SerializeField] Animator transition;
     void Start()
     {
@@ -38,7 +38,7 @@ public class TransitionController : MonoBehaviour
     {
         transition.SetTrigger("End");
         yield return new WaitForSeconds(1);
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadSceneAsync(0);
         //transition.SetTrigger("Start");
     }
 

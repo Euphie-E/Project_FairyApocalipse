@@ -39,10 +39,13 @@ public class BossDamageTrigger : MonoBehaviour
 
         PlayerDeathController player =
             other.GetComponentInParent<PlayerDeathController>();
+        TimeTravel tt =
+            other.GetComponentInParent<TimeTravel>();
 
         if (player == null)
             return;
-
+        if (tt.isTravelling)
+            return;
         damageActive = false;
 
         player.KillFromBoss();
