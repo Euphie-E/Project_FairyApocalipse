@@ -256,4 +256,15 @@ public class TimeTravel : MonoBehaviour
         if (!notFeet && feet) return false;
         return true;
     }
+
+
+    public void ForceReturnToFuture()
+    {
+        if (!isTravelling) return;
+
+        EndTravel(true);
+
+        onCooldown = false;
+        cooldownTimer = cooldown;
+    }
 }

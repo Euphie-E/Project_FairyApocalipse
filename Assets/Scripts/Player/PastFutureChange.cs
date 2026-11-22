@@ -31,12 +31,17 @@ public class PastFutureChange : Interactable
 
     protected override void Interact(InteractController player, GameObject attach)
     {
-        Debug.Log("interagi");
-        Debug.Log("Check seed:" + CheckSeed());
-        Debug.Log("is changed:" + isChanged);
-        if (player.GetComponent<TimeTravel>().isTravelling ^ interactInFuture && (CheckSeed() ^ isChanged)) // se for pra funcionar no passado funciona no passado, se for pra funcionar no futuro funciona no futuro
+        TimeTravel timeTravel = player.GetComponent<TimeTravel>();
+
+        if (timeTravel.isTravelling ^ interactInFuture &&
+            (CheckSeed() ^ isChanged))
         {
             Change();
+
+            if (isChanged && timeTravel.isTravelling)
+            {
+                timeTravel.ForceReturnToFuture();
+            }
         }
     }
 
