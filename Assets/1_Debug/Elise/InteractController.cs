@@ -10,8 +10,10 @@ public class InteractController : MonoBehaviour
     public Interactable atteched = null;
     TimeTravel timeTravel;
     [SerializeField] float radiusCheck = 1;
-    [SerializeField] bool gizmo = false;
+    [SerializeField] bool gizmo = true;
     Collider[] list = new Collider[10];
+
+    LayerMask interactLayer;
 
     void Start()
     {
@@ -23,13 +25,14 @@ public class InteractController : MonoBehaviour
         PlayerInput.Instance.AddAction(Press,3);
         PlayerInput.Instance.AddCancelAction(Cancel,3);
         timeTravel = transform.GetComponent<TimeTravel>();
+        interactLayer = 1 << timeTravel.pastLayer | 1 << timeTravel.futureLayer | 1 << LayerMask.NameToLayer("Default");
     }
 
     void Press(InputAction.CallbackContext ctx)
     {
         if (atteched == null)
         {
-            int max = Physics.OverlapSphereNonAlloc(this.transform.position,radiusCheck,list,timeTravel.isTravelling ? timeTravel.pastLayer:timeTravel.futureLayer);
+            int max = Physics.OverlapSphereNonAlloc(this.transform.position,radiusCheck,list,interactLayer);//,timeTravel.isTravelling ? timeTravel.pastLayer:timeTravel.futureLayer);
             if(gizmo) DrawDebugSphere(transform.position,radiusCheck,Color.blue,2);
             for(int i = 0; i<max;i++)
             {
