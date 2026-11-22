@@ -13,7 +13,7 @@ public class MenuController : MonoBehaviour
     public GameObject blockTimeTravel;
     public GameObject pausePanel;
 
-    public ArchiveEntries archiveEntries;
+    public ArchiveEntries archiveEntries, mechanicEntries;
     public int indexArchive, indexMechanic;
 
     void Start()
@@ -115,11 +115,12 @@ public class MenuController : MonoBehaviour
     public void EntryArchive(int i)
     {
         indexArchive = i;
-        archiveEntries.FillEntry(i);
+        archiveEntries.FillArchiveEntry(i);
     }
 
     public void EntryMechanic(int i)
     {
         indexMechanic = i;
+        mechanicEntries.FillArchiveEntry(i);
     }
 }

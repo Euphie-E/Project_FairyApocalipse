@@ -9,6 +9,8 @@ public class MechanicIndex : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             MenuController.instance.EntryMechanic(index);
+            enabled = false;
+            Destroy(this);
         }
     }
 }

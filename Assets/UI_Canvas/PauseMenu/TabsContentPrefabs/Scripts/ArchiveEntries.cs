@@ -22,7 +22,12 @@ public class ArchiveEntries : MonoBehaviour
         
     }
 
-    public void FillEntry(int i)
+    public void FillArchiveEntry(int i)
+    {
+        archiveEntries[i].SetActive(true);
+    }
+
+    public void FillMechanicEntry(int i)
     {
         archiveEntries[i].SetActive(true);
     }
