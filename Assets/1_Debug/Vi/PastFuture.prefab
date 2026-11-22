@@ -49,6 +49,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2572fa222a899ba4c80786501eedb42a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  saveData:
+    Key: 0
+    ID: 0
+    Values: []
   attachPoints:
   - {fileID: 2698621453906839477}
   rotationThreshold: -1
@@ -65,8 +69,13 @@ MonoBehaviour:
   futureChangedObject:
   - {fileID: 6741750579409535266}
   isChanged: 0
+  planted: 0
   interactInFuture: 0
   isReversible: 0
+  isFinal: 1
+  seeds: []
+  plantedSeed: {fileID: 0}
+  id: -1
 --- !u!65 &157138221182448079
 BoxCollider:
   m_ObjectHideFlags: 0
