@@ -86,19 +86,31 @@ public class PlayerDeathController : MonoBehaviour
         respawnAnimatorStates = Animator.StringToHash(respawnAnimatorStatesSTR);
     }
 
-    
+    float max = 3;
+    public float time;
+    bool z = false;
     void Update()
     {
-        CheckFall();
-        CheckFallDistance();
-
-        if (isDead)
+        if(playerMovement.enabled && !playerMovement.animatorGrounded && playerMovement.verticalVelocity < 0)
+            time+=Time.deltaTime;
+        else
         {
-            playerInput.OnDeath();
+            time-=Time.deltaTime*0.6f;
+            if(time < max*0.5f)
+                time = 0;
         }
+        if (time >= max && !isDead)
+        {
+            isDead = true;
+            time = 0;
+            playerInput.OnDeath();
+            StartDeathSequence();
+        }
+        //CheckFall();
+        //CheckFallDistance();
     }
 
-    private void CheckFall()
+    /* private void CheckFall()
     {
         if (!isDead && !isFalling && playerMovement.verticalVelocity < 0) 
         {
@@ -133,7 +145,7 @@ public class PlayerDeathController : MonoBehaviour
 
             StartDeathSequence();
         }
-    }
+    } */
 
     /* private void CheckDeath()
     {
@@ -188,6 +200,7 @@ public class PlayerDeathController : MonoBehaviour
         isFalling = false;
         fallHeight = 0f;
         toReviveTimer = 0f;
+        time = 0;
 
         ResetDeathDissolve();
 

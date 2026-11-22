@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -150,11 +151,27 @@ public class TimeTravel : MonoBehaviour
         //}
     }
 
+    IEnumerator Blinking()
+    {
+        TravelBlocked = true;
+        yield return new WaitForSeconds(0.3f);
+        TravelBlocked = false;
+        yield return new WaitForSeconds(0.3f);
+        TravelBlocked = true;
+        yield return new WaitForSeconds(0.3f);
+        TravelBlocked = false;
+        yield return new WaitForSeconds(0.3f);
+        blink = null;
+    }
+    Coroutine blink = null;
     private void StartTravel(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed) return;
         if (onCooldown) return;
-        if (!CheckTravel()) return;
+        if (!CheckTravel()) {
+            blink ??= StartCoroutine(Blinking());
+            return;
+        }
         if (TravelBlocked)
             return;
         if (isTravelling) 
