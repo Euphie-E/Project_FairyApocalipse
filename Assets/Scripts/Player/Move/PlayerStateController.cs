@@ -44,7 +44,7 @@ public class PlayerStateController : MonoBehaviour
 
     public void StartMovement()
     {
-        playerCutsceneMovement.enabled = false;
+        if (playerCutsceneMovement != null) playerCutsceneMovement.enabled = false;
         playerMovement.enabled = true;
         playerSwingController.enabled = false;
     }

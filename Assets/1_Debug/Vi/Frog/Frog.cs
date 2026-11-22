@@ -8,10 +8,11 @@ public class Frog : MonoBehaviour
     public Transform player;
     private Vector3 target;
 
-    //[Header("Tongue Attack")]
+    [Header("Tongue Attack")]
     public TongueController tongue;
 
-    //[Header("Cry Attack")]
+    [Header("Cry Attack")]
+    public EartquakeController cry;
 
     void Start()
     {

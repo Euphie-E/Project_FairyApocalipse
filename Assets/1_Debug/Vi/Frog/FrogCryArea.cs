@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class FrogAttackArea : MonoBehaviour
+public class FrogCryArea : MonoBehaviour
 {
     [SerializeField] Frog frog;
     void OnTriggerEnter(Collider other)
     {
-        frog.ChangeState(new FrogLick(frog));
+        frog.ChangeState(new FrogCry(frog));
     }
 
     void OnTriggerExit(Collider other)
