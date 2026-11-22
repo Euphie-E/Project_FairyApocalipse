@@ -75,7 +75,7 @@ public class PastFutureChange : Interactable
 
             if (isFinal)
             {
-                TransitionController.instance.Epside(0);
+                TransitionController.instance.NextLevel();
             }
 
             DisableAll(pastObject);
