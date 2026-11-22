@@ -9,6 +9,8 @@ public class ArchiveIndex : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             MenuController.instance.EntryArchive(index);
+            enabled = false;
+            Destroy(this);
         }
     }
 }

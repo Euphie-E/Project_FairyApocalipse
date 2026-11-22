@@ -385,6 +385,8 @@ GameObject:
   - component: {fileID: 3132658787583979241}
   - component: {fileID: 73474813063341784}
   - component: {fileID: 7208331312607235309}
+  - component: {fileID: 6626863497517356549}
+  - component: {fileID: 980705297646407174}
   m_Layer: 11
   m_Name: Trigger
   m_TagString: Untagged
@@ -443,6 +445,32 @@ MonoBehaviour:
   hasPlayed: 0
   cutsceneType: 1
   midgameCutsceneID: 0
+--- !u!114 &6626863497517356549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6525987734405061158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7cc3622bf817b408991b9d47c385a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotificationTrigger
+  data: {fileID: 11400000, guid: 283210257229e9f479e00e67241acfbd, type: 2}
+--- !u!114 &980705297646407174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6525987734405061158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d26615ff4e81c76438cc5ed1250a4062, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArchiveIndex
+  index: 2
 --- !u!1 &7900150749123146499
 GameObject:
   m_ObjectHideFlags: 0
