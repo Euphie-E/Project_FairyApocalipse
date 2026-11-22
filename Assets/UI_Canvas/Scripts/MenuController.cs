@@ -45,12 +45,14 @@ public class MenuController : MonoBehaviour
         {
             if (pausePanel.activeSelf)
             {
+                Time.timeScale = 1;
                 pausePanel.SetActive(false);
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
             }
             else
             {
+                Time.timeScale = 0;
                 pausePanel.SetActive(true);
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.Confined;

@@ -22,7 +22,16 @@ public class PlayerAnimatorController : MonoBehaviour
 
         //else if (swing.enabled) UpdateSwingAnimation();
 
-        float speed = movement.horizontalVelocity.magnitude;
+        float speed;
+        if (movement.enabled == true)
+        {
+            speed = movement.horizontalVelocity.magnitude;
+        }   
+        else
+        {
+            speed = 0;
+        }
+
         bool isGrounded = movement.animatorGrounded;
         bool isSwinging = swing.isSwinging;
         float swingDir = swing.swingDir;
