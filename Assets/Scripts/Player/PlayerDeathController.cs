@@ -2,10 +2,14 @@ using UnityEngine;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine.VFX;
-using NUnit.Framework;
 
 public class PlayerDeathController : MonoBehaviour
 {
+    private static readonly int SpeedHash = Animator.StringToHash("Speed");
+    private static readonly int BaseLayerDeathTreeHash = Animator.StringToHash("Base Layer.DeathTree");
+    private static readonly int DeathValueHash = Animator.StringToHash("DeathValue");
+    private static readonly int DeathHash = Animator.StringToHash("Death");
+    private static int respawnAnimatorStates;
     public PlayerMovement playerMovement;
     private PlayerInput playerInput;
     private CharacterController playerCharacterController;
@@ -40,7 +44,7 @@ public class PlayerDeathController : MonoBehaviour
     [SerializeField] private Animator deathAnimator;
     [Header("Retorno da Animacao")]
     [SerializeField]
-    private string respawnAnimatorStates =
+    private string respawnAnimatorStatesSTR =
     "Base Layer.Ground Movement";
 
     [Header("Boss Knockback")]
@@ -74,11 +78,12 @@ public class PlayerDeathController : MonoBehaviour
         }
         SetDissolveValue(2f);
 
-        checkpoints = new GameObject[GameObject.FindGameObjectsWithTag("Checkpoint").Length + 1];
+       /*  checkpoints = new GameObject[GameObject.FindGameObjectsWithTag("Checkpoint").Length + 1];
 
         checkpoints[0] = transform.parent.gameObject; // colocar o spawn como inicio, meio gambiarra aproveitando que o player pai não se mexe;
-        DataManager.Instance?.SetTotalCheckpoints(checkpoints.Length);
-        if(LevelManager.Instance != null)LevelManager.Instance.Player = this.gameObject;
+        DataManager.Instance?.SetTotalCheckpoints(checkpoints.Length); */
+        LevelManager.Get()?.SetPlayer(this.gameObject);
+        respawnAnimatorStates = Animator.StringToHash(respawnAnimatorStatesSTR);
     }
 
     
@@ -130,7 +135,7 @@ public class PlayerDeathController : MonoBehaviour
         }
     }
 
-    private void CheckDeath()
+    /* private void CheckDeath()
     {
         if (isDead && (playerMovement.isGrounded || fallHeight > maxHeight*2.5f || isDrowning))
         {
@@ -142,7 +147,7 @@ public class PlayerDeathController : MonoBehaviour
                 Revive();
             }
         }
-    }
+    } */
 
     private void StartDeathSequence()
     {
@@ -150,7 +155,7 @@ public class PlayerDeathController : MonoBehaviour
             StopCoroutine(deathSequenceCoroutine);
 
         playerMovement.ResetMotionForDeath();
-        playerMovement.enabled = false;
+        //playerMovement.enabled = false;
 
         PlayDeathDissolve();
 
@@ -186,7 +191,7 @@ public class PlayerDeathController : MonoBehaviour
 
         ResetDeathDissolve();
 
-        playerCharacterController.enabled = false;
+        /* playerCharacterController.enabled = false;
 
         Vector3 respawnPosition =
             checkpoints[caughtCheckpointIndex].transform.position
@@ -196,26 +201,25 @@ public class PlayerDeathController : MonoBehaviour
 
         transform.position = respawnPosition;
 
-        playerCharacterController.enabled = true;
+        playerCharacterController.enabled = true; */
+        
+        /*playerMovement.enabled = true;
 
-        playerMovement.ResetMotionForDeath();
-        playerMovement.enabled = true;
-
-        cinemachineCamera.OnTargetObjectWarped(
+         cinemachineCamera.OnTargetObjectWarped(
             cinemachineCamera.Target.TrackingTarget,
             difference
-        );
-
+        ); */
+        playerMovement.TeleportLastCheckpoint();
         playerInput.OnRevive();
 
-        deathAnimator.ResetTrigger("Death");
-        deathAnimator.SetFloat("Speed", 0f);
+        deathAnimator.ResetTrigger(DeathHash);
+        deathAnimator.SetFloat(SpeedHash, 0f);
 
         if (deathAnimator.HasState(
-            0, Animator.StringToHash(respawnAnimatorStates)))
+            0, respawnAnimatorStates))
         {
             deathAnimator.Play(respawnAnimatorStates, 0, 0f);
-            deathAnimator.SetFloat("DeathValue", 0f);
+            deathAnimator.SetFloat(DeathValueHash, 0f);
         }
         else
         {
@@ -225,13 +229,10 @@ public class PlayerDeathController : MonoBehaviour
             );
         }
 
-        Checkpoint checkpoint =
-            checkpoints[caughtCheckpointIndex].GetComponent<Checkpoint>();
+        /* Checkpoint checkpoint =
+            checkpoints[caughtCheckpointIndex].GetComponent<Checkpoint>(); */
 
-        if (checkpoint != null)
-        {
-            checkpoint.PlayRespawnEffect();
-        }
+        
 
         isDead = false;
     }
@@ -256,9 +257,9 @@ public class PlayerDeathController : MonoBehaviour
         if (isDead)
             return;
 
-        deathAnimator.ResetTrigger("Death");
-        deathAnimator.SetFloat("DeathValue", 1f);
-        deathAnimator.Play("Base Layer.DeathTree", 0, 0f);
+        deathAnimator.ResetTrigger(DeathHash);
+        deathAnimator.SetFloat(DeathValueHash, 1f);
+        deathAnimator.Play(BaseLayerDeathTreeHash, 0, 0f);
 
         isFalling = false;
         fallHeight = 0f;

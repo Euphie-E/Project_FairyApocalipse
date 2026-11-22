@@ -65,7 +65,7 @@ public class CollectibleSeed : Collectible
     }
     public void SaveMe()
     {
-        LevelManager.Instance?.SaveMe(this);
+        LevelManager.Get()?.SaveMe(this);
     } */
     
 

@@ -4,8 +4,9 @@ using UnityEngine.VFX;
 
 public class Checkpoint : Savable
 {
+    private static readonly int RespawnHash = Animator.StringToHash("Respawn");
     [Header("VFX")]
-    [SerializeField] private int index = 0;
+    [SerializeField] public int index = 0;
     [SerializeField] private Animator animatorCheckpoint;
     [SerializeField] private VisualEffect vfxCheckpoint;
     
@@ -13,22 +14,24 @@ public class Checkpoint : Savable
 
     void Start()
     {
-        PlayerInput.Instance?.AddCheckpoint(gameObject, index);
+        //PlayerInput.Instance?.AddCheckpoint(gameObject, index);
         saveData = new Save(Types.Checkpoint,index);
-        LevelManager.Instance?.Add(this);
+        LevelManager.Get()?.Add(this);
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            PlayerDeathController playerDeath = other.GetComponent<PlayerDeathController>();
+            /* PlayerDeathController playerDeath = other.GetComponent<PlayerDeathController>();
 
             if (playerDeath != null)
             {
                 playerDeath.NewCheckpoint(index, gameObject);
             }
-            saveData.Add(new KeyValue{key = "Count",value =ct++});
+            saveData.Add(new KeyValue{key = "Count",value =ct++}); */
+            LevelManager.Get()?.SetLastCheckpoint(index);
+
         }
     }
 
@@ -36,7 +39,7 @@ public class Checkpoint : Savable
     {
         if (animatorCheckpoint != null)
         {
-            animatorCheckpoint.SetTrigger("Respawn");
+            animatorCheckpoint.SetTrigger(RespawnHash);
         }
 
         if (vfxCheckpoint != null)

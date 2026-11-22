@@ -595,6 +595,7 @@ MonoBehaviour:
   dashDistance: 3
   dashDuration: 0.18
   dashCooldown: 1
+  cinemachineCamera: {fileID: 1050670444268344066}
   drawGizmos: 1
   vectorGizmoScale: 0.2
 --- !u!114 &8697555056014407891
@@ -668,7 +669,7 @@ MonoBehaviour:
   dissolveDuration: 2
   deathVFXDuration: 2
   deathAnimator: {fileID: 4566249271883874012}
-  respawnAnimatorStates: Base Layer.Ground Movement
+  respawnAnimatorStatesSTR: Base Layer.Ground Movement
   bossPushDistance: 1.5
   bossPushDuration: 0.2
   bossPullDistance: 10
@@ -872,8 +873,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2911940494488221763}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.034255065, y: 0.103734486, z: -0.0035748505, w: 0.99400854}
-  m_LocalPosition: {x: -0.7200651, y: 1.6000004, z: -3.4123077}
+  m_LocalRotation: {x: 0.024475519, y: -0.58395886, z: 0.017618703, w: 0.81122285}
+  m_LocalPosition: {x: 2.9519224, y: 1.5736494, z: -0.98851544}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -956,7 +957,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 13.887826
+    Value: -80.60327
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -966,7 +967,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 0
+    Value: -0.22862384
     Center: 0
     Range: {x: -20, y: 20}
     Wrap: 0
@@ -6896,6 +6897,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4321345822756146143}
+  - component: {fileID: 5028314166888580878}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -6922,6 +6924,25 @@ Transform:
   - {fileID: 315315053849956533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5028314166888580878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6099451806421071561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4665155e5383e9e4d975a3da7ebe9e7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
+  saveData:
+    Key: 0
+    ID: 0
+    Values: []
+  index: 0
+  animatorCheckpoint: {fileID: 0}
+  vfxCheckpoint: {fileID: 0}
 --- !u!1 &6375691715099986341
 GameObject:
   m_ObjectHideFlags: 0
@@ -7099,11 +7120,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrailUV
   mat_moveObject: {fileID: 7052764852419590710}
   mat_shaderPropertyName: _MoveToMaterialUV
-  mat_shaderPropertyID: 1387
+  mat_shaderPropertyID: 1364
   mat_materialData:
   - mat_trailRenderer: {fileID: 4901217431862780009}
     mat_uvTiling: {x: 0.3, y: 0.6}
-    mat_move: 0.7375436
+    mat_move: 0.4437256
 --- !u!198 &9028240595856654505
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -12095,8 +12116,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8630161350924461642}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.03425508, y: 0.103733, z: -0.0035747995, w: 0.9940087}
-  m_LocalPosition: {x: -0.14473493, y: 1.6000004, z: -0.68588996}
+  m_LocalRotation: {x: 0.03510366, y: -0.604455, z: 0.026676005, w: 0.7954184}
+  m_LocalPosition: {x: 89.25802, y: 16.71893, z: 140.4103}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

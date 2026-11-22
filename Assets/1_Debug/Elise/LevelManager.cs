@@ -5,8 +5,29 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager Instance;
+    static LevelManager Instance;
+    public static LevelManager Get()
+    {
+        if(Instance == null) return null;
+        return Instance;
+    }
     public GameObject Player;
+    public void SetPlayer(GameObject player)
+    {
+        Player = player;
+    }
+    public void SetLastCheckpoint(int id)
+    {
+        lastCKP = id;
+    }
+    public Checkpoint GetCheckpoint(int index)
+    {
+        return (Checkpoint)Checkpoints[index];
+    }
+    public Checkpoint GetLastCheckpoint()
+    {
+        return (Checkpoint)Checkpoints[lastCKP];
+    }
     void Awake()
     {
         if(Instance != null && Instance != this)
@@ -21,6 +42,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     List<Savable> List = new();
     List<Savable> Checkpoints = new();
+    int lastCKP = 0;
     List<Savable> PastFutureChange = new();
     [SerializeField]
     List<Seed> Seeds = new();
@@ -44,6 +66,7 @@ public class LevelManager : MonoBehaviour
                         return;
                     }
                     Checkpoints.Add(s);
+                    Checkpoints.Sort((P1, P2) => P1.saveData.ID.CompareTo(P2.saveData.ID));
                     break;
                 case Savable.Types.PastFutureChange:
                     if(PastFutureChange.Any(id => id.saveData.ID == s.saveData.ID))

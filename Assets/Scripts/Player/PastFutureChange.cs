@@ -24,7 +24,7 @@ public class PastFutureChange : Interactable
         ActiveAll(pastObject);
         ActiveAll(futureObject);
         saveData = new Save(Types.PastFutureChange,id);
-        LevelManager.Instance?.Add(this);
+        LevelManager.Get()?.Add(this);
         planted = false;
     }
 
@@ -110,7 +110,7 @@ public class PastFutureChange : Interactable
         int b = saveData.Get("isChanged");
         if(b == 1) {
             isChanged = true;
-            plantedSeed = LevelManager.Instance?.GetSeed(saveData.Get("seedID"));
+            plantedSeed = LevelManager.Get()?.GetSeed(saveData.Get("seedID"));
             DisableAll(pastObject);
             DisableAll(futureObject);
             ActiveAll(pastChangedObject);

@@ -64,11 +64,11 @@ public class DataManager : MonoBehaviour
     IEnumerator Cycle()
     {
         yield return new WaitForFixedUpdate();
-        LevelManager.Instance?.Load(Get());
+        LevelManager.Get()?.Load(Get());
         while (true)
         {
             yield return _waitForSeconds180;
-            playerData.LevelData = LevelManager.Instance?.Save();
+            playerData.LevelData = LevelManager.Get()?.Save();
         }
     }
     void OnEnable()
@@ -88,7 +88,7 @@ public class DataManager : MonoBehaviour
     void SaveData()
     {
         playerData.Duration = (int)((Time.time - strTime)*100)/100f;
-        playerData.LevelData = LevelManager.Instance?.Save();
+        playerData.LevelData = LevelManager.Get()?.Save();
         string json = JsonUtility.ToJson(playerDataGroup, true);
         File.WriteAllText(savePath, json);
     }
