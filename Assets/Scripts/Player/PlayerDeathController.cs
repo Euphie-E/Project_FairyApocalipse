@@ -462,4 +462,12 @@ public class PlayerDeathController : MonoBehaviour
 
         StartDeathSequence();
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("DeathBox") && !isDead)
+        {
+            Drown();
+        }
+    }
 }
