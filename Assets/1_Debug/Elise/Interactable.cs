@@ -11,6 +11,7 @@ public class Interactable : Savable
     float holdThreshold = 1;
     public float forcePS = 0.5f;
     public float start,end;
+
     virtual public void Attach(InteractController player)
     {
         if(attachPoints.Count <= 0)
