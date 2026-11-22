@@ -10,6 +10,7 @@ namespace GCamarada
 {
     public class AudioManager : MonoBehaviour
     {
+        private List<AudioSource> musicSources = new List<AudioSource>();
         public static AudioManager I;
 
         [SerializeField] private List<AudioManagerList> audioInfo;
@@ -173,6 +174,66 @@ namespace GCamarada
         public void SetMusicVolume(Slider slider)
         {
             SetVolumeValue(slider.value, "AudioMusic", slider.GetComponentInChildren<TextMeshProUGUI>());
+        }
+
+        public void PlayFullMusic()
+        {
+            {
+                foreach (var source in musicSources)
+                {
+                    source.Stop();
+                }
+
+                musicSources.Clear();
+
+                foreach (var Audio in audioInfo)
+                {
+                    if (Audio.clipName == "fase1")
+                    {
+                        if (Audio.source == null)
+                        {
+                            Debug.LogWarning("AudioSource não encontrado na fase 1!");
+                            return;
+                        }
+
+                        if (Audio.clip == null || Audio.clip.Length == 0)
+                        {
+                            Debug.LogWarning("Nenhuma música cadastrada na fase 1!");
+                            return;
+                        }
+
+                        for (int i = 0; i < Audio.clip.Length; i++)
+                        {
+                            if (Audio.clip[i] == null)
+                                continue;
+
+                            AudioSource source;
+
+                            if (i == 0)
+                            {
+                                source = Audio.source;
+                            }
+                            else
+                            {
+                                source = Audio.source.gameObject.AddComponent<AudioSource>();
+
+                                source.outputAudioMixerGroup = Audio.source.outputAudioMixerGroup;
+                                source.volume = Audio.source.volume;
+                                source.pitch = Audio.source.pitch;
+                            }
+
+                            source.clip = Audio.clip[i];
+                            source.loop = true;
+                            source.spatialBlend = 0f;
+                            source.Play();
+
+                            musicSources.Add(source);
+                        }
+
+                        break;
+                    }
+                }
+            }
         }
     }
 }

@@ -311,9 +311,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
       propertyPath: audioInfo.Array.data[1].clipe
       value: 
       objectReference: {fileID: 8300000, guid: 6aeefb601c305f64487cebdfacae5b6c, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[3].clipe
+      value: 
+      objectReference: {fileID: 8300000, guid: e41e0f0cf0ded9f41be40ecbab24f10e, type: 3}
     - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
       propertyPath: audioInfo.Array.data[0].source
       value: 
@@ -325,6 +333,18 @@ PrefabInstance:
     - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
       propertyPath: audioInfo.Array.data[2].source
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[3].source
+      value: 
+      objectReference: {fileID: 1687246658531745528}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[3].clipName
+      value: fase1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[3].clip.Array.size
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
       propertyPath: 'audioInfo.Array.data[0].clip.Array.data[0]'
@@ -350,6 +370,30 @@ PrefabInstance:
       propertyPath: 'audioInfo.Array.data[1].clip.Array.data[2]'
       value: 
       objectReference: {fileID: 8300000, guid: 856b6d74addb9ad4ab2b7b47bae3e839, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: 'audioInfo.Array.data[3].clip.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: e41e0f0cf0ded9f41be40ecbab24f10e, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: 'audioInfo.Array.data[3].clip.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 6aa147eff8462f24480c5ef339e512e0, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: 'audioInfo.Array.data[3].clip.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: d2d39aa21a3f6714a8afc5c8d4d3df8b, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: 'audioInfo.Array.data[3].clip.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 120bcbfa6cb195d40bd9fd0f73fad035, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: 'audioInfo.Array.data[3].clip.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8300000, guid: edd20037959f10e4a9971dd4bc7029be, type: 3}
+    - target: {fileID: 8296640443195721283, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 2850824082802619406, guid: 22c1f18cb1e7045488e2e6fb0db064c0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -366,6 +410,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7a1be1d547f5604088b3a73d98101ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GCamarada.AudioManager
+--- !u!82 &1687246658531745528 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8296640443195721283, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+  m_PrefabInstance: {fileID: 7226548295608162491}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9022875199192236111 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1837022603590818036, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
@@ -797,7 +846,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3362750348581290416, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.00012207031
       objectReference: {fileID: 0}
     - target: {fileID: 3431074580367198752, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -869,7 +918,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3808344100102153557, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
       propertyPath: m_Value
-      value: 0.5
+      value: 0.50000006
       objectReference: {fileID: 0}
     - target: {fileID: 3886817118483813243, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1131,6 +1180,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5462460980819422547, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 677.41003
+      objectReference: {fileID: 0}
     - target: {fileID: 5499421661574815298, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1173,7 +1226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5890031262942693814, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 0.091921665
       objectReference: {fileID: 0}
     - target: {fileID: 5902274562453277552, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1481,6 +1534,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8472594582607246001, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
       propertyPath: m_Size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472594582607246001, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
+      propertyPath: m_Value
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8586155997818385458, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
