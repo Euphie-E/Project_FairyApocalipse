@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditorInternal;
 using UnityEngine;
+using GCamarada;
 
 public class LevelManager : MonoBehaviour
 {
     static LevelManager Instance;
+    private void Start()
+    {
+        AudioManager.I.PlayFullMusic();
+    }
     public static LevelManager Get()
     {
         if(Instance == null) return null;
