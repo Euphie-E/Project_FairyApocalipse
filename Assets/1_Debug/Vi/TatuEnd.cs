@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class TatuEnd : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public PastFutureChange seed;
+    bool changed = false;
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (seed.isChanged != changed)
+        {
+            changed = seed.isChanged;
+            TransitionController.instance.Epside(0);
+        }
     }
 }

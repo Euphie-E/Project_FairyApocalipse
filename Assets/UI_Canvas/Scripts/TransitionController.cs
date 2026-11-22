@@ -5,7 +5,7 @@ using static Unity.Collections.Unicode;
 
 public class TransitionController : MonoBehaviour
 {
-    private static TransitionController instance;
+    public static TransitionController instance;
     [SerializeField] Animator transition;
     void Start()
     {

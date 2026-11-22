@@ -8,7 +8,7 @@ public class PastFutureChange : Interactable
     [SerializeField] GameObject[] pastChangedObject;
     [SerializeField] GameObject[] futureObject;
     [SerializeField] GameObject[] futureChangedObject;
-    [SerializeField] private bool isChanged = false;
+    [SerializeField] public bool isChanged = false;
     public bool planted;
 
     [SerializeField] private bool interactInFuture = false;
