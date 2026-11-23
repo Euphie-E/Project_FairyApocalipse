@@ -235,5 +235,22 @@ namespace GCamarada
                 }
             }
         }
+
+        public void StopMusic()
+        {
+            foreach (var source in musicSources)
+            {
+                if (source != null)
+                {
+                    source.Stop();
+                }
+            }
+
+            musicSources.Clear();
+
+            Debug.Log("Músicas da fase interrompidas.");
+        }
     }
+
+
 }
