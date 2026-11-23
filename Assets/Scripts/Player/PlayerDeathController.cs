@@ -70,6 +70,25 @@ public class PlayerDeathController : MonoBehaviour
     [SerializeField] private float toReviveTime = 3f;
     private float toReviveTimer = 0f;
 
+    [Header("Protecao Respawn")]
+    [SerializeField] private float respawnProtection = 2f;
+
+    private float protectedUntil = -1f;
+
+    private bool IsRespawnProtected()
+    {
+        return Time.time < protectedUntil;
+    }
+
+    private void ProtectRespawn()
+    {
+        time = 0f;
+        isFalling = false;
+        fallHeight = 0f;
+        yfall = transform.position.y;
+
+        protectedUntil = Time.time + respawnProtection;
+    }
     void Start()
     {
         playerMovement = gameObject.GetComponent<PlayerMovement>();
@@ -96,23 +115,45 @@ public class PlayerDeathController : MonoBehaviour
     bool z = false;
     void Update()
     {
-        if(playerMovement.enabled && !playerMovement.animatorGrounded && playerMovement.verticalVelocity < 0)
-            time+=Time.deltaTime;
+        if (isDead || IsRespawnProtected())
+        {
+            time = 0f;
+            return;
+        }
+        if (isDead)
+            return;
+
+        // Durante o Push não contabiliza queda
+        if (pushCoroutine != null)
+        {
+            time = 0f;
+            return;
+        }
+
+        if (playerMovement.enabled &&
+            !playerMovement.animatorGrounded &&
+            playerMovement.verticalVelocity < 0)
+        {
+            time += Time.deltaTime;
+        }
         else
         {
-            time-=Time.deltaTime*0.6f;
-            if(time < max*0.5f)
-                time = 0;
+            time -= Time.deltaTime * 0.6f;
+
+            if (time < max * 0.5f)
+                time = 0f;
         }
-        if (time >= max && !isDead)
+
+        if (time >= max)
         {
+            Debug.LogWarning("PLAYER MORREU POR TEMPO DE QUEDA");
+
             isDead = true;
-            time = 0;
+            time = 0f;
+
             playerInput.OnDeath();
             StartDeathSequence();
         }
-        //CheckFall();
-        //CheckFallDistance();
     }
 
     /* private void CheckFall()
@@ -228,7 +269,15 @@ public class PlayerDeathController : MonoBehaviour
             difference
         ); */
 
+        ProtectRespawn();
+
         playerMovement.TeleportLastCheckpoint();
+
+        ProtectRespawn();
+
+        Debug.Log(
+            "[RESPAWN] Player renasceu em: " + transform.position
+        );
 
         TimeTravel timeTravel = GetComponent<TimeTravel>();
 
@@ -273,15 +322,15 @@ public class PlayerDeathController : MonoBehaviour
 
     public void ResetFallAfterTeleport()
     {
-        isFalling = false;
-        fallHeight = 0f;
-        yfall = transform.position.y;
+        ProtectRespawn();
     }
 
     public void KillFromBoss()
     {
-        if (isDead)
+        if (isDead || IsRespawnProtected())
             return;
+
+        Debug.LogError("[MORTE] KILL FROM BOSS!");
 
         deathAnimator.ResetTrigger(DeathHash);
         deathAnimator.SetFloat(DeathValueHash, 1f);
@@ -348,26 +397,23 @@ public class PlayerDeathController : MonoBehaviour
 
     public void Push(Vector3 hitPosition)
     {
-        if (playerCharacterController == null || !playerCharacterController.enabled)
-        {
+        if (isDead ||
+            playerCharacterController == null ||
+            !playerCharacterController.enabled)
             return;
-        }
 
-        hitPosition.y = transform.position.y;
         Vector3 direction = transform.position - hitPosition;
-        direction.y = 0;
+        direction.y = 0f;
 
         if (direction.sqrMagnitude < 0.001f)
-        {
             direction = -transform.forward;
-        }
 
         direction.Normalize();
 
         if (pushCoroutine != null)
-        {
             StopCoroutine(pushCoroutine);
-        }
+
+        time = 0f;
 
         pushCoroutine = StartCoroutine(pushRoutine(direction));
     }
@@ -376,11 +422,12 @@ public class PlayerDeathController : MonoBehaviour
     {
         float timer = 0f;
         float previousProgress = 0f;
-        float duration = Mathf.Max(0.01f, bossPullDuration);
+        float duration = Mathf.Max(0.01f, pushDuration);
 
         while (timer < duration)
         {
-            if (!playerCharacterController.enabled) break;
+            if (isDead || !playerCharacterController.enabled)
+                break;
 
             timer += Time.deltaTime;
 
@@ -388,16 +435,20 @@ public class PlayerDeathController : MonoBehaviour
 
             float progress = 1f - Mathf.Pow(1f - t, 2f);
 
-            float distanceStep = (progress - previousProgress) * bossPullDistance;
+            float distanceStep =
+                (progress - previousProgress) * pushDistance;
 
             playerCharacterController.Move(direction * distanceStep);
 
             previousProgress = progress;
 
+            // Impede que o empurrão acumule tempo de queda
+            time = 0f;
+
             yield return null;
         }
 
-        bossPullCoroutine = null;
+        pushCoroutine = null;
     }
 
     private IEnumerator BossPullRoutine(Vector3 direction)
@@ -524,8 +575,24 @@ public class PlayerDeathController : MonoBehaviour
 
     public void Drown()
     {
+
+        Debug.LogError(
+    "[DROWN CHAMADO]\n" +
+    "Player: " + transform.position + "\n" +
+    "Origem da chamada:\n" +
+    System.Environment.StackTrace,
+    gameObject
+);
+        if (isDead || IsRespawnProtected())
+            return;
+
+        Debug.LogError(
+            "[MORTE] DROWN! Posicao: " + transform.position
+        );
+
         isDrowning = true;
         isDead = true;
+        time = 0f;
 
         StartDeathSequence();
     }
@@ -534,6 +601,17 @@ public class PlayerDeathController : MonoBehaviour
     {
         if (other.CompareTag("DeathBox") && !isDead)
         {
+            Debug.LogError(
+                "[DEATHBOX DETECTADA]\n" +
+                "Objeto: " + other.gameObject.name + "\n" +
+                "Objeto Pai: " + other.transform.root.name + "\n" +
+                "Cena: " + other.gameObject.scene.name + "\n" +
+                "Layer: " + LayerMask.LayerToName(other.gameObject.layer) + "\n" +
+                "Posicao DeathBox: " + other.bounds.center + "\n" +
+                "Posicao Player: " + transform.position,
+                other.gameObject
+            );
+
             Drown();
         }
     }
