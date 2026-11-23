@@ -215,16 +215,24 @@ public class PlayerDeathController : MonoBehaviour
         transform.position = respawnPosition;
 
         playerCharacterController.enabled = true; */
-        
+
         /*playerMovement.enabled = true;
 
          cinemachineCamera.OnTargetObjectWarped(
             cinemachineCamera.Target.TrackingTarget,
             difference
         ); */
-        playerMovement.TeleportLastCheckpoint();
-        playerInput.OnRevive();
 
+        playerMovement.TeleportLastCheckpoint();
+
+        TimeTravel timeTravel = GetComponent<TimeTravel>();
+
+        if (timeTravel != null)
+        {
+            timeTravel.ResetAfterRespawn();
+        }
+
+        playerInput.OnRevive();
         deathAnimator.ResetTrigger(DeathHash);
         deathAnimator.SetFloat(SpeedHash, 0f);
 

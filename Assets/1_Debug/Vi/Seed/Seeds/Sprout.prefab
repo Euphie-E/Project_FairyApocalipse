@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3969409277331338036}
   - component: {fileID: 6396575164905939133}
   - component: {fileID: 2415697136551807474}
+  - component: {fileID: 8830482352159682700}
   m_Layer: 7
   m_Name: Sprout
   m_TagString: Untagged
@@ -67,8 +68,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1badf16e8c27fb44b584fe907f4c505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollectibleSeed
+  saveData:
+    Key: 0
+    ID: 0
+    Values: []
   Collected: 0
+  rotationSpeed: 15
+  verticalAmplitude: 2
+  verticalSpeed: 1
+  id: -1
   seed: {fileID: 11400000, guid: 57bd3ff1a486d0a4ca08b454df95c897, type: 2}
+  isHolding: 0
+--- !u!114 &8830482352159682700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3677767058771440924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7cc3622bf817b408991b9d47c385a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotificationTrigger
+  data: {fileID: 11400000, guid: 1ae19650957ec594c8c0f5366905256f, type: 2}
 --- !u!1001 &8873450698559895790
 PrefabInstance:
   m_ObjectHideFlags: 0

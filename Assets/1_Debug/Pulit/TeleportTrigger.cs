@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Cinemachine;
 
 public class TeleportTrigger : MonoBehaviour
 {
@@ -19,7 +20,16 @@ public class TeleportTrigger : MonoBehaviour
     [Header("Proteção")]
     public float teleportCooldown = 1f;
 
+    [Header("Música do Boss")]
+    public bool playBossMusic = false;
+
     private static bool teleporting = false;
+    [Header("Rotação do Player")]
+    public bool invertPlayerDirection = false;
+
+    [Header("Rotação da Câmera")]
+    [SerializeField] private CinemachineCamera cinemachineCamera;
+    [SerializeField] private bool invertCameraDirection = false;
 
     private void Start()
     {
@@ -39,15 +49,21 @@ public class TeleportTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (teleporting)
-            return;
+        Debug.Log("TeleportTrigger detectou: " + other.name);
 
-        // Procura o PlayerMovement no objeto que entrou
-        // ou em algum pai dele
-        PlayerMovement player = other.GetComponentInParent<PlayerMovement>();
+        if (teleporting)
+        {
+            Debug.LogWarning("Teleporte já está em andamento!");
+            return;
+        }
+
+        PlayerMovement player =
+            other.GetComponentInParent<PlayerMovement>();
 
         if (player == null)
             return;
+
+        Debug.Log("Iniciando transição do teleporte!");
 
         StartCoroutine(Teleport(player));
     }
@@ -59,19 +75,54 @@ public class TeleportTrigger : MonoBehaviour
         // Fade para preto
         yield return StartCoroutine(Fade(0f, 1f));
 
-        // Teleporta através do próprio PlayerMovement
         player.TeleportTo(teleportPoint);
 
+        // Aguarda a câmera atualizar
+        yield return null;
+
+        // Corrige a direção do Player
+        player.FaceCameraDirection(invertPlayerDirection);
+
+        // Inverte a posição da câmera ao redor do Player
+        if (invertCameraDirection && cinemachineCamera != null)
+        {
+            CinemachineOrbitalFollow orbital =
+                cinemachineCamera.GetComponent<CinemachineOrbitalFollow>();
+
+            if (orbital != null)
+            {
+                orbital.HorizontalAxis.Value += 180f;
+
+                // Atualiza a câmera sem usar o estado anterior
+                cinemachineCamera.PreviousStateIsValid = false;
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "A Cinemachine Camera não possui Orbital Follow!"
+                );
+            }
+        }
+
         PlayerDeathController deathController =
-         player.GetComponent<PlayerDeathController>();
+            player.GetComponent<PlayerDeathController>();
 
         if (deathController != null)
             deathController.ResetFallAfterTeleport();
 
+        // Altera para noite, se configurado
         if (nitghChange)
             SkyboxManager.Instance.SetNight();
 
-        // Mantém tela preta
+        // Inicia a música do Boss, se ativada
+        if (playBossMusic)
+        {
+            GCamarada.AudioManager.I?.StopMusic();
+            GCamarada.AudioManager.I?.PlayClip("boss", true);
+           
+        }
+
+        // Mantém a tela preta
         yield return new WaitForSeconds(blackScreenDuration);
 
         // Fade voltando
@@ -85,21 +136,37 @@ public class TeleportTrigger : MonoBehaviour
 
     private IEnumerator Fade(float startAlpha, float endAlpha)
     {
+        if (blackScreen == null)
+        {
+            Debug.LogError("CanvasGroup não configurado!");
+            yield break;
+        }
+
+        blackScreen.gameObject.SetActive(true);
+
         float timer = 0f;
+
+        blackScreen.alpha = startAlpha;
+
+        Debug.Log($"Fade iniciado: {startAlpha} -> {endAlpha}");
 
         while (timer < fadeDuration)
         {
             timer += Time.deltaTime;
 
+            float t = Mathf.Clamp01(timer / Mathf.Max(0.01f, fadeDuration));
+
             blackScreen.alpha = Mathf.Lerp(
                 startAlpha,
                 endAlpha,
-                timer / fadeDuration
+                t
             );
 
             yield return null;
         }
 
         blackScreen.alpha = endAlpha;
+
+        Debug.Log("Fade concluído. Alpha: " + blackScreen.alpha);
     }
 }
