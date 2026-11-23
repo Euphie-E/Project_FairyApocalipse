@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1025799013332030452}
   - component: {fileID: 2051599147808181636}
   - component: {fileID: 8556692428531356413}
+  - component: {fileID: 8729589216071173478}
   m_Layer: 5
   m_Name: UI 1
   m_TagString: Untagged
@@ -127,6 +128,62 @@ MonoBehaviour:
   mechanicEntries: {fileID: 7144147674647944647}
   indexArchive: 0
   indexMechanic: 0
+--- !u!114 &8729589216071173478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5020841182296245345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667004ebc95039f4e8dc7a7158e103e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GnomeHUD
+  silhouetteSprite: {fileID: 21300000, guid: 1e0019b20edf9f84a99d345ca918afa6, type: 3}
+  slots:
+  - gnomeId: 0
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 2
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 3
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 4
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 5
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 6
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 7
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 8
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 9
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 10
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 11
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 12
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 13
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
+  - gnomeId: 14
+    image: {fileID: 810716322119062685}
+    collectedSprite: {fileID: 21300000, guid: 46bfad13df27a0049ade7baffc07cb62, type: 3}
 --- !u!1001 &1943485380350319425
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1794,6 +1851,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
+--- !u!114 &810716322119062685 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7827411289869022300, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
+  m_PrefabInstance: {fileID: 7485179581612351681}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &2747008441421110121 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4755773393702583208, guid: dac0c49f94692cc499e3ea5c5e60a7cc, type: 3}
