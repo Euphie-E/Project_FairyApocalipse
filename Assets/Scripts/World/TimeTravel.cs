@@ -41,6 +41,11 @@ public class TimeTravel : MonoBehaviour
     [Header("Time Dome")]
     [SerializeField] private MeshRenderer timeDome;
 
+    [Header("Fada")]
+    [SerializeField] private bool hasFairy = false;
+
+    public bool HasFairy => hasFairy;
+
     public bool TravelBlocked ;//{ get; private set; }
     PlayerSwingController psc;
 
@@ -167,6 +172,14 @@ public class TimeTravel : MonoBehaviour
     private void StartTravel(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed) return;
+
+        // Não permite viajar sem ter coletado a fada
+        if (!hasFairy && !isTravelling)
+        {
+            Debug.Log("Você precisa coletar a fada para viajar no tempo.");
+            return;
+        }
+
         if (onCooldown) return;
         if (!CheckTravel()) {
             blink ??= StartCoroutine(Blinking());
@@ -199,6 +212,15 @@ public class TimeTravel : MonoBehaviour
         //timeDome.enabled = true;
         if (DataManager.Instance != null)
             DataManager.Instance.AddData(DataManager.Data.TimeTravel,1);
+    }
+
+    public void CollectFairy()
+    {
+        if (hasFairy) return;
+
+        hasFairy = true;
+
+        Debug.Log("Fada coletada! Viagem temporal liberada.");
     }
 
     private void EndTravel(bool force = false)
