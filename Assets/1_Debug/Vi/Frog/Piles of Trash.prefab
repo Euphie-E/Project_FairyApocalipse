@@ -55,6 +55,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 94171844794015195}
     m_Modifications:
+    - target: {fileID: 1191872243137727467, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+      propertyPath: trash
+      value: 
+      objectReference: {fileID: 1035768925990544569}
     - target: {fileID: 2299838846433956481, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
       propertyPath: m_Name
       value: Pile 1 (1)
@@ -103,6 +107,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9160980509188430417, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+      propertyPath: trash
+      value: 
+      objectReference: {fileID: 1035768925990544569}
     - target: {fileID: 4697566328614536419, guid: 53f169807a0849441b97eb12503aa070, type: 3}
       propertyPath: trashPile
       value: 
@@ -112,6 +120,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+--- !u!114 &1035768925990544569 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3926343632534573532, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+  m_PrefabInstance: {fileID: 4045049276292330853}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29df48785216c0645a408cacef0b05f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Trash
 --- !u!4 &8506166954904401650 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5632067055988818839, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
@@ -125,6 +144,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 94171844794015195}
     m_Modifications:
+    - target: {fileID: 1191872243137727467, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+      propertyPath: trash
+      value: 
+      objectReference: {fileID: 8093865529212758869}
     - target: {fileID: 2299838846433956481, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
       propertyPath: m_Name
       value: Pile 1 (2)
@@ -169,6 +192,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -286.287
       objectReference: {fileID: 0}
+    - target: {fileID: 9160980509188430417, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+      propertyPath: trash
+      value: 
+      objectReference: {fileID: 8093865529212758869}
     - target: {fileID: 6641034417554298118, guid: e0a99ea37de8f2547971d7d2695d5ab7, type: 3}
       propertyPath: trashPile
       value: 
@@ -183,6 +210,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5632067055988818839, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
   m_PrefabInstance: {fileID: 5056983193905166985}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8093865529212758869 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3926343632534573532, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+  m_PrefabInstance: {fileID: 5056983193905166985}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29df48785216c0645a408cacef0b05f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Trash
 --- !u!1001 &6588832013210725395
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -191,6 +229,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 94171844794015195}
     m_Modifications:
+    - target: {fileID: 1191872243137727467, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+      propertyPath: trash
+      value: 
+      objectReference: {fileID: 7857962719254855119}
     - target: {fileID: 1217623063413800712, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
       propertyPath: trashPile
       value: 
@@ -243,6 +285,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9160980509188430417, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+      propertyPath: trash
+      value: 
+      objectReference: {fileID: 7857962719254855119}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -253,3 +299,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5632067055988818839, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
   m_PrefabInstance: {fileID: 6588832013210725395}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7857962719254855119 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3926343632534573532, guid: c79a7eac26186754e9bd63c639b9366b, type: 3}
+  m_PrefabInstance: {fileID: 6588832013210725395}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29df48785216c0645a408cacef0b05f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Trash
