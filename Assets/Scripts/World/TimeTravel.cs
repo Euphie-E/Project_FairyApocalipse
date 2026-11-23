@@ -72,7 +72,7 @@ public class TimeTravel : MonoBehaviour
     private void Start()
     {
         // Inputs
-        PlayerInput.Instance.AddAction(HandleReset,4);
+       // PlayerInput.Instance.AddAction(HandleReset,4);
         PlayerInput.Instance.AddAction(StartTravel,5);
 
 
