@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.VFX;
 
 public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
@@ -73,6 +74,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     private bool hasJumped;
 
     [Header("Dash")]
+    public bool dashAvailable = true;
     [SerializeField] private float dashDistance = 3f;
     [SerializeField] private float dashDuration = 0.18f;
     [SerializeField] private float dashCooldown = 1f;
@@ -107,6 +109,9 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         wasGrounded = true;
         cameraTransform = Camera.main.transform;
         FutureCollision();
+
+        if (SceneManager.GetActiveScene().name == "01Spring")
+            DisableDash();
     }
 
     private void Update()
@@ -490,6 +495,7 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
 
     private bool StartDash()
     {
+        if (!dashAvailable) return false;
         if (!canDash) return false;
         if (!PlayerInput.Instance.dashAction.WasPressedThisFrame()) return false;
 
@@ -756,5 +762,15 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         isGrounded = false;
         isSliding = false;
         isDashing = false;
+    }
+
+    public void EnableDash()
+    {
+        dashAvailable = true;
+    }
+
+    public void DisableDash()
+    {
+        dashAvailable = false;
     }
 }
