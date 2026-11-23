@@ -152,6 +152,7 @@ public class PlantTrunkGrowth : MonoBehaviour
 
         DefinirCrescimento(0f);
         AplicarRotacao(0f);
+        GCamarada.AudioManager.I?.PlayClip("Folha");
     }
 
     public void DefinirCrescimento(float valor)

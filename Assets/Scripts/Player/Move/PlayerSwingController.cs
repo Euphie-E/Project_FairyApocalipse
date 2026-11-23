@@ -89,6 +89,7 @@ public class PlayerSwingController : MonoBehaviour
         }
 
         vfxToActivate.SetActive(true);
+        GCamarada.AudioManager.I?.PlayClip("Swing", true);
     }
 
     private void OnDisable()
@@ -98,6 +99,7 @@ public class PlayerSwingController : MonoBehaviour
             PlayerInput.Instance.RemoveAction(Jump,2);
         isSwinging = false;
 
+        GCamarada.AudioManager.I?.StopClip("Swing");
     }
 
     public void SetCurrentBar(Transform swing, SwingBarController _currentBar)

@@ -525,8 +525,10 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         transform.rotation = Quaternion.LookRotation(dashDirection);
 
         playerAnimatorController.PlayDash();
-        //Trigger audio
+        GCamarada.AudioManager.I?.OnShotClip("Dash");
 
+        //Trigger audio
+        
         return true;
     }
 
@@ -772,5 +774,27 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     public void DisableDash()
     {
         dashAvailable = false;
+    }
+
+    public void FaceCameraDirection(bool invert = false)
+    {
+        if (cameraTransform == null)
+            return;
+
+        Vector3 forward = cameraTransform.forward;
+        forward.y = 0f;
+
+        if (forward.sqrMagnitude < 0.001f)
+            return;
+
+        forward.Normalize();
+
+        // Inverte a direção em 180 graus quando necessário
+        if (invert)
+            forward = -forward;
+
+        transform.rotation = Quaternion.LookRotation(forward);
+
+        lastFacingDirection = forward;
     }
 }

@@ -72,7 +72,7 @@ public class TimeTravel : MonoBehaviour
     private void Start()
     {
         // Inputs
-        PlayerInput.Instance.AddAction(HandleReset,4);
+       // PlayerInput.Instance.AddAction(HandleReset,4);
         PlayerInput.Instance.AddAction(StartTravel,5);
 
 
@@ -182,7 +182,9 @@ public class TimeTravel : MonoBehaviour
         isTravelling = true;
         travelDurationTimer = travelDuration;
 
-        GCamarada.AudioManager.I?.PlayClip("StartTravel", true);
+        GCamarada.AudioManager.I?.UpdateMusicTimeline(true);
+
+        GCamarada.AudioManager.I?.OnShotClip("StartTravel");
         Debug.Log("Viajei pro passado");
 
         // Física do passado
@@ -203,7 +205,7 @@ public class TimeTravel : MonoBehaviour
     {
         if(!force && !CheckTravel()) return;
         isTravelling = false;
-
+        GCamarada.AudioManager.I?.UpdateMusicTimeline(false);
         GCamarada.AudioManager.I?.StopClip("StartTravel");
         Debug.Log("Voltei pro futuro");
 
@@ -266,5 +268,51 @@ public class TimeTravel : MonoBehaviour
 
         onCooldown = false;
         cooldownTimer = cooldown;
+    }
+
+    public void ResetAfterRespawn()
+    {
+        // Cancela qualquer bloqueio temporário
+        if (blink != null)
+        {
+            StopCoroutine(blink);
+            blink = null;
+        }
+
+        // Libera a viagem temporal
+        TravelBlocked = false;
+
+        // Reseta os estados
+        isTravelling = false;
+        onCooldown = false;
+
+        GCamarada.AudioManager.I?.UpdateMusicTimeline(false);
+
+        travelDurationTimer = travelDuration;
+        cooldownTimer = cooldown;
+
+        // Restaura a física do FUTURO
+        Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
+        Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
+
+        notPlayer = 1 << pastLayer;
+        realPlayer = 1 << futureLayer;
+
+        // Restaura o estado do jogador
+        if (PlayerStateController.Instance != null)
+            PlayerStateController.Instance.ActivateFutureLayer();
+
+        // Desliga a câmera do passado
+        if (pastCamera != null)
+            pastCamera.enabled = false;
+
+        // Reseta o shader
+        if (timeTravelMaterial != null)
+            timeTravelMaterial.SetFloat("_SphereRadius", 0f);
+
+        // Para o som da viagem
+        GCamarada.AudioManager.I?.StopClip("StartTravel");
+
+        Debug.Log("TimeTravel resetado após respawn");
     }
 }

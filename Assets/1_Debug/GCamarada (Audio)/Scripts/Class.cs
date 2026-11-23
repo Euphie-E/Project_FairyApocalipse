@@ -10,6 +10,8 @@ namespace GCamarada
         public AudioClip clipe;
         public AudioClip[] clip;
         public AudioSource source;
+        [Header("Tempo do audio")]
+        public MusicTimeline timeline = MusicTimeline.Both;
     }
 }
 
