@@ -42,7 +42,7 @@ public class TimeTravel : MonoBehaviour
     [SerializeField] private MeshRenderer timeDome;
 
     [Header("Fada")]
-    [SerializeField] private bool hasFairy = false;
+    [SerializeField] public bool hasFairy = false;
 
     public bool HasFairy => hasFairy;
 
