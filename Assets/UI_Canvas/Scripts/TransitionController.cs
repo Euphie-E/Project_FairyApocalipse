@@ -18,6 +18,7 @@ public class TransitionController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        Time.timeScale = 1f;
         SceneManager.sceneLoaded += End;
     }
     void End(Scene scene, LoadSceneMode loaded){
