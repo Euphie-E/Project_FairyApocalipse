@@ -77,7 +77,8 @@ public class UISpriteAnimation : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(m_Speed);
+            //yield return new WaitForSeconds(m_Speed);
+            yield return new WaitForSecondsRealtime(m_Speed);
 
             if (m_IndexSprite >= m_SpriteArray.Length)
             {
