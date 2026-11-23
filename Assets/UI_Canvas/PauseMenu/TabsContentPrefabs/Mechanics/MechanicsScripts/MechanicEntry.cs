@@ -13,8 +13,9 @@ public class MechanicEntry : MonoBehaviour
             Debug.LogError("Panel não atribuído no ArchiveEntry!");
             return;
         }
-        panel.SetData(mInfo);
         panel.gameObject.SetActive(true);
+        panel.SetData(mInfo);
+        
        
     }
 }
