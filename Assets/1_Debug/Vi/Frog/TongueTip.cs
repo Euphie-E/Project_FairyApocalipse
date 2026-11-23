@@ -11,10 +11,11 @@ public class TongueTip : MonoBehaviour
             other.GetComponent<PlayerDeathController>().Pull(tongue.transform.position);
         }
 
-        /* else if (other.CompareTag("Weak Point"))
+        else if (other.CompareTag("Weak Spot"))
         {
-            other.GetComponent<WeakPoint>().BringDown();
-        } */
+            Debug.Log("Entrou");
+            other.GetComponent<WeakSpot>().TakeDamage();
+        }
 
         tongue.OnCollision();
     }

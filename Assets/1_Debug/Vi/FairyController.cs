@@ -121,7 +121,7 @@ public class FairyController : MonoBehaviour
             if (distance > 2f && !animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && !animator.IsInTransition(0))
             {
                 animator.SetTrigger("Dash");
-                Debug.Log("triggei animação");
+//                Debug.Log("triggei animação");
             }
 
             speedMultiplier = animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") ? dashSpeed : 1;

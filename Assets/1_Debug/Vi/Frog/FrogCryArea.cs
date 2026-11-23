@@ -5,11 +5,17 @@ public class FrogCryArea : MonoBehaviour
     [SerializeField] Frog frog;
     void OnTriggerEnter(Collider other)
     {
-        frog.ChangeState(new FrogCry(frog));
+        if (other.CompareTag("Player"))
+        {
+            frog.ChangeState(new FrogCry(frog));
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
-        frog.ChangeState(new FrogIdle(frog));
+        if (other.CompareTag("Player"))
+        {
+            frog.ChangeState(new FrogIdle(frog));
+        }
     }
 }

@@ -7,7 +7,6 @@ public class EartquakeController : MonoBehaviour
 {
     private DebrisSpawner[] spawners;
     private Transform player;
-    [SerializeField] private GameObject rockDebris;
     [SerializeField] private int debrisQuantity = 3;
     [SerializeField] private bool autoEarthquake = false;
 

@@ -55,10 +55,15 @@ public class PlayerDeathController : MonoBehaviour
     [SerializeField] private float bossPullDistance = 1.5f;
     [SerializeField] private float bossPullDuration = 0.2f;
 
+    [Header("Tear Push")]
+    [SerializeField] private float pushDistance = 1.5f;
+    [SerializeField] private float pushDuration = 0.2f;
+
     private bool isDrowning = false;
 
     private Coroutine bossPushCoroutine;
     private Coroutine bossPullCoroutine;
+    private Coroutine pushCoroutine;
 
 
     [Header("Revive")]
@@ -339,6 +344,60 @@ public class PlayerDeathController : MonoBehaviour
         }
 
         bossPullCoroutine = StartCoroutine(BossPullRoutine(direction));
+    }
+
+    public void Push(Vector3 hitPosition)
+    {
+        if (playerCharacterController == null || !playerCharacterController.enabled)
+        {
+            return;
+        }
+
+        hitPosition.y = transform.position.y;
+        Vector3 direction = transform.position - hitPosition;
+        direction.y = 0;
+
+        if (direction.sqrMagnitude < 0.001f)
+        {
+            direction = -transform.forward;
+        }
+
+        direction.Normalize();
+
+        if (pushCoroutine != null)
+        {
+            StopCoroutine(pushCoroutine);
+        }
+
+        pushCoroutine = StartCoroutine(pushRoutine(direction));
+    }
+
+    private IEnumerator pushRoutine(Vector3 direction)
+    {
+        float timer = 0f;
+        float previousProgress = 0f;
+        float duration = Mathf.Max(0.01f, bossPullDuration);
+
+        while (timer < duration)
+        {
+            if (!playerCharacterController.enabled) break;
+
+            timer += Time.deltaTime;
+
+            float t = Mathf.Clamp01(timer / duration);
+
+            float progress = 1f - Mathf.Pow(1f - t, 2f);
+
+            float distanceStep = (progress - previousProgress) * bossPullDistance;
+
+            playerCharacterController.Move(direction * distanceStep);
+
+            previousProgress = progress;
+
+            yield return null;
+        }
+
+        bossPullCoroutine = null;
     }
 
     private IEnumerator BossPullRoutine(Vector3 direction)
