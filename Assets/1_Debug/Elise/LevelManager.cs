@@ -155,17 +155,17 @@ public class LevelManager : MonoBehaviour
         if (save == null)
             return;
 
-        Saves = new List<Save>(save);
+        Saves = save.Where(s => s != null).ToList();
 
         foreach (var item in List)
         {
-            item.Load(save);
+            item.Load(Saves);
         }
 
         int ck = -1;
         Save sv = null;
 
-        foreach (var item in save)
+        foreach (var item in Saves)
         {
             if (item.Key != Savable.Types.Checkpoint)
                 continue;
@@ -204,12 +204,27 @@ public class LevelManager : MonoBehaviour
 
     public void SaveMe(Savable s)
     {
+        if (s == null)
+        {
+            Debug.LogWarning("[SAVE] Tentativa de salvar Savable nulo.");
+            return;
+        }
+
         Save updated = s.Save();
 
-        // Remove versoes anteriores do mesmo registro.
+        if (updated == null)
+        {
+            Debug.LogError(
+                $"[SAVE] O objeto {s.gameObject.name} retornou Save NULL!",
+                s.gameObject
+            );
+            return;
+        }
+
+        // Remove registros nulos e versões anteriores
         Saves.RemoveAll(k =>
-            k.Key == updated.Key &&
-            k.ID == updated.ID
+            k == null ||
+            (k.Key == updated.Key && k.ID == updated.ID)
         );
 
         Saves.Add(updated);

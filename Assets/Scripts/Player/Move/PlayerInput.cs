@@ -91,6 +91,7 @@ public class PlayerInput : MonoBehaviour
         else if (teclado.digit5Key.wasPressedThisFrame) TeleportarParaCheckpoint(5);
         else if (teclado.digit0Key.wasPressedThisFrame) AlternarCena();
         else if (teclado.rKey.wasPressedThisFrame) ReiniciarCena();
+        else if (teclado.lKey.wasPressedThisFrame) DamageRandomTrash();
     }
 
     private void TeleportarParaCheckpoint(int checkpoint)
@@ -130,6 +131,7 @@ public class PlayerInput : MonoBehaviour
             if (i >= tpPositions.Length) break;
         }
     }
+
 
     private void OnEnable()
     {
@@ -388,5 +390,40 @@ public class PlayerInput : MonoBehaviour
             item(resp);
         }
 //        Debug.Log(resp.ToString());
+    }
+
+    private void DamageRandomTrash()
+    {
+        Trash[] trashs = FindObjectsByType<Trash>(
+            FindObjectsSortMode.None
+        );
+
+        List<Trash> available = new List<Trash>();
+
+        foreach (Trash trash in trashs)
+        {
+            if (trash != null && trash.IsAlive)
+            {
+                available.Add(trash);
+            }
+        }
+
+        if (available.Count == 0)
+        {
+            Debug.Log("[DEBUG] Todas as Trashs foram destruídas!");
+            return;
+        }
+
+        int randomIndex = UnityEngine.Random.Range(
+            0, available.Count
+        );
+
+        Trash selected = available[randomIndex];
+
+        selected.TakeDamage();
+
+        Debug.Log(
+            $"[DEBUG] Dano aplicado em: {selected.gameObject.name}"
+        );
     }
 }

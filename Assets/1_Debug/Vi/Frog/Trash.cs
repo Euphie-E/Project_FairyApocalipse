@@ -6,19 +6,41 @@ public class Trash : MonoBehaviour
     [SerializeField] int life = 3;
     [SerializeField] GameObject[] pileStates;
 
+    public bool IsAlive => life > 0;
+
     public void TakeDamage()
     {
+        if (life <= 0) return;
+
         life--;
-        
-        if (pileStates[life] != null) 
+
+        if (pileStates != null &&
+            life >= 0 &&
+            life < pileStates.Length)
         {
-            pileStates[life].SetActive(false);
+            GameObject state = pileStates[life];
+
+            if (state != null)
+            {
+                // Verifica se o estado possui efeitos
+                TrashStateEffects effects =
+                    state.GetComponent<TrashStateEffects>();
+
+                // Executa os efeitos, caso existam
+                if (effects != null)
+                {
+                    effects.PlayEffects();
+                }
+
+                // Desativa o estado destruído
+                state.SetActive(false);
+            }
         }
 
-        if (life < 1)
+        if (life == 0)
         {
-            manager.DestroyPile();
+            if (manager != null)
+                manager.DestroyPile();
         }
     }
-    
 }
