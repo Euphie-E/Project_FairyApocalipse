@@ -39,7 +39,7 @@ public class PlayerInput : MonoBehaviour
     public InputAction quatro { get; private set; }
     public InputAction cinco { get; private set; }
     public InputAction test { get; private set; }
-    Vector3[] tpPositions = new Vector3[5];
+    Vector3[] tpPositions = new Vector3[7];
 
 
     private void Awake()
@@ -89,6 +89,8 @@ public class PlayerInput : MonoBehaviour
         else if (teclado.digit3Key.wasPressedThisFrame) TeleportarParaCheckpoint(3);
         else if (teclado.digit4Key.wasPressedThisFrame) TeleportarParaCheckpoint(4);
         else if (teclado.digit5Key.wasPressedThisFrame) TeleportarParaCheckpoint(5);
+        else if (teclado.digit6Key.wasPressedThisFrame) TeleportarParaCheckpoint(6);
+        else if (teclado.digit7Key.wasPressedThisFrame) TeleportarParaCheckpoint(7);
         else if (teclado.digit0Key.wasPressedThisFrame) AlternarCena();
         else if (teclado.rKey.wasPressedThisFrame) ReiniciarCena();
         else if (teclado.lKey.wasPressedThisFrame) DamageRandomTrash();
