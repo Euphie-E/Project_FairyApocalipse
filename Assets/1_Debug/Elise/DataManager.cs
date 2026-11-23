@@ -166,23 +166,35 @@ public class DataManager : MonoBehaviour
     }
     void Run(Scene scene, LoadSceneMode loaded)
     {
-        LoadGame();
+
         int index = CheckSceneIDX(scene);
         dataEvents.index = index;
-        if (testing || reset || playerDataGroup.group[index] == null)
+
+        if (testing || reset ||
+            playerDataGroup.group[index] == null)
         {
             playerData = new PlayerData();
             strTime = Time.time;
 
-            // Registra os dados novos no grupo.
             playerDataGroup.group[index] = playerData;
         }
         else
         {
             playerData = playerDataGroup.group[index];
         }
+
         playerData.index = index;
-        if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize) playerData.CheckPoints = new double[ckpSize];
+
+        if (playerData.CheckPoints == null ||
+            playerData.CheckPoints.Length != ckpSize)
+        {
+            playerData.CheckPoints = new double[ckpSize];
+        }
+
+        Debug.Log(
+            $"[DATA MANAGER] Cena: {scene.name} | " +
+            $"Gnomos coletados: {GnomeProgress.GetTotalCollected()}/14"
+        );
         //if(reset) return;
         //if(!(index >= 0 && index <= 3)) return;
         //GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -310,6 +322,7 @@ public class DataManager : MonoBehaviour
         }
         PlayerPrefs.SetInt("TotalTester", user);
         PlayerPrefs.Save();
+        GnomeProgress.ResetAll();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

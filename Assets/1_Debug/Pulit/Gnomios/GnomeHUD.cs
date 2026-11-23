@@ -77,11 +77,52 @@ public class GnomeHUD : MonoBehaviour
             // Atualiza o componente visual.
             slot.image.SetAllDirty();
 
+
             Debug.Log(
-                $"[GNOME HUD] ID {slot.gnomeId} | " +
+                $"[GNOME HUD] ID: {slot.gnomeId} | " +
                 $"Coletado: {collected} | " +
-                $"Sprite: {selectedSprite.name}"
+                $"Objeto: {slot.image.gameObject.name} | " +
+                $"Sprite aplicado: {slot.image.sprite.name} | " +
+                $"Ativo: {slot.image.gameObject.activeInHierarchy}",
+                slot.image.gameObject
             );
+
         }
+
     }
+
+    [ContextMenu("Verificar Referencias dos Gnomos")]
+    public void VerifySlots()
+    {
+        Dictionary<Image, int> usedImages = new();
+
+        foreach (GnomeSlot slot in slots)
+        {
+            if (slot.image == null)
+            {
+                Debug.LogError(
+                    $"[GNOME HUD] ID {slot.gnomeId} sem Image!"
+                );
+                continue;
+            }
+
+            if (usedImages.TryGetValue(
+                slot.image, out int previousId))
+            {
+                Debug.LogError(
+                    $"[GNOME HUD] ERRO! IDs {previousId} e " +
+                    $"{slot.gnomeId} usam a MESMA Image: " +
+                    $"{slot.image.gameObject.name}",
+                    slot.image.gameObject
+                );
+            }
+            else
+            {
+                usedImages.Add(slot.image, slot.gnomeId);
+            }
+        }
+
+        Debug.Log("[GNOME HUD] Verificacao concluida.");
+    }
+
 }
