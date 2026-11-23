@@ -387,6 +387,6 @@ public class PlayerInput : MonoBehaviour
         {
             item(resp);
         }
-        Debug.Log(resp.ToString());
+//        Debug.Log(resp.ToString());
     }
 }
