@@ -1,46 +1,64 @@
-using NUnit.Framework;
+
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class ShadowEffect : MonoBehaviour
 {
     private DecalProjector decalProjector;
-    bool isFalling = false;
-    float startHeight;
-    float differenceHeight = 25;
-    float floorHeight;
+    private Transform rock;
 
-    void Start()
+    private bool isFalling;
+    private float differenceHeight;
+    private float floorHeight;
+
+    [SerializeField] private float groundOffset = 0.05f;
+
+    private void Awake()
     {
         decalProjector = GetComponent<DecalProjector>();
     }
 
-    void OnEnable()
+    private void Update()
     {
+        if (!isFalling || rock == null) return;
+
+        float distance = rock.position.y - floorHeight;
+
+        float progress = 1f - (distance / differenceHeight);
+        progress = Mathf.Clamp01(progress);
+
+        // A sombra fica mais forte conforme a pedra cai
+        decalProjector.fadeFactor = Mathf.Lerp(0.5f, 1f, progress);
+    }
+
+    public void ShowWarning(Transform fallingRock, float height)
+    {
+        rock = fallingRock;
+        differenceHeight = Mathf.Max(0.01f, height);
+
+        floorHeight = rock.position.y - differenceHeight;
+
+        // Posiciona a sombra no chão
+        transform.position = new Vector3(
+            rock.position.x,
+            floorHeight + groundOffset,
+            rock.position.z
+        );
+
         isFalling = false;
+        decalProjector.fadeFactor = 1f;
+
+        gameObject.SetActive(true);
     }
 
-    void Update()
-    {
-        HandleOpacity();
-    }
-
-    private void HandleOpacity()
-    {
-        if (isFalling)
-        {
-            float opacity = 1 - ((transform.position.y - floorHeight) / differenceHeight);
-            if (opacity <= 1) decalProjector.fadeFactor = opacity;
-            else decalProjector.fadeFactor = 1;
-        }
-    }
-
-    public void StartDrop(float spawnHeight)
+    public void StartDrop()
     {
         isFalling = true;
-        differenceHeight = spawnHeight;
-        startHeight = transform.position.y;
-        floorHeight = startHeight - differenceHeight;
     }
 
+    public void HideShadow()
+    {
+        isFalling = false;
+        gameObject.SetActive(false);
+    }
 }

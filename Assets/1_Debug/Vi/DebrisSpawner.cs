@@ -1,52 +1,78 @@
-using System;
-using System.Linq.Expressions;
-using NUnit.Framework;
-using Unity.VisualScripting;
+
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DebrisSpawner : MonoBehaviour
 {
-    private Transform rockDebris;
+    [Header("References")]
+    [SerializeField] private Transform rockDebris;
+    [SerializeField] private ShadowEffect shadowEffect;
+
+    [Header("Drop Settings")]
+    [SerializeField] private float delayBeforeDrop = 2f;
+    [SerializeField] private float speed = 2f;
+    [SerializeField] private float size = 2f;
+
     private Rigidbody rockDebrisRB;
-    public float speed = 2;
-    public float size = 2;
-    
-    private ShadowEffect shadowEffect;
+    private Vector3 initialPosition;
+    private Coroutine dropCoroutine;
 
-    void Start()
+    private void Start()
     {
-        
-        rockDebris = transform.GetChild(0);
         rockDebrisRB = rockDebris.GetComponent<Rigidbody>();
-        rockDebris.gameObject.SetActive(false);
 
-        shadowEffect = rockDebris.transform.GetChild(0).GetComponent<ShadowEffect>();
+        initialPosition = rockDebris.localPosition;
+
+        rockDebris.gameObject.SetActive(false);
+        shadowEffect.HideShadow();
     }
 
     public void Drop(float startHeight, bool randomize)
     {
-        rockDebrisRB.linearVelocity = Vector3.zero;
-        rockDebris.gameObject.SetActive(false);
-        rockDebris.localPosition = new Vector3(0, 0, 0);
-        rockDebris.gameObject.SetActive(true);
-        shadowEffect.StartDrop(startHeight);
+        if (dropCoroutine != null)
+            StopCoroutine(dropCoroutine);
 
-        if (randomize)
-        {
-            float randomSize = UnityEngine.Random.Range(1f, 4f);
-            float randomSpeed = UnityEngine.Random.Range(0f, 20f) * 100;
-            rockDebrisRB.AddForce(Vector3.down * randomSpeed, ForceMode.Acceleration);
-            rockDebris.localScale = Vector3.one * randomSize;
-        }
-
-        else
-        {
-            rockDebrisRB.AddForce(Vector3.down * speed, ForceMode.Acceleration);
-            rockDebris.localScale = Vector3.one * size;
-        }
-
-        rockDebris.gameObject.SetActive(true);
+        dropCoroutine = StartCoroutine(
+            DropRoutine(startHeight, randomize)
+        );
     }
 
+    private IEnumerator DropRoutine(float startHeight, bool randomize)
+    {
+        // RESET
+        rockDebris.gameObject.SetActive(false);
+
+        rockDebris.localPosition = initialPosition;
+
+        rockDebrisRB.linearVelocity = Vector3.zero;
+        rockDebrisRB.angularVelocity = Vector3.zero;
+
+        float dropSize = randomize
+            ? Random.Range(1f, 4f)
+            : size;
+
+        rockDebris.localScale = Vector3.one * dropSize;
+
+        // 1. MOSTRA A SOMBRA
+        shadowEffect.ShowWarning(rockDebris, startHeight);
+
+        // 2. ESPERA X SEGUNDOS
+        yield return new WaitForSeconds(delayBeforeDrop);
+
+        // 3. ATIVA A PEDRA
+        rockDebris.gameObject.SetActive(true);
+
+        // 4. INICIA A QUEDA
+        shadowEffect.StartDrop();
+
+        rockDebrisRB.useGravity = false;
+
+        float dropSpeed = randomize
+            ? Random.Range(3f, 6f)
+            : speed;
+
+        rockDebrisRB.linearVelocity = Vector3.down * dropSpeed;
+
+        dropCoroutine = null;
+    }
 }
