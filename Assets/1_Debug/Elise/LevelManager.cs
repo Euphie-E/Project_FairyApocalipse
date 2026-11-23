@@ -22,17 +22,47 @@ public class LevelManager : MonoBehaviour
     {
         Player = player;
     }
+
     public void SetLastCheckpoint(int id)
     {
+        Checkpoint checkpoint = Checkpoints
+            .OfType<Checkpoint>()
+            .FirstOrDefault(c => c.index == id);
+
+        if (checkpoint == null)
+        {
+            Debug.LogWarning(
+                $"Checkpoint {id} nao encontrado!"
+            );
+            return;
+        }
+
+        // Substitui o ultimo checkpoint.
         lastCKP = id;
+
+        // Incrementa a ordem de ativacao.
+        checkpointActivationOrder++;
+
+        // Atualiza os dados do checkpoint.
+        checkpoint.RegisterActivation(
+            checkpointActivationOrder
+        );
+
+        // Atualiza os dados em memoria.
+        SaveMe(checkpoint);
+
+        Debug.Log($"Ultimo checkpoint atualizado: {id}");
     }
+
     public Checkpoint GetCheckpoint(int index)
     {
         return (Checkpoint)Checkpoints[index];
     }
     public Checkpoint GetLastCheckpoint()
     {
-        return (Checkpoint)Checkpoints[lastCKP];
+        return Checkpoints
+            .OfType<Checkpoint>()
+            .FirstOrDefault(c => c.index == lastCKP);
     }
     void Awake()
     {
@@ -49,6 +79,7 @@ public class LevelManager : MonoBehaviour
     List<Savable> List = new();
     List<Savable> Checkpoints = new();
     int lastCKP = 0;
+    int checkpointActivationOrder = 0;
     List<Savable> PastFutureChange = new();
     [SerializeField]
     List<Seed> Seeds = new();
@@ -118,6 +149,7 @@ public class LevelManager : MonoBehaviour
         return Seeds.FirstOrDefault(k => k.seedIndex == index);
     }
 
+
     public void Load(List<Save> save)
     {
         if (save == null)
@@ -170,26 +202,34 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void SaveMe(Savable s)
+    {
+        Save updated = s.Save();
+
+        // Remove versoes anteriores do mesmo registro.
+        Saves.RemoveAll(k =>
+            k.Key == updated.Key &&
+            k.ID == updated.ID
+        );
+
+        Saves.Add(updated);
+    }
+
     public List<Save> Save()
     {
         Debug.Log("Saving");
-        List<Save> temp = new();
-        temp.AddRange(Saves);
+
         foreach (var item in List)
         {
-            if(item.enabled == false) continue;
-            Saves.Add(item.Save());
+            if (!item.enabled)
+                continue;
+
+            SaveMe(item);
         }
-        return Saves;
+
+        return new List<Save>(Saves);
     }
-    public void SaveMe(Savable s)
-    {
-        Save temp = Saves.FirstOrDefault(k => k.Key == s.saveData.Key && k.ID == s.saveData.ID);
-        if(temp == null)
-            Saves.Add(s.Save());
-        else{
-            temp = s.Save();
-        }
-    }
+
 }
+
 
