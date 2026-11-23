@@ -2,15 +2,29 @@ using UnityEngine;
 
 public class FairyNotification : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public NotifData data;
+    public TimeTravel timeTravel;
     void Start()
     {
-        
+        timeTravel = FindFirstObjectByType<TimeTravel>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter(Collider other)
     {
-        
+        if(other.CompareTag("Player"))
+        {
+            if(NotificationManager.instance != null)
+            {   
+                if(!timeTravel.hasFairy)
+                {
+                    NotificationManager.instance.ShowNotif(data);
+                }
+                else if(timeTravel.hasFairy)
+                {
+                    enabled = false;
+                    Destroy(this);
+                }
+            }
+        }
     }
 }
