@@ -267,4 +267,48 @@ public class TimeTravel : MonoBehaviour
         onCooldown = false;
         cooldownTimer = cooldown;
     }
+
+    public void ResetAfterRespawn()
+    {
+        // Cancela qualquer bloqueio temporário
+        if (blink != null)
+        {
+            StopCoroutine(blink);
+            blink = null;
+        }
+
+        // Libera a viagem temporal
+        TravelBlocked = false;
+
+        // Reseta os estados
+        isTravelling = false;
+        onCooldown = false;
+
+        travelDurationTimer = travelDuration;
+        cooldownTimer = cooldown;
+
+        // Restaura a física do FUTURO
+        Physics.IgnoreLayerCollision(playerLayer, futureLayer, false);
+        Physics.IgnoreLayerCollision(playerLayer, pastLayer, true);
+
+        notPlayer = 1 << pastLayer;
+        realPlayer = 1 << futureLayer;
+
+        // Restaura o estado do jogador
+        if (PlayerStateController.Instance != null)
+            PlayerStateController.Instance.ActivateFutureLayer();
+
+        // Desliga a câmera do passado
+        if (pastCamera != null)
+            pastCamera.enabled = false;
+
+        // Reseta o shader
+        if (timeTravelMaterial != null)
+            timeTravelMaterial.SetFloat("_SphereRadius", 0f);
+
+        // Para o som da viagem
+        GCamarada.AudioManager.I?.StopClip("StartTravel");
+
+        Debug.Log("TimeTravel resetado após respawn");
+    }
 }

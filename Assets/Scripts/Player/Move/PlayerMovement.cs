@@ -773,4 +773,26 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
     {
         dashAvailable = false;
     }
+
+    public void FaceCameraDirection(bool invert = false)
+    {
+        if (cameraTransform == null)
+            return;
+
+        Vector3 forward = cameraTransform.forward;
+        forward.y = 0f;
+
+        if (forward.sqrMagnitude < 0.001f)
+            return;
+
+        forward.Normalize();
+
+        // Inverte a direção em 180 graus quando necessário
+        if (invert)
+            forward = -forward;
+
+        transform.rotation = Quaternion.LookRotation(forward);
+
+        lastFacingDirection = forward;
+    }
 }
