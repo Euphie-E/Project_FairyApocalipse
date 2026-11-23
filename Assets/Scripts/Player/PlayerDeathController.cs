@@ -126,7 +126,7 @@ public class PlayerDeathController : MonoBehaviour
         // Durante o Push não contabiliza queda
         if (pushCoroutine != null)
         {
-            time = 0f;
+      
             return;
         }
 
@@ -151,7 +151,6 @@ public class PlayerDeathController : MonoBehaviour
             isDead = true;
             time = 0f;
 
-            playerInput.OnDeath();
             StartDeathSequence();
         }
     }
@@ -212,8 +211,19 @@ public class PlayerDeathController : MonoBehaviour
         if (deathSequenceCoroutine != null)
             StopCoroutine(deathSequenceCoroutine);
 
+        // Bloqueia controles
+        playerInput.OnDeath();
+
+        // Para a movimentação
         playerMovement.ResetMotionForDeath();
-        //playerMovement.enabled = false;
+        playerMovement.enabled = false;
+
+        // Cancela empurrão ativo
+        if (pushCoroutine != null)
+        {
+            StopCoroutine(pushCoroutine);
+            pushCoroutine = null;
+        }
 
         PlayDeathDissolve();
 
@@ -270,6 +280,9 @@ public class PlayerDeathController : MonoBehaviour
         ); */
 
         ProtectRespawn();
+
+        // Reativa movimentação antes do teleporte
+        playerMovement.enabled = true;
 
         playerMovement.TeleportLastCheckpoint();
 
@@ -441,9 +454,6 @@ public class PlayerDeathController : MonoBehaviour
             playerCharacterController.Move(direction * distanceStep);
 
             previousProgress = progress;
-
-            // Impede que o empurrão acumule tempo de queda
-            time = 0f;
 
             yield return null;
         }
