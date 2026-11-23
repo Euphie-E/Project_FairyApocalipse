@@ -592,6 +592,7 @@ MonoBehaviour:
   groundRadiusShrink: 0
   normalSmoothing: 20
   coyoteTime: 0.2
+  dashAvailable: 1
   dashDistance: 3
   dashDuration: 0.18
   dashCooldown: 1
@@ -674,7 +675,10 @@ MonoBehaviour:
   bossPushDuration: 0.2
   bossPullDistance: 10
   bossPullDuration: 0.5
+  pushDistance: 1
+  pushDuration: 0.4
   toReviveTime: 3
+  time: 0
 --- !u!114 &6038228782548844420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6941,6 +6945,7 @@ MonoBehaviour:
     ID: 0
     Values: []
   index: 0
+  allowReactivation: 0
   animatorCheckpoint: {fileID: 0}
   vfxCheckpoint: {fileID: 0}
 --- !u!1 &6375691715099986341
