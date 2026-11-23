@@ -525,8 +525,10 @@ public class PlayerMovement : MonoBehaviour, IMushroomBounceReceiver
         transform.rotation = Quaternion.LookRotation(dashDirection);
 
         playerAnimatorController.PlayDash();
-        //Trigger audio
+        GCamarada.AudioManager.I?.OnShotClip("Dash");
 
+        //Trigger audio
+        
         return true;
     }
 

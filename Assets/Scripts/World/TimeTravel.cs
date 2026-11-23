@@ -184,7 +184,7 @@ public class TimeTravel : MonoBehaviour
 
         GCamarada.AudioManager.I?.UpdateMusicTimeline(true);
 
-        GCamarada.AudioManager.I?.PlayClip("StartTravel", true);
+        GCamarada.AudioManager.I?.OnShotClip("StartTravel");
         Debug.Log("Viajei pro passado");
 
         // Física do passado

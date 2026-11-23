@@ -22,6 +22,7 @@ public class PlayerPlantStep : MonoBehaviour
 
         if (tempoNoAr > 0.15f)
             plataformaAtual = null;
+
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -41,5 +42,6 @@ public class PlayerPlantStep : MonoBehaviour
         plataformaAtual = planta;
 
         planta.Balancar();
+        GCamarada.AudioManager.I?.PlayClip("Folha2");
     }
 }

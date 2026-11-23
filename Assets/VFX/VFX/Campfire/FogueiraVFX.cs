@@ -14,6 +14,9 @@ public class FogueiraVFX : MonoBehaviour
     [SerializeField] private float velocidadeOscilacao = 2f;
     [SerializeField] private float velocidadeTransicao = 4f;
 
+    [Header("Audio")]
+    [SerializeField] private string nomeAudio = "Fogueira";
+
     [Header("Estado Inicial")]
     [SerializeField] private bool comecaAcesa = true;
 
@@ -43,6 +46,12 @@ public class FogueiraVFX : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (acesa)
+            GCamarada.AudioManager.I?.PlayClip(nomeAudio, true);
+    }
+
     private void Update()
     {
         if (luzFogueira == null) return;
@@ -51,7 +60,6 @@ public class FogueiraVFX : MonoBehaviour
 
         if (acesa)
         {
-            
             float ruido = Mathf.PerlinNoise(
                 sementeRuido,
                 Time.time * velocidadeOscilacao
@@ -64,11 +72,9 @@ public class FogueiraVFX : MonoBehaviour
             );
 
             intensidadeAlvo = intensidadeBase * (1f + variacao);
-
             luzFogueira.enabled = true;
         }
 
-       
         luzFogueira.intensity = Mathf.MoveTowards(
             luzFogueira.intensity,
             intensidadeAlvo,
@@ -89,6 +95,8 @@ public class FogueiraVFX : MonoBehaviour
 
     public void DefinirFogueira(bool ligar)
     {
+        if (acesa == ligar) return;
+
         acesa = ligar;
 
         foreach (ParticleSystem ps in particulas)
@@ -96,16 +104,15 @@ public class FogueiraVFX : MonoBehaviour
             if (ps == null) continue;
 
             if (acesa)
-            {
                 ps.Play();
-            }
             else
-            {
-                ps.Stop(
-                    true,
-                    ParticleSystemStopBehavior.StopEmitting
-                );
-            }
+                ps.Stop(true,
+                    ParticleSystemStopBehavior.StopEmitting);
         }
+
+        if (acesa)
+            GCamarada.AudioManager.I?.PlayClip(nomeAudio, true);
+        else
+            GCamarada.AudioManager.I?.StopClip(nomeAudio);
     }
 }
