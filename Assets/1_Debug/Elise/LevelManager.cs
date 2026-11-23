@@ -117,25 +117,59 @@ public class LevelManager : MonoBehaviour
     {
         return Seeds.FirstOrDefault(k => k.seedIndex == index);
     }
+
     public void Load(List<Save> save)
     {
-        int ck = -1;
-        Save sv = null;
+        if (save == null)
+            return;
+
+        Saves = new List<Save>(save);
+
         foreach (var item in List)
         {
             item.Load(save);
         }
+
+        int ck = -1;
+        Save sv = null;
+
         foreach (var item in save)
         {
-            if(item.Key == Savable.Types.Checkpoint && item.Get("Count") > ck)
+            if (item.Key != Savable.Types.Checkpoint)
+                continue;
+
+            int count = item.Get("Count");
+
+            if (count > ck)
             {
-                ck = item.Get("Count");
+                ck = count;
                 sv = item;
             }
         }
-        if(sv != null && ck != -1) 
-            Player.GetComponent<PlayerMovement>().TeleportTo(Checkpoints.FirstOrDefault(k => k.saveData.ID == sv.ID)?.transform);
+
+        // Recupera a ordem da ultima ativacao.
+        checkpointActivationOrder = Mathf.Max(0, ck);
+
+        if (sv == null || ck == -1)
+            return;
+
+        // Recupera o ID do ultimo checkpoint.
+        lastCKP = sv.ID;
+
+        Checkpoint checkpoint = GetLastCheckpoint();
+
+        if (checkpoint != null && Player != null)
+        {
+            PlayerMovement movement =
+                Player.GetComponent<PlayerMovement>();
+
+            if (movement != null)
+            {
+                movement.TeleportTo(checkpoint.transform);
+            }
+        }
     }
+
     public List<Save> Save()
     {
         Debug.Log("Saving");
