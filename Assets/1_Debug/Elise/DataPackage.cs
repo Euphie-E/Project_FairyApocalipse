@@ -92,6 +92,8 @@ public class PlayerDataGroup
     public int JumpTotal;
     public int DeathTotal;
     public int TimeTravelTotal;
+
+    public bool[] CollectedGnomes = new bool[14];
     public PlayerDataGroup(int size)
     {
         group = new PlayerData[size];
