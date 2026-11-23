@@ -53,6 +53,7 @@ public class TransitionController : MonoBehaviour
         transition.SetTrigger("End");
         yield return new WaitForSeconds(1);
         SceneManager.LoadSceneAsync(index);
+        transition.SetTrigger("Start");
     }
 
     public void Quit()
