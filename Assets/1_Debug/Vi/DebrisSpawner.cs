@@ -16,6 +16,7 @@ public class DebrisSpawner : MonoBehaviour
     private Rigidbody rockDebrisRB;
     private Vector3 initialPosition;
     private Coroutine dropCoroutine;
+    private bool isDropping = false;
 
     private void Start()
     {
@@ -29,8 +30,10 @@ public class DebrisSpawner : MonoBehaviour
 
     public void Drop(float startHeight, bool randomize)
     {
-        if (dropCoroutine != null)
-            StopCoroutine(dropCoroutine);
+        // Impede outra queda enquanto a pedra ainda está caindo
+        if (isDropping) return;
+
+        isDropping = true;
 
         dropCoroutine = StartCoroutine(
             DropRoutine(startHeight, randomize)
@@ -67,12 +70,14 @@ public class DebrisSpawner : MonoBehaviour
 
         rockDebrisRB.useGravity = false;
 
-        float dropSpeed = randomize
-            ? Random.Range(3f, 6f)
-            : speed;
+       
 
-        rockDebrisRB.linearVelocity = Vector3.down * dropSpeed;
+        rockDebrisRB.linearVelocity = Vector3.down * speed;
 
         dropCoroutine = null;
+    }
+    public void FinishDrop()
+    {
+        isDropping = false;
     }
 }

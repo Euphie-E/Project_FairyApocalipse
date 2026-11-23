@@ -49,7 +49,7 @@ MonoBehaviour:
   rockDebris: {fileID: 326122470968865897}
   shadowEffect: {fileID: 5151199657585182433}
   delayBeforeDrop: 1.5
-  speed: 2
+  speed: 50
   size: 2
 --- !u!1 &406933645503177053
 GameObject:
@@ -281,6 +281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a1a9f5a1aa0954ab5bfdff73d5214d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  spawner: {fileID: 3609737971560088472}
+  finishDelay: 0.5
 --- !u!64 &5867463573844245568
 MeshCollider:
   m_ObjectHideFlags: 0
