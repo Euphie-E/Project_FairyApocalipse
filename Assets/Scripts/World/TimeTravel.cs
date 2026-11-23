@@ -182,6 +182,8 @@ public class TimeTravel : MonoBehaviour
         isTravelling = true;
         travelDurationTimer = travelDuration;
 
+        GCamarada.AudioManager.I?.UpdateMusicTimeline(true);
+
         GCamarada.AudioManager.I?.PlayClip("StartTravel", true);
         Debug.Log("Viajei pro passado");
 
@@ -203,7 +205,7 @@ public class TimeTravel : MonoBehaviour
     {
         if(!force && !CheckTravel()) return;
         isTravelling = false;
-
+        GCamarada.AudioManager.I?.UpdateMusicTimeline(false);
         GCamarada.AudioManager.I?.StopClip("StartTravel");
         Debug.Log("Voltei pro futuro");
 
@@ -283,6 +285,8 @@ public class TimeTravel : MonoBehaviour
         // Reseta os estados
         isTravelling = false;
         onCooldown = false;
+
+        GCamarada.AudioManager.I?.UpdateMusicTimeline(false);
 
         travelDurationTimer = travelDuration;
         cooldownTimer = cooldown;
