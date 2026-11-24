@@ -49,6 +49,9 @@ public class TimeTravel : MonoBehaviour
     public bool TravelBlocked ;//{ get; private set; }
     PlayerSwingController psc;
 
+    [Header("Time Travel Audio")]
+    [SerializeField] private float travelSoundDuration = 3f;
+    private Coroutine travelSoundCoroutine;
     public void SetTravelBlocked(bool blocked)
     {
         TravelBlocked = blocked;
@@ -197,7 +200,7 @@ public class TimeTravel : MonoBehaviour
 
         GCamarada.AudioManager.I?.UpdateMusicTimeline(true);
 
-        GCamarada.AudioManager.I?.OnShotClip("StartTravel");
+        PlayTravelSound();
         Debug.Log("Viajei pro passado");
 
         // Física do passado
@@ -212,6 +215,39 @@ public class TimeTravel : MonoBehaviour
         //timeDome.enabled = true;
         if (DataManager.Instance != null)
             DataManager.Instance.AddData(DataManager.Data.TimeTravel,1);
+    }
+    private void OnDisable()
+    {
+        StopTravelSound();
+    }
+    private void PlayTravelSound()
+    {
+        StopTravelSound();
+
+        GCamarada.AudioManager.I?.OnShotClip("StartTravel");
+
+        travelSoundCoroutine = StartCoroutine(TravelSoundTimer());
+    }
+
+    private IEnumerator TravelSoundTimer()
+    {
+        yield return new WaitForSecondsRealtime(travelSoundDuration);
+
+        GCamarada.AudioManager.I?.StopClip("StartTravel");
+
+        travelSoundCoroutine = null;
+    }
+
+
+    private void StopTravelSound()
+    {
+        if (travelSoundCoroutine != null)
+        {
+            StopCoroutine(travelSoundCoroutine);
+            travelSoundCoroutine = null;
+        }
+
+        GCamarada.AudioManager.I?.StopClip("StartTravel");
     }
 
     public void CollectFairy()
