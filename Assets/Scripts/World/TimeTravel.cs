@@ -50,7 +50,9 @@ public class TimeTravel : MonoBehaviour
     PlayerSwingController psc;
 
     [Header("Time Travel Audio")]
+    [SerializeField] private AudioSource travelAudioSource;
     [SerializeField] private float travelSoundDuration = 3f;
+
     private Coroutine travelSoundCoroutine;
     public void SetTravelBlocked(bool blocked)
     {
@@ -224,7 +226,11 @@ public class TimeTravel : MonoBehaviour
     {
         StopTravelSound();
 
-        GCamarada.AudioManager.I?.OnShotClip("StartTravel");
+        if (travelAudioSource == null) return;
+
+        travelAudioSource.loop = false;
+        travelAudioSource.time = 0f;
+        travelAudioSource.Play();
 
         travelSoundCoroutine = StartCoroutine(TravelSoundTimer());
     }
@@ -233,21 +239,22 @@ public class TimeTravel : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(travelSoundDuration);
 
-        GCamarada.AudioManager.I?.StopClip("StartTravel");
+        if (travelAudioSource != null)
+            travelAudioSource.Stop();
 
         travelSoundCoroutine = null;
     }
 
-
     private void StopTravelSound()
     {
+        if (travelAudioSource != null)
+            travelAudioSource.Stop();
+
         if (travelSoundCoroutine != null)
         {
             StopCoroutine(travelSoundCoroutine);
             travelSoundCoroutine = null;
         }
-
-        GCamarada.AudioManager.I?.StopClip("StartTravel");
     }
 
     public void CollectFairy()
