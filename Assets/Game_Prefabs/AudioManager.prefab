@@ -1,5 +1,134 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &256376064063395222
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9112624301428665186}
+  - component: {fileID: 8984023987899263011}
+  m_Layer: 0
+  m_Name: AudioSourceVFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9112624301428665186
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256376064063395222}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1837022603590818036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &8984023987899263011
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256376064063395222}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -4698497177912508602, guid: 22c1f18cb1e7045488e2e6fb0db064c0, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &772727775898501536
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,7 +159,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 9112624301428665186}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &8296640443195721283
@@ -42,7 +172,7 @@ AudioSource:
   m_GameObject: {fileID: 772727775898501536}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: 22c1f18cb1e7045488e2e6fb0db064c0, type: 2}
+  OutputAudioMixerGroup: {fileID: 2850824082802619406, guid: 22c1f18cb1e7045488e2e6fb0db064c0, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -143,49 +273,72 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GCamarada.AudioManager
   audioInfo:
-  - clipName: GrassFootstep
-    clipe: {fileID: 8300000, guid: 551d550ab98e3cc4bb7793e752fe8628, type: 3}
+  - clipName: Fogueira
+    clipe: {fileID: 8300000, guid: 23f9d525bf5056e44b342ff7f1c5e461, type: 3}
     clip:
-    - {fileID: 8300000, guid: 6aeefb601c305f64487cebdfacae5b6c, type: 3}
-    - {fileID: 8300000, guid: a967f92e38352bb4291945423de63499, type: 3}
-    - {fileID: 8300000, guid: 856b6d74addb9ad4ab2b7b47bae3e839, type: 3}
+    - {fileID: 8300000, guid: 23f9d525bf5056e44b342ff7f1c5e461, type: 3}
     source: {fileID: 0}
     timeline: 1
-  - clipName: Jump
-    clipe: {fileID: 0}
+  - clipName: fase1
+    clipe: {fileID: 8300000, guid: e41e0f0cf0ded9f41be40ecbab24f10e, type: 3}
+    clip:
+    - {fileID: 8300000, guid: e41e0f0cf0ded9f41be40ecbab24f10e, type: 3}
+    - {fileID: 8300000, guid: 6aa147eff8462f24480c5ef339e512e0, type: 3}
+    - {fileID: 8300000, guid: d2d39aa21a3f6714a8afc5c8d4d3df8b, type: 3}
+    - {fileID: 8300000, guid: 120bcbfa6cb195d40bd9fd0f73fad035, type: 3}
+    - {fileID: 8300000, guid: edd20037959f10e4a9971dd4bc7029be, type: 3}
+    source: {fileID: 8296640443195721283}
+    timeline: 0
+  - clipName: GrassFootstep
+    clipe: {fileID: 8300000, guid: 551d550ab98e3cc4bb7793e752fe8628, type: 3}
     clip:
     - {fileID: 8300000, guid: 551d550ab98e3cc4bb7793e752fe8628, type: 3}
     - {fileID: 8300000, guid: 18e761ff5ef14fd4588d9283fcc9b829, type: 3}
     - {fileID: 8300000, guid: 9c0c1f9411026f749bcb3746cd557bec, type: 3}
-    source: {fileID: 0}
+    source: {fileID: 8984023987899263011}
     timeline: 0
-  - clipName: StartTravel
-    clipe: {fileID: 8300000, guid: 3578d88c3f2436e44b3ad3f9e55f1dd7, type: 3}
+  - clipName: Jump
+    clipe: {fileID: 8300000, guid: 6aeefb601c305f64487cebdfacae5b6c, type: 3}
     clip:
-    - {fileID: 8300000, guid: 3578d88c3f2436e44b3ad3f9e55f1dd7, type: 3}
-    source: {fileID: 0}
+    - {fileID: 8300000, guid: 6aeefb601c305f64487cebdfacae5b6c, type: 3}
+    - {fileID: 8300000, guid: a967f92e38352bb4291945423de63499, type: 3}
+    - {fileID: 8300000, guid: 856b6d74addb9ad4ab2b7b47bae3e839, type: 3}
+    source: {fileID: 8984023987899263011}
     timeline: 0
   - clipName: StartTravel
-    clipe: {fileID: 8300000, guid: 3578d88c3f2436e44b3ad3f9e55f1dd7, type: 3}
+    clipe: {fileID: 8300000, guid: 5496b18e4fe415a428ec415b1aacd8b2, type: 3}
     clip:
-    - {fileID: 8300000, guid: 3578d88c3f2436e44b3ad3f9e55f1dd7, type: 3}
-    source: {fileID: 0}
+    - {fileID: 8300000, guid: 5496b18e4fe415a428ec415b1aacd8b2, type: 3}
+    source: {fileID: 8984023987899263011}
     timeline: 0
-  - clipName: StartTravel
-    clipe: {fileID: 8300000, guid: 3578d88c3f2436e44b3ad3f9e55f1dd7, type: 3}
+  - clipName: Dash
+    clipe: {fileID: 8300000, guid: 181210944d2433848b4081860df790e9, type: 3}
     clip:
-    - {fileID: 8300000, guid: 3578d88c3f2436e44b3ad3f9e55f1dd7, type: 3}
-    source: {fileID: 0}
-    timeline: 0
-  - clipName: StartTravel
-    clipe: {fileID: 8300000, guid: 3578d88c3f2436e44b3ad3f9e55f1dd7, type: 3}
-    clip: []
-    source: {fileID: 0}
+    - {fileID: 8300000, guid: 181210944d2433848b4081860df790e9, type: 3}
+    source: {fileID: 8984023987899263011}
     timeline: 0
   - clipName: boss
     clipe: {fileID: 8300000, guid: d50b71de223d83e49930ffbe76ffa5eb, type: 3}
     clip: []
     source: {fileID: 8296640443195721283}
+    timeline: 0
+  - clipName: Folha
+    clipe: {fileID: 8300000, guid: 0ff7503113815584980dc7371ddd1106, type: 3}
+    clip:
+    - {fileID: 8300000, guid: 0ff7503113815584980dc7371ddd1106, type: 3}
+    source: {fileID: 0}
+    timeline: 0
+  - clipName: Folha2
+    clipe: {fileID: 8300000, guid: ff167a74e91e43943835ace91e2a006b, type: 3}
+    clip:
+    - {fileID: 8300000, guid: ff167a74e91e43943835ace91e2a006b, type: 3}
+    source: {fileID: 8984023987899263011}
+    timeline: 0
+  - clipName: Swing
+    clipe: {fileID: 8300000, guid: e53e34d78c2de2e448bcf9ce615bf0f1, type: 3}
+    clip:
+    - {fileID: 8300000, guid: e53e34d78c2de2e448bcf9ce615bf0f1, type: 3}
+    source: {fileID: 8984023987899263011}
     timeline: 0
   audioMixer: {fileID: 24100000, guid: 22c1f18cb1e7045488e2e6fb0db064c0, type: 2}
   timeTravel: {fileID: 0}
