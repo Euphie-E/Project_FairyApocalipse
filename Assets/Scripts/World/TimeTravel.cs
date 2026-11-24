@@ -53,7 +53,7 @@ public class TimeTravel : MonoBehaviour
     [SerializeField] private AudioSource travelAudioSource;
     [SerializeField] private float travelSoundDuration = 3f;
 
-    private Coroutine travelSoundCoroutine;
+   
     public void SetTravelBlocked(bool blocked)
     {
         TravelBlocked = blocked;
@@ -224,36 +224,24 @@ public class TimeTravel : MonoBehaviour
     }
     private void PlayTravelSound()
     {
-        StopTravelSound();
-
         if (travelAudioSource == null) return;
 
+        travelAudioSource.Stop();
         travelAudioSource.loop = false;
         travelAudioSource.time = 0f;
+
         travelAudioSource.Play();
 
-        travelSoundCoroutine = StartCoroutine(TravelSoundTimer());
-    }
-
-    private IEnumerator TravelSoundTimer()
-    {
-        yield return new WaitForSecondsRealtime(travelSoundDuration);
-
-        if (travelAudioSource != null)
-            travelAudioSource.Stop();
-
-        travelSoundCoroutine = null;
+        travelAudioSource.SetScheduledEndTime(
+            AudioSettings.dspTime + travelSoundDuration
+        );
     }
 
     private void StopTravelSound()
     {
-       
-            travelAudioSource.Stop();
+        if (travelAudioSource == null) return;
 
-       
-            StopCoroutine(travelSoundCoroutine);
-            travelSoundCoroutine = null;
-        
+        travelAudioSource.Stop();
     }
 
     public void CollectFairy()
