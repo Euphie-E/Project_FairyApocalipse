@@ -381,6 +381,74 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[4].clipe
+      value: 
+      objectReference: {fileID: 8300000, guid: 181210944d2433848b4081860df790e9, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[5].clipe
+      value: 
+      objectReference: {fileID: 8300000, guid: d50b71de223d83e49930ffbe76ffa5eb, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[6].clipe
+      value: 
+      objectReference: {fileID: 8300000, guid: ff167a74e91e43943835ace91e2a006b, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[8].clipe
+      value: 
+      objectReference: {fileID: 8300000, guid: e53e34d78c2de2e448bcf9ce615bf0f1, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[5].source
+      value: 
+      objectReference: {fileID: 1687246658531745528}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[6].source
+      value: 
+      objectReference: {fileID: 1793683160341360792}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[7].source
+      value: 
+      objectReference: {fileID: 1793683160341360792}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[4].clipName
+      value: Dash
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[5].clipName
+      value: boss
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[6].clipName
+      value: Folha2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[8].clipName
+      value: Swing
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[5].clip.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: audioInfo.Array.data[6].clip.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: 'audioInfo.Array.data[4].clip.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 181210944d2433848b4081860df790e9, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: 'audioInfo.Array.data[6].clip.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ff167a74e91e43943835ace91e2a006b, type: 3}
+    - target: {fileID: 7463811866316377638, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+      propertyPath: 'audioInfo.Array.data[8].clip.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: e53e34d78c2de2e448bcf9ce615bf0f1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -397,6 +465,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7a1be1d547f5604088b3a73d98101ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GCamarada.AudioManager
+--- !u!82 &1687246658531745528 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8296640443195721283, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+  m_PrefabInstance: {fileID: 7226548295608162491}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1793683160341360792 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8984023987899263011, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
+  m_PrefabInstance: {fileID: 7226548295608162491}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9022875199192236111 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1837022603590818036, guid: 926ccf3be0c976849a97dea3f569fd1d, type: 3}
