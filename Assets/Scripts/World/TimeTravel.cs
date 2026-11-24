@@ -247,14 +247,13 @@ public class TimeTravel : MonoBehaviour
 
     private void StopTravelSound()
     {
-        if (travelAudioSource != null)
+       
             travelAudioSource.Stop();
 
-        if (travelSoundCoroutine != null)
-        {
+       
             StopCoroutine(travelSoundCoroutine);
             travelSoundCoroutine = null;
-        }
+        
     }
 
     public void CollectFairy()
