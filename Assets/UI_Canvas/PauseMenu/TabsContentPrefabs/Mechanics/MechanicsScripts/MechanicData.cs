@@ -4,7 +4,7 @@ using UnityEngine;
 public class MechanicData : ScriptableObject
 {
     public string tName, keyKeyboard;
-    public string description;
+    [TextArea]public string description;
     public Sprite[] gif;
     public Sprite keyControl;
 }

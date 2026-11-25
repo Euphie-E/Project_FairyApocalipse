@@ -24,8 +24,11 @@ public class TransitionController : MonoBehaviour
     void Awake()
     {
         Time.timeScale = 1f;
-        Cursor.visible= true;
-        Cursor.lockState = CursorLockMode.None;
+        if(SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            Cursor.visible= true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     void End(Scene scene, LoadSceneMode loaded){
