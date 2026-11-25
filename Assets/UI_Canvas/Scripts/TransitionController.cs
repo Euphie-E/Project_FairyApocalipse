@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static Unity.Collections.Unicode;
 
 public class TransitionController : MonoBehaviour
 {
@@ -21,6 +20,14 @@ public class TransitionController : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.sceneLoaded += End;
     }
+
+    void Awake()
+    {
+        Time.timeScale = 1f;
+        Cursor.visible= true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
     void End(Scene scene, LoadSceneMode loaded){
         if(SceneManager.GetActiveScene().buildIndex == 0)
         {
