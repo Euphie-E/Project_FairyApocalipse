@@ -9,7 +9,8 @@ using UnityEngine.SceneManagement;
 public class DataManager : MonoBehaviour
 {
     private static WaitForSeconds _waitForSeconds180 = new WaitForSeconds(30);
-
+    [Header("Gnomos")]
+    private const int TotalGnomes = 14;
     public static DataManager Instance {get; private set;}
     public readonly DataEvents dataEvents = new();
     string savePath;
@@ -36,31 +37,63 @@ public class DataManager : MonoBehaviour
         TimeTravel,
         TimeStamp
     }
+
+
     void Awake()
     {
         act = new InputSystem_Actions();
         add = act.Player.AddTester;
-        if(Instance != null && Instance != this)
+
+        if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        else
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        savePath = Path.Combine(
+            Application.persistentDataPath,
+            "playerData.json"
+        );
+
+        testing = ENVIRONMENT == Environment.playtest;
+
+        // Carrega o save uma unica vez.
+        LoadGame();
+
+        EnsureGnomeData();
+
+        // No Editor ou em playtest:
+        // nova execucao = nova colecao.
+        if (Application.isEditor || testing)
         {
-            Instance = this;
-            DontDestroyOnLoad(this);
-            dataEvents.Run(ENVIRONMENT.ToString());
+            playerDataGroup.CollectedGnomes = new bool[14];
+
         }
+
+        dataEvents.Run(ENVIRONMENT.ToString());
     }
+
+
     void Start()
     {
-        savePath = Path.Combine(Application.persistentDataPath, "playerData.json");
-        Run(SceneManager.GetActiveScene(),LoadSceneMode.Single);
-        if(ENVIRONMENT == Environment.playtest) testing = true;
+        Run(
+            SceneManager.GetActiveScene(),
+            LoadSceneMode.Single
+        );
+
         SceneManager.activeSceneChanged += SaveGame;
         SceneManager.sceneLoaded += Run;
+
         add.performed += AddNewTester;
+
         StartCoroutine(Cycle());
+
+        GnomeProgress.NotifyChanged();
     }
+
     IEnumerator Cycle()
     {
         yield return new WaitForFixedUpdate();
@@ -85,13 +118,30 @@ public class DataManager : MonoBehaviour
         SaveData();
     }
 
+
     void SaveData()
     {
-        playerData.Duration = (int)((Time.time - strTime)*100)/100f;
-        playerData.LevelData = LevelManager.Get()?.Save();
-        string json = JsonUtility.ToJson(playerDataGroup, true);
+        if (playerData != null)
+        {
+            playerData.Duration =
+                (int)((Time.time - strTime) * 100) / 100f;
+
+            LevelManager level = LevelManager.Get();
+
+            if (level != null)
+            {
+                playerData.LevelData = level.Save();
+            }
+        }
+
+        string json = JsonUtility.ToJson(
+            playerDataGroup,
+            true
+        );
+
         File.WriteAllText(savePath, json);
     }
+
     public void SendData()
     {
         if (TestInit())
@@ -116,20 +166,35 @@ public class DataManager : MonoBehaviour
     }
     void Run(Scene scene, LoadSceneMode loaded)
     {
-        LoadGame();
+
         int index = CheckSceneIDX(scene);
         dataEvents.index = index;
-        if(testing || reset ||  playerDataGroup?.group[index] == null)
+
+        if (testing || reset ||
+            playerDataGroup.group[index] == null)
         {
-            playerData = new();
+            playerData = new PlayerData();
             strTime = Time.time;
+
+            playerDataGroup.group[index] = playerData;
         }
         else
         {
             playerData = playerDataGroup.group[index];
         }
+
         playerData.index = index;
-        if(playerData.CheckPoints == null || playerData.CheckPoints.Length != ckpSize) playerData.CheckPoints = new double[ckpSize];
+
+        if (playerData.CheckPoints == null ||
+            playerData.CheckPoints.Length != ckpSize)
+        {
+            playerData.CheckPoints = new double[ckpSize];
+        }
+
+        Debug.Log(
+            $"[DATA MANAGER] Cena: {scene.name} | " +
+            $"Gnomos coletados: {GnomeProgress.GetTotalCollected()}/14"
+        );
         //if(reset) return;
         //if(!(index >= 0 && index <= 3)) return;
         //GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -257,11 +322,78 @@ public class DataManager : MonoBehaviour
         }
         PlayerPrefs.SetInt("TotalTester", user);
         PlayerPrefs.Save();
+        GnomeProgress.ResetAll();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public List<Save> Get()
     {
         return playerData.LevelData;
+    }
+
+    private void EnsureGnomeData()
+    {
+        if (playerDataGroup == null)
+            playerDataGroup = new PlayerDataGroup(5);
+
+        if (playerDataGroup.CollectedGnomes == null ||
+            playerDataGroup.CollectedGnomes.Length != TotalGnomes)
+        {
+            bool[] old = playerDataGroup.CollectedGnomes;
+
+            playerDataGroup.CollectedGnomes = new bool[TotalGnomes];
+
+            if (old != null)
+            {
+                Array.Copy(
+                    old,
+                    playerDataGroup.CollectedGnomes,
+                    Mathf.Min(old.Length, TotalGnomes)
+                );
+            }
+        }
+    }
+
+    public bool IsGnomeCollected(int id)
+    {
+        if (id < 1 || id > TotalGnomes)
+            return false;
+
+        EnsureGnomeData();
+
+        return playerDataGroup.CollectedGnomes[id - 1];
+    }
+
+    public bool CollectGnome(int id)
+    {
+        if (id < 1 || id > TotalGnomes)
+            return false;
+
+        EnsureGnomeData();
+
+        if (playerDataGroup.CollectedGnomes[id - 1])
+            return false;
+
+        playerDataGroup.CollectedGnomes[id - 1] = true;
+
+        Debug.Log($"[GNOMOS] Gnomo {id} coletado!");
+
+        // Salva imediatamente na partida normal.
+        if (!testing)
+            SaveData();
+
+        return true;
+    }
+
+    public void ResetGnomes()
+    {
+        EnsureGnomeData();
+
+        playerDataGroup.CollectedGnomes = new bool[TotalGnomes];
+
+        if (!testing)
+            SaveData();
+
+        Debug.Log("[GNOMOS] Colecao resetada!");
     }
 }

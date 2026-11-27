@@ -3,16 +3,14 @@ using UnityEngine;
 
 public class GnomeCollectible : MonoBehaviour
 {
-    [Header("Identificação")]
+    [Header("Identificacao")]
     [SerializeField, Range(1, 14)]
     private int gnomeId = 1;
 
     private void Start()
     {
         if (GnomeProgress.IsCollected(gnomeId))
-        {
             gameObject.SetActive(false);
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -20,9 +18,17 @@ public class GnomeCollectible : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        if (GnomeProgress.Collect(gnomeId))
+        // Registra a coleta apenas uma vez.
+        if (!GnomeProgress.Collect(gnomeId))
+            return;
+
+        // Exibe a contagem da fase.
+        if (GnomeCollectionNotice.Instance != null)
         {
-            gameObject.SetActive(false);
+            GnomeCollectionNotice.Instance
+                .ShowCollected(gnomeId);
         }
+
+        gameObject.SetActive(false);
     }
 }

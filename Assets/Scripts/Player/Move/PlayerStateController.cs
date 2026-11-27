@@ -99,7 +99,13 @@ public class PlayerStateController : MonoBehaviour
 
     public void StartCutsceneState()
     {
+        currentPlayerState = PlayerState.Cutscene;
         playerMovement.enabled = false;
-        playerCutsceneMovement.enabled = true;
+        //playerCutsceneMovement.enabled = false;
+    }
+
+    public void StopCutsceneState()
+    {
+        currentPlayerState = PlayerState.Walking;
     }
 }

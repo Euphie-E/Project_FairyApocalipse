@@ -4,6 +4,7 @@ using UnityEngine.Playables;
 public class CutsceneManager : MonoBehaviour
 {
     public static CutsceneManager Instance;
+    public bool startCutscene = true;
 
     [Header("Starting")]
     [SerializeField] private PlayableDirector startingCutscene;
@@ -27,6 +28,9 @@ public class CutsceneManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
+
+        if (startingCutscene)
+            PlayStartingCutscene();
     }
 
     void PlayStartingCutscene()
@@ -80,5 +84,6 @@ public class CutsceneManager : MonoBehaviour
     public void EndCutscene()
     {
         PlayerStateController.Instance.StartMovement();
+        PlayerStateController.Instance.StopCutsceneState();
     }
 }

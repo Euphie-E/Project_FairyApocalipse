@@ -12,6 +12,8 @@ public class TimeTravel : MonoBehaviour
     private InputAction resetAction;
     private InputAction travelAction; */
 
+
+
     [Header("Layers")]
     private int playerLayer;
     public int pastLayer;
@@ -40,7 +42,11 @@ public class TimeTravel : MonoBehaviour
 
     [Header("Time Dome")]
     [SerializeField] private MeshRenderer timeDome;
-
+    [Header("Sphere Size")]
+    [SerializeField] private float sphereRadius = 2.5f;
+    [SerializeField] private float minSphereRadius = 1f;
+    [SerializeField] private float maxSphereRadius = 5f;
+    [SerializeField] private float scrollSensitivity = 1f;
     [Header("Fada")]
     [SerializeField] public bool hasFairy = false;
 
@@ -49,6 +55,11 @@ public class TimeTravel : MonoBehaviour
     public bool TravelBlocked ;//{ get; private set; }
     PlayerSwingController psc;
 
+    [Header("Time Travel Audio")]
+    [SerializeField] private AudioSource travelAudioSource;
+    [SerializeField] private float travelSoundDuration = 3f;
+
+   
     public void SetTravelBlocked(bool blocked)
     {
         TravelBlocked = blocked;
@@ -111,8 +122,8 @@ public class TimeTravel : MonoBehaviour
 
     private void Update()
     {
-        //HandleReset();
         HandleTravel();
+        HandleSphereSize();
         UpdateTimeShader();
     }
 
@@ -197,7 +208,7 @@ public class TimeTravel : MonoBehaviour
 
         GCamarada.AudioManager.I?.UpdateMusicTimeline(true);
 
-        GCamarada.AudioManager.I?.OnShotClip("StartTravel");
+        PlayTravelSound();
         Debug.Log("Viajei pro passado");
 
         // Física do passado
@@ -212,6 +223,31 @@ public class TimeTravel : MonoBehaviour
         //timeDome.enabled = true;
         if (DataManager.Instance != null)
             DataManager.Instance.AddData(DataManager.Data.TimeTravel,1);
+    }
+    private void OnDisable()
+    {
+        StopTravelSound();
+    }
+    private void PlayTravelSound()
+    {
+        if (travelAudioSource == null) return;
+
+        travelAudioSource.Stop();
+        travelAudioSource.loop = false;
+        travelAudioSource.time = 0f;
+
+        travelAudioSource.Play();
+
+        travelAudioSource.SetScheduledEndTime(
+            AudioSettings.dspTime + travelSoundDuration
+        );
+    }
+
+    private void StopTravelSound()
+    {
+        if (travelAudioSource == null) return;
+
+        travelAudioSource.Stop();
     }
 
     public void CollectFairy()
@@ -262,10 +298,9 @@ public class TimeTravel : MonoBehaviour
 
         Vector3 center = timeDomeTransform.position;
 
-        float radius = timeDomeTransform.lossyScale.x * 0.5f;
-
         timeTravelMaterial.SetVector("_SphereCenter", center);
-        timeTravelMaterial.SetFloat("_SphereRadius", isTravelling ? radius : 0f);
+        timeTravelMaterial.SetFloat("_SphereRadius",
+            isTravelling ? sphereRadius : 0f);
     }
 
     bool CheckTravel()
@@ -336,5 +371,34 @@ public class TimeTravel : MonoBehaviour
         GCamarada.AudioManager.I?.StopClip("StartTravel");
 
         Debug.Log("TimeTravel resetado após respawn");
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (timeDomeTransform == null) return;
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(
+            timeDomeTransform.position,
+            sphereRadius
+        );
+    }
+
+    private void HandleSphereSize()
+    {
+        if (!isTravelling) return;
+        if (Mouse.current == null) return;
+
+        float scroll = Mouse.current.scroll.ReadValue().y;
+
+        if (scroll == 0f) return;
+
+        sphereRadius -= Mathf.Sign(scroll) * scrollSensitivity;
+
+        sphereRadius = Mathf.Clamp(
+            sphereRadius,
+            minSphereRadius,
+            maxSphereRadius
+        );
     }
 }

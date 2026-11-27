@@ -10,26 +10,29 @@ public class GnomeHUD : MonoBehaviour
     public class GnomeSlot
     {
         [Range(1, 14)]
-        public int gnomeId;
+        public int gnomeId = 1;
 
-        [Header("Imagem na HUD")]
         public Image image;
-
-        [Header("Sprite do gnomo coletado")]
         public Sprite collectedSprite;
     }
 
-    [Header("Silhueta padrão")]
+    [Header("Silhueta padrao")]
     [SerializeField]
     private Sprite silhouetteSprite;
 
-    [Header("Lista de Gnomos")]
+    [Header("Lista de gnomios")]
     [SerializeField]
     private List<GnomeSlot> slots = new();
 
     private void OnEnable()
     {
         GnomeProgress.OnProgressChanged += RefreshHUD;
+
+        RefreshHUD();
+    }
+
+    private void Start()
+    {
         RefreshHUD();
     }
 
@@ -38,21 +41,88 @@ public class GnomeHUD : MonoBehaviour
         GnomeProgress.OnProgressChanged -= RefreshHUD;
     }
 
+    [ContextMenu("Atualizar HUD")]
     public void RefreshHUD()
     {
         foreach (GnomeSlot slot in slots)
         {
             if (slot.image == null)
+            {
+                Debug.LogWarning(
+                    $"[GNOME HUD] Image nao configurada no ID {slot.gnomeId}!",
+                    this
+                );
                 continue;
+            }
 
             bool collected =
                 GnomeProgress.IsCollected(slot.gnomeId);
 
-            slot.image.sprite = collected
+            Sprite selectedSprite = collected
                 ? slot.collectedSprite
                 : silhouetteSprite;
 
+            if (selectedSprite == null)
+            {
+                Debug.LogWarning(
+                    $"[GNOME HUD] Sprite ausente no ID {slot.gnomeId}!",
+                    this
+                );
+                continue;
+            }
+
+            slot.image.sprite = selectedSprite;
             slot.image.color = Color.white;
+
+            // Atualiza o componente visual.
+            slot.image.SetAllDirty();
+
+
+            Debug.Log(
+                $"[GNOME HUD] ID: {slot.gnomeId} | " +
+                $"Coletado: {collected} | " +
+                $"Objeto: {slot.image.gameObject.name} | " +
+                $"Sprite aplicado: {slot.image.sprite.name} | " +
+                $"Ativo: {slot.image.gameObject.activeInHierarchy}",
+                slot.image.gameObject
+            );
+
         }
+
     }
+
+    [ContextMenu("Verificar Referencias dos Gnomos")]
+    public void VerifySlots()
+    {
+        Dictionary<Image, int> usedImages = new();
+
+        foreach (GnomeSlot slot in slots)
+        {
+            if (slot.image == null)
+            {
+                Debug.LogError(
+                    $"[GNOME HUD] ID {slot.gnomeId} sem Image!"
+                );
+                continue;
+            }
+
+            if (usedImages.TryGetValue(
+                slot.image, out int previousId))
+            {
+                Debug.LogError(
+                    $"[GNOME HUD] ERRO! IDs {previousId} e " +
+                    $"{slot.gnomeId} usam a MESMA Image: " +
+                    $"{slot.image.gameObject.name}",
+                    slot.image.gameObject
+                );
+            }
+            else
+            {
+                usedImages.Add(slot.image, slot.gnomeId);
+            }
+        }
+
+        Debug.Log("[GNOME HUD] Verificacao concluida.");
+    }
+
 }
