@@ -33365,6 +33365,8 @@ MonoBehaviour:
   fpsCompacto: 24
   fpsExpandido: 24
   fpsPulso: 30
+  sincronizarMateriaisEmRuntime: 1
+  intervaloSincronizacaoMateriais: 0.2
   mapaExpandido: 0
   mapaVisivel: 1
   utilizarAtalhos: 1
@@ -61988,7 +61990,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 100
+  far clip plane: 200
   field of view: 60
   orthographic: 1
   orthographic size: 8
@@ -122618,8 +122620,8 @@ MonoBehaviour:
   cameraMinimapa: {fileID: 1351654762030301051}
   interfaceMinimapa: {fileID: 1269001222922387842}
   objetivoAtivo: 1
-  corObjetivo: {r: 0.35095528, g: 1, b: 0.015686274, a: 1}
-  alcanceMaximo: 50
+  corObjetivo: {r: 0.9827943, g: 1, b: 0, a: 1}
+  alcanceMaximo: 100
   mostrarIndicadorBorda: 0
   tamanhoIndicador: 12
   margemBorda: 20

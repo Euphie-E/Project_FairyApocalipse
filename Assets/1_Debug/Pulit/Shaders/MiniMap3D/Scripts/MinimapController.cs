@@ -135,9 +135,17 @@ public class MinimapController : MonoBehaviour
 
     [Header("Desempenho")]
     [SerializeField] private bool limitarFPSMinimapa = true;
-    [Min(1)] [SerializeField] private int fpsCompacto = 30;
-    [Min(1)] [SerializeField] private int fpsExpandido = 30;
-    [Min(1)] [SerializeField] private int fpsPulso = 60;
+    [Min(1)][SerializeField] private int fpsCompacto = 30;
+    [Min(1)][SerializeField] private int fpsExpandido = 30;
+    [Min(1)][SerializeField] private int fpsPulso = 60;
+
+#if UNITY_EDITOR
+    [Header("Desenvolvimento - Editor Only")]
+    [SerializeField] private bool sincronizarMateriaisEmRuntime = true;
+    [Min(0.05f)]
+    [SerializeField] private float intervaloSincronizacaoMateriais = 0.2f;
+    private double proximaSincronizacaoMateriais = -1;
+#endif
 
     [Header("Estado")]
 
@@ -765,6 +773,9 @@ public class MinimapController : MonoBehaviour
     {
         using (marcadorMateriais.Auto())
         {
+#if UNITY_EDITOR
+            SincronizarMateriaisEditor();
+#endif
             Vector3 posicao = jogador.position;
             Vector3 direcao = Quaternion.Euler(0f, rotacaoHorizontalAtual, 0f) * Vector3.forward;
             float raio = Mathf.Max(0.1f, configuracaoAtual.raio);
@@ -816,6 +827,43 @@ public class MinimapController : MonoBehaviour
             shaderInicializado = true;
         }
     }
+
+#if UNITY_EDITOR
+    // Permite editar os assets originais durante o Play Mode, sem alterar
+    // a estrategia de materiais compartilhados usada na build.
+    private void SincronizarMateriaisEditor()
+    {
+        if (!sincronizarMateriaisEmRuntime)
+        {
+            proximaSincronizacaoMateriais = -1;
+            return;
+        }
+
+        double agora = Time.unscaledTimeAsDouble;
+        if (agora < proximaSincronizacaoMateriais)
+            return;
+
+        proximaSincronizacaoMateriais = agora +
+            Mathf.Max(0.05f, intervaloSincronizacaoMateriais);
+
+        bool copiou = false;
+        foreach (KeyValuePair<Material, Material> par in materiaisRuntime)
+        {
+            Material original = par.Key;
+            Material runtime = par.Value;
+            if (original == null || runtime == null || original.shader != runtime.shader)
+                continue;
+
+            runtime.CopyPropertiesFromMaterial(original);
+            copiou = true;
+        }
+
+        // A copia inclui as propriedades dinamicas. Forca a reaplicacao
+        // das cinco propriedades do controlador no mesmo frame, antes de renderizar.
+        if (copiou)
+            shaderInicializado = false;
+    }
+#endif
 
     private ShaderBinding CriarBinding(Material material)
     {
@@ -890,6 +938,9 @@ public class MinimapController : MonoBehaviour
 
         shaderInicializado = false;
         proximaRenderizacao = -1;
+#if UNITY_EDITOR
+        proximaSincronizacaoMateriais = -1;
+#endif
     }
 
     private void LiberarMateriais()
@@ -1037,6 +1088,34 @@ public class MinimapController : MonoBehaviour
         }
     }
 
+
+    // Altera somente as duas layers temporais do minimapa.
+    // Preserva todas as outras layers ja configuradas na camera.
+    public void DefinirLinhaTemporal(bool noPassado)
+    {
+        if (cameraMinimapa == null || cameraMinimapa == cameraPrincipal)
+            return;
+
+        int layerPassado = LayerMask.NameToLayer("MinimapPast");
+        int layerFuturo = LayerMask.NameToLayer("MinimapFuture");
+
+        // Evita alterar a mascara se a configuracao estiver incompleta.
+        if (layerPassado < 0 || layerFuturo < 0)
+            return;
+
+        int mascaraPassado = 1 << layerPassado;
+        int mascaraFuturo = 1 << layerFuturo;
+
+        int mascara = cameraMinimapa.cullingMask;
+        mascara &= ~(mascaraPassado | mascaraFuturo);
+        mascara |= noPassado ? mascaraPassado : mascaraFuturo;
+
+        cameraMinimapa.cullingMask = mascara;
+
+        // Atualiza a imagem no proximo LateUpdate, sem esperar o limite de FPS.
+        // Nao habilita a camera se o minimapa estiver oculto.
+        proximaRenderizacao = -1;
+    }
 
     // Compatibilidade com os metodos anteriores.
 

@@ -35,7 +35,10 @@ public class TimeTravel : MonoBehaviour
     [Header("Cameras")]
     [SerializeField] private Camera playerCamera;
     [SerializeField] private Camera pastCamera;
-    
+
+    [Header("Minimapa")]
+    [SerializeField] private MinimapController minimapController;
+
     [Header("Time Shader")]
     [SerializeField] private Material timeTravelMaterial;
     [SerializeField] private Transform timeDomeTransform;
@@ -52,14 +55,14 @@ public class TimeTravel : MonoBehaviour
 
     public bool HasFairy => hasFairy;
 
-    public bool TravelBlocked ;//{ get; private set; }
+    public bool TravelBlocked;//{ get; private set; }
     PlayerSwingController psc;
 
     [Header("Time Travel Audio")]
     [SerializeField] private AudioSource travelAudioSource;
     [SerializeField] private float travelSoundDuration = 3f;
 
-   
+
     public void SetTravelBlocked(bool blocked)
     {
         TravelBlocked = blocked;
@@ -88,8 +91,8 @@ public class TimeTravel : MonoBehaviour
     private void Start()
     {
         // Inputs
-       // PlayerInput.Instance.AddAction(HandleReset,4);
-        PlayerInput.Instance.AddAction(StartTravel,5);
+        // PlayerInput.Instance.AddAction(HandleReset,4);
+        PlayerInput.Instance.AddAction(StartTravel, 5);
 
 
         // Estado físico inicial: FUTURO
@@ -103,11 +106,14 @@ public class TimeTravel : MonoBehaviour
 
         // Past Camera só será usada durante a habilidade.
         pastCamera.enabled = false;
-        
+
         // Dome começa desligado.
         //timeDome.enabled = false;
 
         psc = GetComponent<PlayerSwingController>();
+
+        // O jogador inicia no futuro.
+        SincronizarMinimapa(false);
     }
 
     /* private void OnEnable()
@@ -131,7 +137,7 @@ public class TimeTravel : MonoBehaviour
     {
         //if (resetAction.WasPressedThisFrame())
         //{
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         //}
     }
 
@@ -192,13 +198,14 @@ public class TimeTravel : MonoBehaviour
         }
 
         if (onCooldown) return;
-        if (!CheckTravel()) {
+        if (!CheckTravel())
+        {
             blink ??= StartCoroutine(Blinking());
             return;
         }
         if (TravelBlocked)
             return;
-        if (isTravelling) 
+        if (isTravelling)
         {
             EndTravel();
             return;
@@ -214,15 +221,16 @@ public class TimeTravel : MonoBehaviour
         // Física do passado
         Physics.IgnoreLayerCollision(playerLayer, futureLayer, true);
         Physics.IgnoreLayerCollision(playerLayer, pastLayer, false);
-        PlayerStateController.Instance.ActivatePastLayer();     
-        notPlayer = 1 << futureLayer; 
-        realPlayer = 1 << pastLayer;  
+        PlayerStateController.Instance.ActivatePastLayer();
+        notPlayer = 1 << futureLayer;
+        realPlayer = 1 << pastLayer;
 
         // Visual do passado
         pastCamera.enabled = true;
+        SincronizarMinimapa(true);
         //timeDome.enabled = true;
         if (DataManager.Instance != null)
-            DataManager.Instance.AddData(DataManager.Data.TimeTravel,1);
+            DataManager.Instance.AddData(DataManager.Data.TimeTravel, 1);
     }
     private void OnDisable()
     {
@@ -261,7 +269,7 @@ public class TimeTravel : MonoBehaviour
 
     private void EndTravel(bool force = false)
     {
-        if(!force && !CheckTravel()) return;
+        if (!force && !CheckTravel()) return;
         isTravelling = false;
         GCamarada.AudioManager.I?.UpdateMusicTimeline(false);
         GCamarada.AudioManager.I?.StopClip("StartTravel");
@@ -276,12 +284,19 @@ public class TimeTravel : MonoBehaviour
 
         // Visual do passado desligado
         pastCamera.enabled = false;
+        SincronizarMinimapa(false);
         //timeDome.enabled = false;
-       
+
 
         // Cooldown
         onCooldown = true;
         cooldownTimer = cooldown;
+    }
+
+    private void SincronizarMinimapa(bool noPassado)
+    {
+        if (minimapController != null)
+            minimapController.DefinirLinhaTemporal(noPassado);
     }
 
     private void SetMainCameraToFuture()
@@ -305,11 +320,11 @@ public class TimeTravel : MonoBehaviour
 
     bool CheckTravel()
     {
-        if(psc.enabled) return false;
-        bool notBody = layerCheckBody == null || Physics.CheckSphere(layerCheckBody.transform.position,layerCheckBody.radius,notPlayer);
-        bool notFeet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,notPlayer);
-        bool feet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,realPlayer);
-        bool genericFeet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position,layerCheckFeet.radius,1 << 0);
+        if (psc.enabled) return false;
+        bool notBody = layerCheckBody == null || Physics.CheckSphere(layerCheckBody.transform.position, layerCheckBody.radius, notPlayer);
+        bool notFeet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position, layerCheckFeet.radius, notPlayer);
+        bool feet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position, layerCheckFeet.radius, realPlayer);
+        bool genericFeet = layerCheckFeet == null || Physics.CheckSphere(layerCheckFeet.transform.position, layerCheckFeet.radius, 1 << 0);
         if (notBody) return false;
         if (genericFeet) return true;
         if (!notFeet && feet) return false;
@@ -362,6 +377,9 @@ public class TimeTravel : MonoBehaviour
         // Desliga a câmera do passado
         if (pastCamera != null)
             pastCamera.enabled = false;
+
+        // Restaura tambem a linha temporal do minimapa.
+        SincronizarMinimapa(false);
 
         // Reseta o shader
         if (timeTravelMaterial != null)
